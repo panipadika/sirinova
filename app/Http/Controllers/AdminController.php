@@ -31,6 +31,7 @@ class AdminController extends Controller
         $totalTelaahan = TelaahanStaf::count();
         $totalGaleri = Galeri::count();
         $totalIndikator = IndikatorMakro::count();
+        $totalPesan = Pesan::count();
         $totalPesanBelumDibaca = Pesan::where('is_dibaca', false)->count();
         $totalLomba = PendaftaranLomba::count();
         $lombaMenunggu = PendaftaranLomba::where('status', 'Menunggu Verifikasi')->count();
@@ -115,6 +116,7 @@ class AdminController extends Controller
             'indikatorList',
             'tahunList',
             'indikatorChartMap',
+            'totalPesan',
             'totalPesanBelumDibaca',
             'totalLomba',
             'lombaMenunggu'

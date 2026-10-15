@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\PendaftaranLomba;
 use App\Models\JadwalLomba;
+use App\Models\PengaturanLomba;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -18,10 +20,12 @@ class LombaController extends Controller
     {
         $totalPendaftar = PendaftaranLomba::count();
         $user = Auth::guard('peserta')->user();
-        $pendaftaranUser = $user ? PendaftaranLomba::where('id_user', $user->id)->get() : collect();
+        $pendaftaranUser = $user ? PendaftaranLomba::where('id_user', $user->id)->where('status', '!=', 'Ditolak')->get() : collect();
+        $lockedKategori = $user ? ($user->kategori ?? ($pendaftaranUser->isNotEmpty() ? $pendaftaranUser->first()->kategori_peserta : null)) : null;
         $jadwalKategori = JadwalLomba::all()->keyBy('kategori');
+        $linkTemplateProposal = PengaturanLomba::getTemplateUrl();
 
-        return view('user.lomba.index', compact('totalPendaftar', 'user', 'pendaftaranUser', 'jadwalKategori'));
+        return view('user.lomba.index', compact('totalPendaftar', 'user', 'pendaftaranUser', 'lockedKategori', 'jadwalKategori', 'linkTemplateProposal'));
     }
 
     /**
@@ -31,7 +35,28 @@ class LombaController extends Controller
     {
         $user = Auth::guard('peserta')->user();
         $jadwalKategori = JadwalLomba::all()->keyBy('kategori');
-        return view('user.lomba.daftar', compact('user', 'jadwalKategori'));
+        $userRegistrations = PendaftaranLomba::where('id_user', $user->id)
+            ->where('status', '!=', 'Ditolak')
+            ->orderBy('id', 'desc')
+            ->get();
+
+        // Kategori terkunci dari akun peserta ($user->kategori) atau riwayat pendaftaran karya pertama
+        $lockedKategori = $user->kategori ?? ($userRegistrations->isNotEmpty() ? $userRegistrations->first()->kategori_peserta : null);
+        $totalKaryaUser = $userRegistrations->count();
+        $linkTemplateProposal = PengaturanLomba::getTemplateUrl();
+
+        // Prefill instansi & no_wa dari karya sebelumnya jika profil user masih kosong
+        $latest = $userRegistrations->first();
+        if ($latest) {
+            if (!$user->asal_instansi) {
+                $user->asal_instansi = $latest->asal_instansi;
+            }
+            if (!$user->no_wa) {
+                $user->no_wa = $latest->nomor_wa;
+            }
+        }
+
+        return view('user.lomba.daftar', compact('user', 'jadwalKategori', 'userRegistrations', 'lockedKategori', 'totalKaryaUser', 'linkTemplateProposal'));
     }
 
     /**
@@ -41,7 +66,32 @@ class LombaController extends Controller
     {
         $user = Auth::guard('peserta')->user();
 
-        // 0. Verifikasi status gembok pendaftaran kategori yang dipilih
+        // 1. Verifikasi: 1 akun yang sudah terdaftar di 1 kategori tidak bisa daftar lagi di kategori lain
+        $userLockedKategori = $user->kategori ?? (
+            PendaftaranLomba::where('id_user', $user->id)
+                ->where('status', '!=', 'Ditolak')
+                ->value('kategori_peserta')
+        );
+
+        if ($userLockedKategori && $userLockedKategori !== $request->kategori_peserta) {
+            return back()->withInput()->withErrors([
+                'kategori_peserta' => "Akun Anda telah terdaftar pada kategori '{$userLockedKategori}'. Satu akun peserta hanya dapat mendaftarkan karya pada satu kategori yang sama dan tidak diperbolehkan mendaftar di kategori lain.",
+            ]);
+        }
+
+        // 2. Verifikasi: Cegah pendaftaran judul karya yang persis sama oleh akun yang sama
+        $duplicateAlat = PendaftaranLomba::where('id_user', $user->id)
+            ->where('nama_alat', $request->nama_alat)
+            ->where('status', '!=', 'Ditolak')
+            ->first();
+
+        if ($duplicateAlat) {
+            return back()->withInput()->withErrors([
+                'nama_alat' => "Anda sudah mendaftarkan karya dengan judul '{$request->nama_alat}' (Nomor Registrasi: {$duplicateAlat->nomor_registrasi}). Silakan gunakan nama karya yang berbeda jika ingin mendaftarkan karya baru.",
+            ]);
+        }
+
+        // 3. Verifikasi status gembok pendaftaran kategori yang dipilih
         $jadwal = JadwalLomba::where('kategori', $request->kategori_peserta)->first();
         if ($jadwal && !$jadwal->isPendaftaranDibuka()) {
             return back()->withInput()->withErrors([
@@ -62,7 +112,7 @@ class LombaController extends Controller
             'fungsi' => 'required|string',
             'spesifikasi_bahan' => 'required|string',
             'latar_belakang' => 'nullable|string',
-            'file_proposal' => 'required|file|mimes:pdf,doc,docx|max:15360', // Maks 15MB
+            'file_proposal' => 'required|url|max:1000',
             'foto_alat' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120', // Maks 5MB (Wajib)
             'link_video' => 'nullable|url|max:255',
         ], [
@@ -77,50 +127,89 @@ class LombaController extends Controller
             'estimasi_harga_jual.required' => 'Estimasi harga jual wajib diisi dalam angka.',
             'fungsi.required' => 'Fungsi alat TTG wajib dijelaskan.',
             'spesifikasi_bahan.required' => 'Spesifikasi teknis & bahan alat wajib dicantumkan.',
-            'file_proposal.required' => 'File proposal wajib diunggah.',
-            'file_proposal.mimes' => 'Format file proposal harus berupa PDF, DOC, atau DOCX.',
-            'file_proposal.max' => 'Ukuran file proposal maksimal 15 MB.',
+            'file_proposal.required' => 'Link proposal Google Drive wajib diisi.',
+            'file_proposal.url' => 'Format link proposal Google Drive harus berupa tautan URL valid (contoh: https://drive.google.com/...).',
             'foto_alat.required' => 'Foto dokumentasi alat TTG wajib diunggah.',
             'foto_alat.image' => 'File foto dokumentasi alat harus berupa gambar (JPG, PNG, atau WEBP).',
             'foto_alat.max' => 'Ukuran foto alat maksimal 5 MB.',
             'link_video.url' => 'Format tautan video harus berupa URL valid (contoh: https://youtube.com/...).',
         ]);
 
-        // 1. Generate nomor registrasi resmi yang unik
-        $tahun = date('Y');
-        $urutan = PendaftaranLomba::whereYear('dibuat_pada', $tahun)->count() + 1;
-        $nomorRegistrasi = sprintf('TTG-%s-%04d', $tahun, $urutan);
-
-        // 2. Upload file proposal
-        $fileProposalPath = $request->file('file_proposal')->store('proposal_lomba', 'public');
-
-        // 3. Upload foto alat (wajib)
+        // 1. Ambil link proposal & simpan foto alat
+        $fileProposalLink = trim($request->file_proposal);
         $fotoAlatPath = null;
         if ($request->hasFile('foto_alat')) {
             $fotoAlatPath = $request->file('foto_alat')->store('foto_lomba', 'public');
         }
 
-        // 4. Simpan ke database
-        $pendaftaran = PendaftaranLomba::create([
-            'id_user' => $user->id,
-            'nomor_registrasi' => $nomorRegistrasi,
-            'kategori_peserta' => $validated['kategori_peserta'],
-            'nama_inovator' => $validated['nama_inovator'],
-            'nama_anggota' => $validated['nama_anggota'] ?? null,
-            'asal_instansi' => $validated['asal_instansi'],
-            'nomor_wa' => $validated['nomor_wa'],
-            'email' => $validated['email'],
-            'nama_alat' => $validated['nama_alat'],
-            'biaya_pembuatan' => $validated['biaya_pembuatan'],
-            'estimasi_harga_jual' => $validated['estimasi_harga_jual'],
-            'fungsi' => $validated['fungsi'],
-            'spesifikasi_bahan' => $validated['spesifikasi_bahan'],
-            'latar_belakang' => $validated['latar_belakang'] ?? null,
-            'file_proposal' => $fileProposalPath,
-            'foto_alat' => $fotoAlatPath,
-            'link_video' => $validated['link_video'] ?? null,
-            'status' => 'Menunggu Verifikasi',
-        ]);
+        // 2. Generate nomor registrasi atomik & simpan ke database dengan proteksi race condition
+        $tahun = date('Y');
+        $nomorRegistrasi = null;
+        $pendaftaran = null;
+        $maxAttempts = 5;
+
+        for ($attempt = 1; $attempt <= $maxAttempts; $attempt++) {
+            try {
+                $pendaftaran = DB::transaction(function () use ($user, $validated, $tahun, $fileProposalLink, $fotoAlatPath, &$nomorRegistrasi) {
+                    $lastRegistration = PendaftaranLomba::where('nomor_registrasi', 'LIKE', "TTG-{$tahun}-%")
+                        ->orderByDesc('id')
+                        ->lockForUpdate()
+                        ->first();
+
+                    $urutan = 1;
+                    if ($lastRegistration && preg_match('/TTG-\d{4}-(\d+)/', $lastRegistration->nomor_registrasi, $matches)) {
+                        $urutan = (int) $matches[1] + 1;
+                    }
+
+                    do {
+                        $candidateNomor = sprintf('TTG-%s-%04d', $tahun, $urutan);
+                        $exists = PendaftaranLomba::where('nomor_registrasi', $candidateNomor)->exists();
+                        if ($exists) {
+                            $urutan++;
+                        }
+                    } while ($exists);
+
+                    $nomorRegistrasi = $candidateNomor;
+
+                    return PendaftaranLomba::create([
+                        'id_user' => $user->id,
+                        'nomor_registrasi' => $nomorRegistrasi,
+                        'kategori_peserta' => $validated['kategori_peserta'],
+                        'nama_inovator' => $validated['nama_inovator'],
+                        'nama_anggota' => $validated['nama_anggota'] ?? null,
+                        'asal_instansi' => $validated['asal_instansi'],
+                        'nomor_wa' => $validated['nomor_wa'],
+                        'email' => $validated['email'],
+                        'nama_alat' => $validated['nama_alat'],
+                        'biaya_pembuatan' => $validated['biaya_pembuatan'],
+                        'estimasi_harga_jual' => $validated['estimasi_harga_jual'],
+                        'fungsi' => $validated['fungsi'],
+                        'spesifikasi_bahan' => $validated['spesifikasi_bahan'],
+                        'latar_belakang' => $validated['latar_belakang'] ?? null,
+                        'file_proposal' => $fileProposalLink,
+                        'foto_alat' => $fotoAlatPath,
+                        'link_video' => $validated['link_video'] ?? null,
+                        'status' => 'Menunggu Verifikasi',
+                    ]);
+                });
+
+                break; // Berhasil disimpan
+            } catch (\Illuminate\Database\QueryException $e) {
+                if ($attempt === $maxAttempts) {
+                    // Bersihkan file foto yang sudah diunggah jika gagal total
+                    if ($fotoAlatPath) {
+                        Storage::disk('public')->delete($fotoAlatPath);
+                    }
+                    throw $e;
+                }
+                usleep(50000); // 50ms jeda sebelum retry
+            }
+        }
+
+        // Pastikan kategori pada akun user tersimpan permanen jika sebelumnya masih kosong
+        if (!$user->kategori) {
+            $user->update(['kategori' => $pendaftaran->kategori_peserta]);
+        }
 
         return redirect()->route('lomba.status')->with('pendaftaran_berhasil', [
             'nomor_registrasi' => $nomorRegistrasi,
@@ -144,25 +233,34 @@ class LombaController extends Controller
     }
 
     /**
-     * Download proposal peserta
+     * Buka / Download proposal peserta
      */
     public function downloadProposal($id)
     {
         $pendaftaran = PendaftaranLomba::findOrFail($id);
         $user = Auth::guard('peserta')->user();
+        $isAdmin = Auth::guard('web')->check();
 
-        // Peserta hanya bisa mengunduh proposal miliknya sendiri (kecuali admin)
-        if ($user && $pendaftaran->id_user !== $user->id && !Auth::check()) {
-            abort(403, 'Anda tidak memiliki hak akses untuk mengunduh berkas ini.');
+        // Admin memiliki akses penuh; Peserta hanya bisa mengakses proposal miliknya sendiri
+        if (!$isAdmin) {
+            if (!$user || (int) $pendaftaran->id_user !== (int) $user->id) {
+                abort(403, 'Anda tidak memiliki hak akses untuk mengakses berkas ini.');
+            }
         }
 
-        if (!Storage::disk('public')->exists($pendaftaran->file_proposal)) {
-            abort(404, 'File proposal tidak ditemukan di penyimpanan server.');
+        // Jika berupa tautan URL (seperti Google Drive)
+        if (filter_var($pendaftaran->file_proposal, FILTER_VALIDATE_URL) || Str::startsWith($pendaftaran->file_proposal, ['http://', 'https://'])) {
+            return redirect()->away($pendaftaran->file_proposal);
         }
 
-        $namaFileDownload = 'Proposal_' . Str::slug($pendaftaran->nama_alat) . '_' . $pendaftaran->nomor_registrasi . '.' . pathinfo($pendaftaran->file_proposal, PATHINFO_EXTENSION);
-        /** @var \Illuminate\Filesystem\FilesystemAdapter $disk */
-        $disk = Storage::disk('public');
-        return $disk->download($pendaftaran->file_proposal, $namaFileDownload);
+        // Fallback untuk berkas lokal lama jika ada
+        if ($pendaftaran->file_proposal && Storage::disk('public')->exists($pendaftaran->file_proposal)) {
+            $namaFileDownload = 'Proposal_' . Str::slug($pendaftaran->nama_alat) . '_' . $pendaftaran->nomor_registrasi . '.' . pathinfo($pendaftaran->file_proposal, PATHINFO_EXTENSION);
+            /** @var \Illuminate\Filesystem\FilesystemAdapter $disk */
+            $disk = Storage::disk('public');
+            return $disk->download($pendaftaran->file_proposal, $namaFileDownload);
+        }
+
+        abort(404, 'Tautan atau berkas proposal tidak ditemukan.');
     }
 }

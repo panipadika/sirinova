@@ -156,18 +156,24 @@
                                 </div>
                             </div>
 
-                            <!-- Proposal Download Button -->
-                            <div class="bg-white p-2.5 rounded-lg border border-sky-200 flex items-center justify-between gap-2">
-                                <div class="flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-xl text-[#00A3E0]">description</span>
-                                    <div>
-                                        <strong class="text-gray-900 block font-bold text-xs leading-tight">File Proposal Inovasi</strong>
-                                        <span class="text-[10px] text-gray-400 block leading-tight">Diunggah oleh peserta</span>
+                            <!-- Proposal Link Button -->
+                            <div class="bg-white p-2.5 rounded-lg border border-sky-200 flex items-center justify-between gap-2 flex-wrap sm:flex-nowrap">
+                                <div class="flex items-center gap-2 min-w-0 flex-1">
+                                    <span class="material-symbols-outlined text-xl text-[#00A3E0] shrink-0">link</span>
+                                    <div class="min-w-0">
+                                        <strong class="text-gray-900 block font-bold text-xs leading-tight">Link Proposal (Google Drive)</strong>
+                                        @if(filter_var($item->file_proposal, FILTER_VALIDATE_URL) || \Illuminate\Support\Str::startsWith($item->file_proposal, ['http://', 'https://']))
+                                            <a href="{{ $item->file_proposal }}" target="_blank" rel="noopener noreferrer" class="text-[10px] text-[#00A3E0] hover:underline block truncate leading-tight font-mono">
+                                                {{ $item->file_proposal }}
+                                            </a>
+                                        @else
+                                            <span class="text-[10px] text-gray-400 block leading-tight">Dokumen Proposal Peserta</span>
+                                        @endif
                                     </div>
                                 </div>
-                                <a href="{{ route('lomba.proposal.download', $item->id) }}" class="py-1.5 px-3 bg-[#00A3E0] hover:bg-[#008cc0] active:scale-[0.98] text-white font-bold text-xs rounded-lg flex items-center gap-1 transition-all shadow-2xs cursor-pointer">
-                                    <span class="material-symbols-outlined text-sm">download</span>
-                                    <span>Unduh Proposal</span>
+                                <a href="{{ route('lomba.proposal.download', $item->id) }}" target="_blank" rel="noopener noreferrer" class="py-1.5 px-3 bg-[#00A3E0] hover:bg-[#008cc0] active:scale-[0.98] text-white font-bold text-xs rounded-lg flex items-center gap-1 transition-all shadow-2xs cursor-pointer shrink-0 whitespace-nowrap">
+                                    <span class="material-symbols-outlined text-sm">open_in_new</span>
+                                    <span>Buka Proposal</span>
                                 </a>
                             </div>
                         </div>

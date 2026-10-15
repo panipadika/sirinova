@@ -126,7 +126,7 @@
                         $isBuka = $jadwal->is_buka;
                         $isOperasionalBuka = $jadwal->isPendaftaranDibuka();
                     @endphp
-                    <div class="p-3 rounded-lg border transition-all space-y-2.5 flex flex-col justify-between {{ $isBuka ? 'bg-gradient-to-b from-sky-50/40 to-white border-sky-200/70 shadow-2xs' : 'bg-gradient-to-b from-rose-50/30 to-slate-50 border-rose-200/70' }}">
+                    <div class="p-3 rounded-lg border transition-all space-y-2.5 flex flex-col justify-between {{ $isBuka ? ($isOperasionalBuka ? 'bg-gradient-to-b from-sky-50/40 to-white border-sky-200/70 shadow-2xs' : 'bg-gradient-to-b from-amber-50/30 to-white border-amber-200/70') : 'bg-gradient-to-b from-rose-50/30 to-slate-50 border-rose-200/70' }}">
                         <div class="space-y-2">
                             <!-- Category Header & Status Akses Badge -->
                             <div class="flex items-start justify-between gap-1.5">
@@ -134,9 +134,9 @@
                                     <span class="text-[9px] font-black uppercase tracking-wider text-gray-400">Kategori {{ $loop->iteration }}</span>
                                     <h3 class="text-xs sm:text-sm font-extrabold text-gray-900 leading-tight">{{ $jadwal->judul_tampilan }}</h3>
                                 </div>
-                                <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[9px] font-bold border shrink-0 {{ $isBuka ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-rose-50 text-rose-700 border-rose-200' }}">
-                                    <span class="w-1.5 h-1.5 rounded-full {{ $isBuka ? 'bg-emerald-500' : 'bg-rose-500' }}"></span>
-                                    <span>{{ $isBuka ? 'Akses Terbuka' : 'Akses Ditutup' }}</span>
+                                <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[9px] font-bold border shrink-0 {{ $jadwal->status_badge }}">
+                                    <span class="w-1.5 h-1.5 rounded-full {{ $jadwal->dot_color }}"></span>
+                                    <span>{{ $jadwal->badge_label }}</span>
                                 </span>
                             </div>
 
@@ -144,13 +144,21 @@
                             <div class="bg-white/95 p-2 rounded-md border border-gray-100 space-y-1 text-xs">
                                 <div class="flex items-center justify-between text-[10px]">
                                     <span class="text-gray-400">Akses Pendaftaran:</span>
-                                    @if($isOperasionalBuka)
-                                    <span class="font-bold text-emerald-600 flex items-center gap-1">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Dibuka
+                                    @if(!$isBuka)
+                                    <span class="font-bold text-rose-600 flex items-center gap-1">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> Ditutup Manual
+                                    </span>
+                                    @elseif($jadwal->tanggal_buka && now()->lt($jadwal->tanggal_buka))
+                                    <span class="font-bold text-amber-600 flex items-center gap-1">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Belum Dimulai
+                                    </span>
+                                    @elseif($jadwal->tanggal_tutup && now()->gt($jadwal->tanggal_tutup))
+                                    <span class="font-bold text-slate-600 flex items-center gap-1">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span> Sudah Berakhir
                                     </span>
                                     @else
-                                    <span class="font-bold text-rose-600 flex items-center gap-1">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> Ditutup
+                                    <span class="font-bold text-emerald-600 flex items-center gap-1">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Dibuka
                                     </span>
                                     @endif
                                 </div>
@@ -195,6 +203,69 @@
                 </div>
             </div>
 
+            <!-- LINK TEMPLATE PROPOSAL & KETENTUAN LOMBA (GOOGLE DRIVE) -->
+            <div class="bg-white rounded-xl border border-gray-100 shadow-xs p-3.5 sm:p-4 space-y-3">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div class="flex items-start gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-sky-50 border border-sky-100 flex items-center justify-center shrink-0">
+                            <!-- Google Drive Colorful Icon -->
+                            <svg class="w-5 h-5 shrink-0" viewBox="0 0 87.3 78" xmlns="http://www.w3.org/2000/svg">
+                                <path d="m6.6 66.85 3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3l13.75-23.8h-27.5c0 1.55.4 3.1 1.2 4.5z" fill="#0066da"/>
+                                <path d="m43.65 25-13.75-23.8c-1.35.8-2.5 1.9-3.3 3.3l-25.4 44c-.8 1.4-1.2 2.95-1.2 4.5h27.5z" fill="#00ac47"/>
+                                <path d="m73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75 7.65-13.25c.8-1.4 1.2-2.95 1.2-4.5h-27.502l5.852 11.5z" fill="#ea4335"/>
+                                <path d="m43.65 25 13.75-23.8c-1.35-.8-2.9-1.2-4.5-1.2h-18.5c-1.6 0-3.15.45-4.5 1.2z" fill="#00832d"/>
+                                <path d="m59.8 53h-32.3l-13.75 23.8c1.35.8 2.9 1.2 4.5 1.2h50.8c1.6 0 3.15-.45 4.5-1.2z" fill="#2684fc"/>
+                                <path d="m73.4 26.5-12.7-22c-.8-1.4-1.95-2.5-3.3-3.3l-13.75 23.8 16.15 28h27.45c0-1.55-.4-3.1-1.2-4.5z" fill="#ffba00"/>
+                            </svg>
+                        </div>
+                        <div class="space-y-0.5">
+                            <div class="flex items-center gap-2">
+                                <h2 class="text-xs sm:text-sm font-black text-gray-900">Link Template Proposal & Ketentuan Lomba (Google Drive)</h2>
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold bg-sky-50 text-[#00A3E0] border border-sky-200">
+                                    <span class="material-symbols-outlined text-[11px]">public</span> Publik
+                                </span>
+                            </div>
+                            <p class="text-[10px] sm:text-[11px] text-gray-500">
+                                Tautan Google Drive ini yang dibuka oleh peserta di halaman Informasi Lomba dan Formulir Pendaftaran untuk mengunduh template proposal resmi.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center gap-2 shrink-0">
+                        <!-- Tombol Uji Buka Link -->
+                        <a href="{{ $linkTemplateProposal }}" target="_blank" rel="noopener noreferrer" 
+                           class="px-3 py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 font-bold text-xs rounded-lg transition-colors flex items-center gap-1 shadow-2xs cursor-pointer hover:border-slate-300"
+                           title="Buka link Google Drive saat ini di tab baru">
+                            <span class="material-symbols-outlined text-sm text-[#00A3E0]">open_in_new</span>
+                            <span>Uji Buka Link</span>
+                        </a>
+
+                        <!-- Tombol Ganti Link (Modal) -->
+                        <button type="button" 
+                                onclick="openEditTemplateModal('{{ addslashes($linkTemplateProposal) }}')" 
+                                class="px-3.5 py-1.5 bg-[#00A3E0] hover:bg-[#008cc0] active:scale-[0.99] text-white font-bold text-xs rounded-lg shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer">
+                            <span class="material-symbols-outlined text-sm">edit</span>
+                            <span>Ganti Link Template</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Box URL Aktif -->
+                <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200/80 flex items-center justify-between gap-3 text-xs">
+                    <div class="flex items-center gap-2 min-w-0 flex-1">
+                        <span class="material-symbols-outlined text-base text-slate-400 shrink-0">link</span>
+                        <span class="text-gray-400 text-[11px] shrink-0 font-medium">URL Aktif:</span>
+                        <a href="{{ $linkTemplateProposal }}" target="_blank" rel="noopener noreferrer" class="font-mono text-xs text-[#00A3E0] hover:underline truncate" title="{{ $linkTemplateProposal }}">
+                            {{ $linkTemplateProposal }}
+                        </a>
+                    </div>
+                    <span class="text-[10px] text-slate-400 shrink-0 hidden sm:inline-flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[13px] text-emerald-500">check_circle</span>
+                        <span>Aktif Digunakan Peserta</span>
+                    </span>
+                </div>
+            </div>
+
             <!-- FILTER & SEARCH BAR (Compact & Clean - Arrow Overlap Fixed) -->
             <div class="bg-white p-2.5 sm:p-3 rounded-xl border border-gray-100 shadow-xs">
                 <form action="{{ route('admin.lomba.index') }}" method="GET" class="flex flex-col md:flex-row gap-2 items-stretch md:items-center">
@@ -207,7 +278,7 @@
 
                     <!-- Filter Kategori (Clean Custom Arrow - No Overlap) -->
                     <div class="relative shrink-0">
-                        <select name="kategori" class="appearance-none w-full md:w-auto min-w-[195px] text-xs bg-slate-50 border border-slate-200 rounded-lg pl-3 pr-8 py-1.5 font-medium text-slate-700 focus:bg-white focus:ring-2 focus:ring-[#00A3E0]/20 focus:border-[#00A3E0] outline-none cursor-pointer transition-all">
+                        <select name="kategori" onchange="this.form.submit()" class="appearance-none w-full md:w-auto min-w-[195px] text-xs bg-slate-50 border border-slate-200 rounded-lg pl-3 pr-8 py-1.5 font-medium text-slate-700 focus:bg-white focus:ring-2 focus:ring-[#00A3E0]/20 focus:border-[#00A3E0] outline-none cursor-pointer transition-all">
                             <option value="">Semua Kategori ({{ $stats['total'] }})</option>
                             <option value="SMA/SMK Sederajat" {{ request('kategori') == 'SMA/SMK Sederajat' ? 'selected' : '' }}>SMA/SMK Sederajat ({{ $stats['sma'] }})</option>
                             <option value="Perguruan Tinggi" {{ request('kategori') == 'Perguruan Tinggi' ? 'selected' : '' }}>Perguruan Tinggi ({{ $stats['pt'] }})</option>
@@ -220,7 +291,7 @@
 
                     <!-- Filter Status (Clean Custom Arrow) -->
                     <div class="relative shrink-0">
-                        <select name="status" class="appearance-none w-full md:w-auto min-w-[155px] text-xs bg-slate-50 border border-slate-200 rounded-lg pl-3 pr-8 py-1.5 font-medium text-slate-700 focus:bg-white focus:ring-2 focus:ring-[#00A3E0]/20 focus:border-[#00A3E0] outline-none cursor-pointer transition-all">
+                        <select name="status" onchange="this.form.submit()" class="appearance-none w-full md:w-auto min-w-[155px] text-xs bg-slate-50 border border-slate-200 rounded-lg pl-3 pr-8 py-1.5 font-medium text-slate-700 focus:bg-white focus:ring-2 focus:ring-[#00A3E0]/20 focus:border-[#00A3E0] outline-none cursor-pointer transition-all">
                             <option value="">Semua Status</option>
                             <option value="Menunggu Verifikasi" {{ request('status') == 'Menunggu Verifikasi' ? 'selected' : '' }}>Menunggu Verifikasi</option>
                             <option value="Lolos Administrasi" {{ request('status') == 'Lolos Administrasi' ? 'selected' : '' }}>Lolos Administrasi</option>
@@ -232,18 +303,14 @@
                         </div>
                     </div>
 
-                    <!-- Buttons -->
-                    <div class="flex items-center gap-1.5 shrink-0">
-                        <button type="submit" class="px-3.5 py-1.5 bg-[#00A3E0] hover:bg-[#008cc0] active:scale-[0.99] text-white font-bold text-xs rounded-lg shadow-2xs transition-all flex items-center justify-center gap-1 cursor-pointer">
-                            <span class="material-symbols-outlined text-[15px]">filter_alt</span>
-                            <span>Filter</span>
-                        </button>
-                        @if(request()->hasAny(['q', 'kategori', 'status']))
-                        <a href="{{ route('admin.lomba.index') }}" class="p-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg transition-colors flex items-center justify-center cursor-pointer" title="Reset Filter">
-                            <span class="material-symbols-outlined text-[15px]">close</span>
-                        </a>
-                        @endif
-                    </div>
+                    <!-- Hidden submit button for Enter key support in search input -->
+                    <button type="submit" class="hidden"></button>
+
+                    <!-- Tombol Reset Filter -->
+                    <a href="{{ route('admin.lomba.index') }}" class="px-3.5 py-1.5 bg-[#00A3E0] hover:bg-[#008cc0] active:scale-[0.99] text-white font-bold text-xs rounded-lg shadow-2xs transition-all flex items-center justify-center gap-1 cursor-pointer whitespace-nowrap shrink-0" title="Reset Semua Filter">
+                        <span class="material-symbols-outlined text-[16px]">restart_alt</span>
+                        <span>Reset</span>
+                    </a>
                 </form>
             </div>
 
@@ -339,8 +406,8 @@
                                         <a href="{{ route('admin.lomba.show', $item->id) }}" class="p-1 bg-sky-50 hover:bg-[#00A3E0] text-[#00A3E0] hover:text-white rounded-md transition-colors" title="Lihat Detail & Verifikasi">
                                             <span class="material-symbols-outlined text-base">visibility</span>
                                         </a>
-                                        <a href="{{ route('lomba.proposal.download', $item->id) }}" class="p-1 bg-slate-50 hover:bg-slate-200 text-slate-600 rounded-md transition-colors" title="Download Proposal">
-                                            <span class="material-symbols-outlined text-base">download</span>
+                                        <a href="{{ route('lomba.proposal.download', $item->id) }}" target="_blank" rel="noopener noreferrer" class="p-1 bg-slate-50 hover:bg-[#00A3E0] text-slate-600 hover:text-white rounded-md transition-colors" title="Buka Link Proposal (Google Drive)">
+                                            <span class="material-symbols-outlined text-base">link</span>
                                         </a>
                                         <form action="{{ route('admin.lomba.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data pendaftaran karya ini?')" class="inline">
                                             @csrf
@@ -546,6 +613,72 @@
         </div>
     </div>
 
+    <!-- MODAL EDIT LINK TEMPLATE PROPOSAL (GOOGLE DRIVE) -->
+    <div id="modal-edit-template" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs hidden items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-100 animate-in fade-in zoom-in-95 duration-150">
+            <!-- Header Modal -->
+            <div class="p-4 sm:p-5 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-sky-50/70 to-white">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-sky-100 text-[#00A3E0] flex items-center justify-center">
+                        <span class="material-symbols-outlined text-xl">link</span>
+                    </div>
+                    <div>
+                        <h3 class="text-sm sm:text-base font-black text-gray-900">Ganti Link Template Proposal</h3>
+                        <p class="text-[10px] sm:text-[11px] text-gray-500">Ubah tautan Google Drive dokumen template proposal & pedoman lomba TTG</p>
+                    </div>
+                </div>
+                <button type="button" onclick="closeEditTemplateModal()" class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer">
+                    <span class="material-symbols-outlined text-lg">close</span>
+                </button>
+            </div>
+
+            <!-- Form Edit Link Template -->
+            <form action="{{ route('admin.lomba.template.update') }}" method="POST" class="p-5 space-y-4">
+                @csrf
+                @method('PUT')
+
+                <div class="space-y-1.5">
+                    <label for="modal-input-template-url" class="block text-xs font-bold text-slate-700 flex items-center justify-between">
+                        <span>Link Google Drive Template Proposal</span>
+                        <span class="text-[10px] font-semibold text-rose-500">*Wajib URL valid</span>
+                    </label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                            <span class="material-symbols-outlined text-lg text-[#00A3E0]">link</span>
+                        </span>
+                        <input type="url" name="link_template_proposal" id="modal-input-template-url" 
+                               required
+                               placeholder="https://drive.google.com/drive/folders/... atau https://drive.google.com/file/d/..." 
+                               class="w-full pl-9 pr-3.5 py-2.5 text-xs font-mono bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-[#00A3E0]/20 focus:border-[#00A3E0] outline-none transition-all">
+                    </div>
+                    <span class="block text-[10px] text-slate-400 leading-tight">Tempelkan link folder atau dokumen template proposal dari Google Drive Anda.</span>
+                </div>
+
+                <!-- Catatan Peringatan Izin Akses Google Drive -->
+                <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800 space-y-1">
+                    <div class="flex items-center gap-1.5 font-bold text-amber-900">
+                        <span class="material-symbols-outlined text-base text-amber-600">info</span>
+                        <span>Pastikan Akses Tautan Bersifat Publik</span>
+                    </div>
+                    <p class="text-[11px] text-amber-700 leading-relaxed">
+                        Di Google Drive, klik kanan folder/file template &rarr; pilih <strong>Bagikan (Share)</strong> &rarr; ubah Akses Umum menjadi <strong>"Siapa saja yang memiliki link" (Anyone with the link can view)</strong> agar peserta dapat mengunduh tanpa meminta izin akses.
+                    </p>
+                </div>
+
+                <!-- Modal Actions -->
+                <div class="pt-3 border-t border-gray-100 flex items-center justify-end gap-2.5">
+                    <button type="button" onclick="closeEditTemplateModal()" class="px-4 py-2.5 text-xs font-bold text-gray-500 hover:text-gray-800 hover:bg-gray-100 rounded-xl transition-colors cursor-pointer">
+                        Batal
+                    </button>
+                    <button type="submit" class="px-5 py-2.5 bg-[#00A3E0] hover:bg-[#008cc0] active:scale-[0.99] text-white font-bold text-xs rounded-xl shadow-md shadow-sky-500/20 transition-all cursor-pointer flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-base">save</span>
+                        <span>Simpan & Terapkan Link</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
         function setStatusAkses(val) {
             document.getElementById('modal-input-is-buka').value = val;
@@ -582,6 +715,37 @@
         document.getElementById('modal-edit-jadwal').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeEditJadwalModal();
+            }
+        });
+
+        // Handler Modal Edit Template Proposal (Google Drive)
+        function openEditTemplateModal(currentUrl) {
+            document.getElementById('modal-input-template-url').value = currentUrl;
+            const modal = document.getElementById('modal-edit-template');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => {
+                document.getElementById('modal-input-template-url').focus();
+            }, 100);
+        }
+
+        function closeEditTemplateModal() {
+            const modal = document.getElementById('modal-edit-template');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        document.getElementById('modal-edit-template').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeEditTemplateModal();
+            }
+        });
+
+        // Close modals on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeEditJadwalModal();
+                closeEditTemplateModal();
             }
         });
     </script>

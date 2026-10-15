@@ -79,7 +79,7 @@
                     Panel Administrasi
                 </h2>
                 <p class="text-sm lg:text-base text-cyan-50 leading-relaxed font-normal opacity-90 pt-1">
-                    Pusat pengelolaan terintegrasi riset, indikator pembangunan makro, katalog teknologi tepat guna, repositori e-book kajian, telaahan staf, dan publikasi inovasi daerah.
+                    Pusat pengelolaan terintegrasi riset, indikator pembangunan makro, katalog teknologi tepat guna, pendaftaran lomba inovasi TTG, repositori e-book kajian, telaahan staf, dan publikasi inovasi daerah.
                 </p>
             </div>
         </div>

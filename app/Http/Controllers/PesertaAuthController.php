@@ -70,6 +70,7 @@ class PesertaAuthController extends Controller
             'email' => 'required|string|email|max:255|unique:user,email',
             'no_wa' => 'required|string|max:20',
             'asal_instansi' => 'required|string|max:255',
+            'kategori' => 'required|in:SMA/SMK Sederajat,Perguruan Tinggi,Umum',
             'password' => 'required|string|min:6|confirmed',
         ], [
             'name.required' => 'Nama lengkap inovator / perwakilan wajib diisi.',
@@ -77,6 +78,8 @@ class PesertaAuthController extends Controller
             'email.unique' => 'Email ini sudah terdaftar. Silakan login menggunakan email tersebut.',
             'no_wa.required' => 'Nomor WhatsApp aktif wajib diisi.',
             'asal_instansi.required' => 'Asal instansi / sekolah / universitas wajib diisi.',
+            'kategori.required' => 'Pilih kategori peserta yang sesuai dengan identitas inovator/tim Anda.',
+            'kategori.in' => 'Kategori peserta tidak valid.',
             'password.required' => 'Kata sandi wajib diisi.',
             'password.min' => 'Kata sandi minimal 6 karakter.',
             'password.confirmed' => 'Konfirmasi kata sandi tidak cocok.',
@@ -87,6 +90,7 @@ class PesertaAuthController extends Controller
             'email' => $validated['email'],
             'no_wa' => $validated['no_wa'],
             'asal_instansi' => $validated['asal_instansi'],
+            'kategori' => $validated['kategori'],
             'password' => Hash::make($validated['password']),
         ]);
 

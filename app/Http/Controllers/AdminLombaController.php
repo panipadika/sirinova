@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\PendaftaranLomba;
 use App\Models\JadwalLomba;
+use App\Models\PengaturanLomba;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class AdminLombaController extends Controller
 {
@@ -42,6 +44,9 @@ class AdminLombaController extends Controller
         // Data Jadwal & Gembok Pendaftaran per Kategori
         $jadwalLomba = JadwalLomba::orderBy('id')->get();
 
+        // Link Template Proposal Resmi (Google Drive)
+        $linkTemplateProposal = PengaturanLomba::getTemplateUrl();
+
         // Statistik Cepat untuk Card Dashboard Lomba
         $stats = [
             'total' => PendaftaranLomba::count(),
@@ -54,7 +59,7 @@ class AdminLombaController extends Controller
             'umum' => PendaftaranLomba::where('kategori_peserta', 'Umum')->count(),
         ];
 
-        return view('admin.lomba.index', compact('pendaftar', 'stats', 'jadwalLomba'));
+        return view('admin.lomba.index', compact('pendaftar', 'stats', 'jadwalLomba', 'linkTemplateProposal'));
     }
 
     /**
@@ -92,8 +97,8 @@ class AdminLombaController extends Controller
     {
         $item = PendaftaranLomba::findOrFail($id);
 
-        // Hapus file proposal dan foto dari storage jika ada
-        if ($item->file_proposal && Storage::disk('public')->exists($item->file_proposal)) {
+        // Hapus file proposal dan foto dari storage jika ada (hanya jika berupa berkas lokal)
+        if ($item->file_proposal && !Str::startsWith($item->file_proposal, ['http://', 'https://']) && Storage::disk('public')->exists($item->file_proposal)) {
             Storage::disk('public')->delete($item->file_proposal);
         }
         if ($item->foto_alat && Storage::disk('public')->exists($item->foto_alat)) {
@@ -172,5 +177,27 @@ class AdminLombaController extends Controller
         ]);
 
         return back()->with('success', "Pengaturan jadwal pendaftaran kategori '{$jadwal->judul_tampilan}' berhasil disimpan.");
+    }
+
+    /**
+     * Update Link Template Proposal (Google Drive)
+     */
+    public function updateTemplateProposal(Request $request)
+    {
+        $request->validate([
+            'link_template_proposal' => 'required|url|max:1000',
+        ], [
+            'link_template_proposal.required' => 'Link Google Drive template proposal wajib diisi.',
+            'link_template_proposal.url' => 'Format tautan harus berupa URL valid (contoh: https://drive.google.com/...).',
+            'link_template_proposal.max' => 'Panjang tautan maksimal 1000 karakter.',
+        ]);
+
+        PengaturanLomba::set(
+            'link_template_proposal',
+            trim($request->link_template_proposal),
+            'Link Google Drive template proposal dan pedoman ketentuan Lomba TTG Kota Tasikmalaya'
+        );
+
+        return back()->with('success', 'Tautan Google Drive template proposal berhasil diperbarui dan langsung aktif di halaman peserta.');
     }
 }

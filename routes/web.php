@@ -61,8 +61,10 @@ Route::middleware('auth:peserta')->prefix('lomba-ttg')->group(function () {
     Route::get('/daftar', [LombaController::class, 'create'])->name('lomba.daftar');
     Route::post('/daftar', [LombaController::class, 'store'])->name('lomba.store');
     Route::get('/status', [LombaController::class, 'status'])->name('lomba.status');
-    Route::get('/proposal/{id}', [LombaController::class, 'downloadProposal'])->name('lomba.proposal.download');
 });
+
+// Download Proposal Lomba (Dapat diakses oleh Peserta pemilik proposal atau Admin)
+Route::middleware('auth:peserta,web')->get('/lomba-ttg/proposal/{id}', [LombaController::class, 'downloadProposal'])->name('lomba.proposal.download');
 
 // Route Autentikasi Admin & Lupa Password (Guest / Logged Out dengan Proteksi Rate Limiting)
 Route::middleware(['guest', 'throttle:10,1'])->group(function () {
@@ -124,6 +126,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('/lomba', [AdminLombaController::class, 'index'])->name('admin.lomba.index');
     Route::post('/lomba/jadwal/{id}/toggle-gembok', [AdminLombaController::class, 'toggleGembok'])->name('admin.lomba.jadwal.toggle');
     Route::put('/lomba/jadwal/{id}', [AdminLombaController::class, 'updateJadwal'])->name('admin.lomba.jadwal.update');
+    Route::put('/lomba/template-proposal', [AdminLombaController::class, 'updateTemplateProposal'])->name('admin.lomba.template.update');
     Route::get('/lomba/print', [AdminLombaController::class, 'print'])->name('admin.lomba.print');
     Route::get('/lomba/{id}', [AdminLombaController::class, 'show'])->name('admin.lomba.show');
     Route::patch('/lomba/{id}/status', [AdminLombaController::class, 'updateStatus'])->name('admin.lomba.update-status');

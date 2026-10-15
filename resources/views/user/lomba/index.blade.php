@@ -49,7 +49,7 @@
 
     <!-- 1. NAVBAR / HEADER -->
     <header class="bg-white/95 backdrop-blur-md sticky top-0 z-50 border-b border-slate-100 shadow-sm transition-all m-0" style="top: 0; margin-top: 0;">
-        <div class="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
 
             <!-- Logo & Brand Name -->
             <a href="/" class="flex items-center gap-3 shrink-0 group">
@@ -61,7 +61,7 @@
             </a>
 
             <!-- Desktop Navigation Links -->
-            <nav class="hidden md:flex items-center gap-5 xl:gap-7 font-semibold text-sm whitespace-nowrap">
+            <nav class="hidden md:flex items-center gap-6 xl:gap-8 font-semibold text-sm whitespace-nowrap">
                 @if(!Auth::guard('peserta')->check())
                 <a href="/" class="text-slate-600 hover:text-[#00A3E0] transition-colors py-1 whitespace-nowrap">Beranda</a>
                 @endif
@@ -92,8 +92,8 @@
                 <a href="{{ route('public.ebook') }}" class="text-slate-600 hover:text-[#00A3E0] transition-colors py-1 whitespace-nowrap">E-Book Kajian</a>
                 <a href="{{ route('public.telaahan-staf') }}" class="text-slate-600 hover:text-[#00A3E0] transition-colors py-1 whitespace-nowrap">Telaahan Staf</a>
                 <a href="{{ route('public.galeri') }}" class="text-slate-600 hover:text-[#00A3E0] transition-colors py-1 whitespace-nowrap">Galeri</a>
-                <a href="{{ route('lomba.info') }}" class="text-amber-500 hover:text-amber-600 transition-colors py-1 flex items-center gap-1 font-bold whitespace-nowrap">
-                    <span class="material-symbols-outlined text-base">emoji_events</span>
+                <a href="{{ route('lomba.info') }}" class="text-amber-500 border-b-2 border-amber-500 pb-1 flex items-center gap-1 font-bold whitespace-nowrap transition-colors">
+                    <span class="material-symbols-outlined text-base text-amber-500">emoji_events</span>
                     <span>Lomba TTG</span>
                 </a>
                 <a href="{{ route('public.tentang') }}" class="text-slate-600 hover:text-[#00A3E0] transition-colors py-1 whitespace-nowrap">Tentang</a>
@@ -112,7 +112,7 @@
                         </div>
                         <div class="text-left hidden lg:block">
                             <span class="block text-xs font-bold leading-tight max-w-[90px] xl:max-w-[120px] truncate text-slate-800">{{ $namaPanggilan }}</span>
-                            <span class="block text-[9px] font-semibold text-emerald-600 leading-none">Peserta TTG</span>
+                            <span class="block text-[9px] font-semibold text-emerald-600 leading-none">{{ $pesertaUser->kategori ?? 'Peserta TTG' }}</span>
                         </div>
                         <span class="material-symbols-outlined text-base text-slate-400 group-hover:text-[#00A3E0] transition-transform duration-200 group-hover:rotate-180">expand_more</span>
                     </button>
@@ -122,8 +122,13 @@
                         <div class="bg-white rounded-2xl shadow-xl border border-slate-100 py-1.5 overflow-hidden">
                             <!-- User Info Header -->
                             <div class="px-4 py-3 border-b border-slate-100 bg-slate-50/70">
-                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Akun Peserta Lomba</span>
-                                <p class="text-xs font-bold text-slate-800 truncate mt-0.5">{{ $pesertaUser->name }}</p>
+                                <div class="flex items-center justify-between gap-1 mb-0.5">
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Akun Peserta Lomba</span>
+                                    @if($pesertaUser->kategori)
+                                    <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-[#00A3E0]/10 text-[#00A3E0] border border-[#00A3E0]/20">{{ $pesertaUser->kategori }}</span>
+                                    @endif
+                                </div>
+                                <p class="text-xs font-bold text-slate-800 truncate">{{ $pesertaUser->name }}</p>
                                 <p class="text-[11px] text-slate-500 truncate">{{ $pesertaUser->email }}</p>
                             </div>
 
@@ -201,7 +206,7 @@
             <a href="{{ route('public.telaahan-staf') }}" class="block text-slate-600">Telaahan Staf</a>
             <a href="{{ route('public.galeri') }}" class="block text-slate-600">Galeri</a>
             <a href="{{ route('lomba.info') }}" class="flex items-center gap-1.5 text-amber-500 font-bold">
-                <span class="material-symbols-outlined text-base">emoji_events</span>
+                <span class="material-symbols-outlined text-base text-amber-500">emoji_events</span>
                 <span>Lomba TTG</span>
             </a>
             <a href="{{ route('public.tentang') }}" class="block text-slate-600">Tentang</a>
@@ -392,9 +397,14 @@
                         </ul>
                     </div>
 
-                    @if($isSMABuka)
+                    @if(!empty($lockedKategori) && $lockedKategori !== 'SMA/SMK Sederajat')
+                    <button type="button" disabled class="w-full py-2.5 px-4 bg-slate-100 text-slate-400 font-bold text-xs rounded-xl text-center cursor-not-allowed flex items-center justify-center gap-1.5 border border-slate-200" title="Akun Anda terdaftar di kategori {{ $lockedKategori }}">
+                        <span class="material-symbols-outlined text-sm">lock</span>
+                        <span>Akun Terdaftar di {{ $lockedKategori }}</span>
+                    </button>
+                    @elseif($isSMABuka)
                     <a href="{{ route('lomba.daftar') }}?kategori=SMA/SMK Sederajat" class="w-full py-2.5 px-4 bg-sky-100 hover:bg-[#00A3E0] text-[#00A3E0] hover:text-white font-bold text-xs rounded-xl text-center transition-colors block">
-                        Daftar Kategori Ini &rarr;
+                        {{ !empty($lockedKategori) && $lockedKategori === 'SMA/SMK Sederajat' ? '+ Daftarkan Karya Baru →' : 'Daftar Kategori Ini →' }}
                     </a>
                     @else
                     <button type="button" disabled class="w-full py-2.5 px-4 bg-slate-100 text-slate-400 font-bold text-xs rounded-xl text-center cursor-not-allowed flex items-center justify-center gap-1.5 border border-slate-200">
@@ -447,9 +457,14 @@
                         </ul>
                     </div>
 
-                    @if($isPTBuka)
+                    @if(!empty($lockedKategori) && $lockedKategori !== 'Perguruan Tinggi')
+                    <button type="button" disabled class="w-full py-2.5 px-4 bg-slate-100 text-slate-400 font-bold text-xs rounded-xl text-center cursor-not-allowed flex items-center justify-center gap-1.5 border border-slate-200" title="Akun Anda terdaftar di kategori {{ $lockedKategori }}">
+                        <span class="material-symbols-outlined text-sm">lock</span>
+                        <span>Akun Terdaftar di {{ $lockedKategori }}</span>
+                    </button>
+                    @elseif($isPTBuka)
                     <a href="{{ route('lomba.daftar') }}?kategori=Perguruan Tinggi" class="w-full py-2.5 px-4 bg-indigo-100 hover:bg-indigo-600 text-indigo-700 hover:text-white font-bold text-xs rounded-xl text-center transition-colors block">
-                        Daftar Kategori Ini &rarr;
+                        {{ !empty($lockedKategori) && $lockedKategori === 'Perguruan Tinggi' ? '+ Daftarkan Karya Baru →' : 'Daftar Kategori Ini →' }}
                     </a>
                     @else
                     <button type="button" disabled class="w-full py-2.5 px-4 bg-slate-100 text-slate-400 font-bold text-xs rounded-xl text-center cursor-not-allowed flex items-center justify-center gap-1.5 border border-slate-200">
@@ -502,9 +517,14 @@
                         </ul>
                     </div>
 
-                    @if($isUmumBuka)
+                    @if(!empty($lockedKategori) && $lockedKategori !== 'Umum')
+                    <button type="button" disabled class="w-full py-2.5 px-4 bg-slate-100 text-slate-400 font-bold text-xs rounded-xl text-center cursor-not-allowed flex items-center justify-center gap-1.5 border border-slate-200" title="Akun Anda terdaftar di kategori {{ $lockedKategori }}">
+                        <span class="material-symbols-outlined text-sm">lock</span>
+                        <span>Akun Terdaftar di {{ $lockedKategori }}</span>
+                    </button>
+                    @elseif($isUmumBuka)
                     <a href="{{ route('lomba.daftar') }}?kategori=Umum" class="w-full py-2.5 px-4 bg-amber-100 hover:bg-amber-600 text-amber-700 hover:text-white font-bold text-xs rounded-xl text-center transition-colors block">
-                        Daftar Kategori Ini &rarr;
+                        {{ !empty($lockedKategori) && $lockedKategori === 'Umum' ? '+ Daftarkan Karya Baru →' : 'Daftar Kategori Ini →' }}
                     </a>
                     @else
                     <button type="button" disabled class="w-full py-2.5 px-4 bg-slate-100 text-slate-400 font-bold text-xs rounded-xl text-center cursor-not-allowed flex items-center justify-center gap-1.5 border border-slate-200">
@@ -552,9 +572,9 @@
                 <!-- Step 3 -->
                 <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm relative space-y-3">
                     <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#00A3E0] text-white font-black text-sm">3</span>
-                    <h3 class="text-base font-bold text-slate-900">Upload Berkas Proposal</h3>
+                    <h3 class="text-base font-bold text-slate-900">Tautan Proposal Google Drive</h3>
                     <p class="text-xs text-slate-600 leading-relaxed">
-                        Unggah proposal karya (PDF/DOCX) dan sertakan foto dokumentasi/link video preview cara kerja alat.
+                        Sertakan tautan Google Drive dokumen proposal karya dan unggah foto dokumentasi prototipe alat TTG.
                     </p>
                 </div>
 
@@ -578,7 +598,7 @@
                     </div>
                     <div class="flex flex-wrap items-center gap-3 shrink-0">
                         <!-- Tombol Link Google Drive: Template Proposal & Ketentuan Syarat -->
-                        <a href="{{ env('GDRIVE_TEMPLATE_LOMBA_URL', 'https://drive.google.com/') }}" 
+                        <a href="{{ $linkTemplateProposal ?? \App\Models\PengaturanLomba::getTemplateUrl() }}" 
                            target="_blank" 
                            rel="noopener noreferrer" 
                            class="inline-flex items-center gap-2.5 px-5 py-3 bg-white text-[#00A3E0] hover:bg-cyan-50 font-black text-xs rounded-xl shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98]">
@@ -605,10 +625,10 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-xs">
                     <div class="bg-white/10 p-4 rounded-xl border border-white/10 space-y-2 flex flex-col justify-between">
                         <div class="space-y-1">
-                            <strong class="text-white block font-bold">1. File Proposal</strong>
-                            <span class="text-cyan-100 block leading-relaxed">Format PDF/DOCX (Maks. 15MB) yang memuat latar belakang, cara kerja, dan diagram sesuai template resmi.</span>
+                            <strong class="text-white block font-bold">1. Link Proposal (Google Drive)</strong>
+                            <span class="text-cyan-100 block leading-relaxed">Tautan dokumen proposal dari Google Drive sesuai template resmi (pastikan akses link tidak di-private).</span>
                         </div>
-                        <a href="{{ env('GDRIVE_TEMPLATE_LOMBA_URL', 'https://drive.google.com/') }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-[11px] font-bold text-cyan-200 hover:text-white underline pt-1">
+                        <a href="{{ $linkTemplateProposal ?? \App\Models\PengaturanLomba::getTemplateUrl() }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-[11px] font-bold text-cyan-200 hover:text-white underline pt-1">
                             <span>Unduh Template di Google Drive</span>
                             <span class="material-symbols-outlined text-xs">open_in_new</span>
                         </a>

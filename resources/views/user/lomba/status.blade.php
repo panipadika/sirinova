@@ -43,7 +43,7 @@
 
     <!-- 1. NAVBAR / HEADER -->
     <header class="bg-white/95 backdrop-blur-md sticky top-0 z-50 border-b border-slate-100 shadow-sm transition-all m-0" style="top: 0; margin-top: 0;">
-        <div class="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
 
             <!-- Logo & Brand Name -->
             <a href="/" class="flex items-center gap-3 shrink-0 group">
@@ -55,7 +55,7 @@
             </a>
 
             <!-- Desktop Navigation Links -->
-            <nav class="hidden md:flex items-center gap-5 xl:gap-7 font-semibold text-sm whitespace-nowrap">
+            <nav class="hidden md:flex items-center gap-6 xl:gap-8 font-semibold text-sm whitespace-nowrap">
                 @if(!Auth::guard('peserta')->check())
                 <a href="/" class="text-slate-600 hover:text-[#00A3E0] transition-colors py-1 whitespace-nowrap">Beranda</a>
                 @endif
@@ -86,8 +86,8 @@
                 <a href="{{ route('public.ebook') }}" class="text-slate-600 hover:text-[#00A3E0] transition-colors py-1 whitespace-nowrap">E-Book Kajian</a>
                 <a href="{{ route('public.telaahan-staf') }}" class="text-slate-600 hover:text-[#00A3E0] transition-colors py-1 whitespace-nowrap">Telaahan Staf</a>
                 <a href="{{ route('public.galeri') }}" class="text-slate-600 hover:text-[#00A3E0] transition-colors py-1 whitespace-nowrap">Galeri</a>
-                <a href="{{ route('lomba.info') }}" class="text-amber-500 hover:text-amber-600 transition-colors py-1 flex items-center gap-1 font-bold whitespace-nowrap">
-                    <span class="material-symbols-outlined text-base">emoji_events</span>
+                <a href="{{ route('lomba.info') }}" class="text-amber-500 border-b-2 border-amber-500 pb-1 flex items-center gap-1 font-bold whitespace-nowrap transition-colors">
+                    <span class="material-symbols-outlined text-base text-amber-500">emoji_events</span>
                     <span>Lomba TTG</span>
                 </a>
                 <a href="{{ route('public.tentang') }}" class="text-slate-600 hover:text-[#00A3E0] transition-colors py-1 whitespace-nowrap">Tentang</a>
@@ -106,7 +106,7 @@
                         </div>
                         <div class="text-left hidden lg:block">
                             <span class="block text-xs font-bold leading-tight max-w-[90px] xl:max-w-[120px] truncate text-slate-800">{{ $namaPanggilan }}</span>
-                            <span class="block text-[9px] font-semibold text-emerald-600 leading-none">Peserta TTG</span>
+                            <span class="block text-[9px] font-semibold text-emerald-600 leading-none">{{ $pesertaUser->kategori ?? 'Peserta TTG' }}</span>
                         </div>
                         <span class="material-symbols-outlined text-base text-slate-400 group-hover:text-[#00A3E0] transition-transform duration-200 group-hover:rotate-180">expand_more</span>
                     </button>
@@ -116,8 +116,13 @@
                         <div class="bg-white rounded-2xl shadow-xl border border-slate-100 py-1.5 overflow-hidden">
                             <!-- User Info Header -->
                             <div class="px-4 py-3 border-b border-slate-100 bg-slate-50/70">
-                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Akun Peserta Lomba</span>
-                                <p class="text-xs font-bold text-slate-800 truncate mt-0.5">{{ $pesertaUser->name }}</p>
+                                <div class="flex items-center justify-between gap-1 mb-0.5">
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Akun Peserta Lomba</span>
+                                    @if($pesertaUser->kategori)
+                                    <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-[#00A3E0]/10 text-[#00A3E0] border border-[#00A3E0]/20">{{ $pesertaUser->kategori }}</span>
+                                    @endif
+                                </div>
+                                <p class="text-xs font-bold text-slate-800 truncate">{{ $pesertaUser->name }}</p>
                                 <p class="text-[11px] text-slate-500 truncate">{{ $pesertaUser->email }}</p>
                             </div>
 
@@ -195,7 +200,7 @@
             <a href="{{ route('public.telaahan-staf') }}" class="block text-slate-600">Telaahan Staf</a>
             <a href="{{ route('public.galeri') }}" class="block text-slate-600">Galeri</a>
             <a href="{{ route('lomba.info') }}" class="flex items-center gap-1.5 text-amber-500 font-bold">
-                <span class="material-symbols-outlined text-base">emoji_events</span>
+                <span class="material-symbols-outlined text-base text-amber-500">emoji_events</span>
                 <span>Lomba TTG</span>
             </a>
             <a href="{{ route('public.tentang') }}" class="block text-slate-600">Tentang</a>
@@ -273,11 +278,17 @@
 
         <!-- List Pendaftaran -->
         <div class="space-y-4">
-            <div class="flex items-center justify-between">
+            <div class="flex items-center justify-between flex-wrap gap-3">
                 <h3 class="text-base sm:text-lg font-extrabold text-slate-900 flex items-center gap-2">
                     <span class="material-symbols-outlined text-[#00A3E0]">inventory</span>
                     <span>Daftar Karya Inovasi yang Diajukan</span>
                 </h3>
+                @if(!$pendaftaran->isEmpty())
+                <a href="{{ route('lomba.daftar') }}" class="inline-flex items-center gap-1.5 px-4 py-2 bg-[#00A3E0] hover:bg-[#008cc0] text-white rounded-xl text-xs font-bold transition-all shadow-sm shadow-sky-500/20 active:scale-[0.99]">
+                    <span class="material-symbols-outlined text-base">add_circle</span>
+                    <span>Daftarkan Karya Baru</span>
+                </a>
+                @endif
             </div>
 
             @if($pendaftaran->isEmpty())
@@ -378,9 +389,9 @@
                             </div>
 
                             <div class="pt-3 border-t border-slate-200 space-y-2">
-                                <a href="{{ route('lomba.proposal.download', $item->id) }}" class="w-full py-2 px-3 bg-white hover:bg-sky-50 text-[#00A3E0] border border-sky-200 font-bold text-xs rounded-xl flex items-center justify-center gap-1.5 transition-colors shadow-sm">
-                                    <span class="material-symbols-outlined text-base">download</span>
-                                    <span>Unduh Proposal Saya</span>
+                                <a href="{{ route('lomba.proposal.download', $item->id) }}" target="_blank" rel="noopener noreferrer" class="w-full py-2 px-3 bg-white hover:bg-sky-50 text-[#00A3E0] border border-sky-200 font-bold text-xs rounded-xl flex items-center justify-center gap-1.5 transition-colors shadow-sm">
+                                    <span class="material-symbols-outlined text-base">open_in_new</span>
+                                    <span>Buka Proposal (Google Drive)</span>
                                 </a>
 
                                 @if($item->link_video)

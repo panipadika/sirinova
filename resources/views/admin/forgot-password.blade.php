@@ -140,7 +140,7 @@
                                id="email" 
                                name="email" 
                                value="{{ old('email') }}" 
-                               placeholder="Massukan email admin..." 
+                               placeholder="Masukkan Email Admin" 
                                required 
                                autofocus
                                type="email">
@@ -156,7 +156,7 @@
                                id="nama" 
                                name="nama" 
                                value="{{ old('nama') }}" 
-                               placeholder="Massukan nama admin..." 
+                               placeholder="Masukkan Nama Admin" 
                                required 
                                type="text">
                     </div>

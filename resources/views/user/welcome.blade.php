@@ -10,7 +10,7 @@
 
     <!-- OpenGraph Meta Tags (WhatsApp, Facebook, Twitter Sharing) -->
     <meta property="og:title" content="SI-RINOVA - Bappelitbangda Kota Tasikmalaya">
-    <meta property="og:description" content="Sistem Informasi Riset, Indikator Makro, Katalog TTG, Repositori Kajian & Inovasi Bappelitbangda Kota Tasikmalaya.">
+    <meta property="og:description" content="Sistem Informasi Riset, Indikator Makro, Katalog & Lomba Inovasi TTG, Repositori Kajian, serta Inovasi Bappelitbangda Kota Tasikmalaya.">
     <meta property="og:image" content="{{ asset('storage/images/bappelitbangda_building.png') }}">
     <meta property="og:type" content="website">
 
@@ -421,7 +421,7 @@
                     </h1>
                     <p
                         class="animate-hero-subtitle text-slate-100 text-xs sm:text-base leading-relaxed font-normal opacity-90 line-clamp-2 sm:line-clamp-none">
-                        Wadah integrasi publikasi riset, capaian indikator makro, katalog TTG, repositori kajian, dan inovasi Bappelitbangda Kota Tasikmalaya.
+                        Wadah integrasi publikasi riset, capaian indikator makro, katalog & lomba inovasi TTG, repositori kajian, serta inovasi Bappelitbangda Kota Tasikmalaya.
                     </p>
 
                     <!-- CTA Buttons (Symmetrical 2-Column Grid on Mobile & Desktop) -->

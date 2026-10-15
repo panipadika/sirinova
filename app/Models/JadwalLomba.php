@@ -103,6 +103,48 @@ class JadwalLomba extends Model
     }
 
     /**
+     * Label teks ringkas untuk badge kartu
+     */
+    public function getBadgeLabelAttribute(): string
+    {
+        if (!$this->is_buka) {
+            return 'Akses Ditutup';
+        }
+
+        $now = now();
+        if ($this->tanggal_buka && $now->lt($this->tanggal_buka)) {
+            return 'Menunggu Jadwal';
+        }
+
+        if ($this->tanggal_tutup && $now->gt($this->tanggal_tutup)) {
+            return 'Periode Berakhir';
+        }
+
+        return 'Akses Terbuka';
+    }
+
+    /**
+     * Warna titik dot status
+     */
+    public function getDotColorAttribute(): string
+    {
+        if (!$this->is_buka) {
+            return 'bg-rose-500';
+        }
+
+        $now = now();
+        if ($this->tanggal_buka && $now->lt($this->tanggal_buka)) {
+            return 'bg-amber-500';
+        }
+
+        if ($this->tanggal_tutup && $now->gt($this->tanggal_tutup)) {
+            return 'bg-slate-500';
+        }
+
+        return 'bg-emerald-500';
+    }
+
+    /**
      * Periode teks ramah pembaca
      */
     public function getPeriodeTeksAttribute(): string

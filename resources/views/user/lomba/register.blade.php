@@ -117,13 +117,61 @@
 
                 <!-- Asal Sekolah / Kampus / Instansi -->
                 <div>
-                    <label for="asal_instansi" class="block text-xs font-semibold text-slate-700 mb-1.5">Asal Sekolah / Kampus / Instansi <span class="text-rose-500"></span></label>
+                    <label for="asal_instansi" class="block text-xs font-semibold text-slate-700 mb-1.5">Asal Sekolah / Kampus / Instansi <span class="text-rose-500">*</span></label>
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none material-symbols-outlined text-slate-400 text-lg">school</span>
                         <input type="text" id="asal_instansi" name="asal_instansi" value="{{ old('asal_instansi') }}" required
-                               placeholder="Masukkan Asal Sekolah / Kampus / Instansi Anda"
+                               placeholder="Contoh: Universitas Siliwangi / SMKN 1 Tasikmalaya / Mandiri"
                                class="w-full pl-9 pr-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-[#00A3E0]/20 focus:border-[#00A3E0] transition-all outline-none">
                     </div>
+                </div>
+
+                <!-- Kategori Peserta Akun -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1.5">
+                        Kategori Peserta Lomba <span class="text-rose-500">*</span>
+                    </label>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                        <!-- SMA/SMK -->
+                        <label class="relative flex flex-col p-3 border-2 rounded-xl cursor-pointer transition-all hover:border-[#00A3E0] has-[:checked]:border-[#00A3E0] has-[:checked]:bg-sky-50/50 border-slate-200 group">
+                            <input type="radio" name="kategori" value="SMA/SMK Sederajat" class="sr-only" {{ old('kategori') === 'SMA/SMK Sederajat' ? 'checked' : '' }} required>
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="w-7 h-7 rounded-lg bg-sky-100 text-[#00A3E0] flex items-center justify-center material-symbols-outlined text-base">school</span>
+                                <span class="w-4 h-4 rounded-full border-2 border-slate-300 group-has-[:checked]:border-[#00A3E0] group-has-[:checked]:bg-[#00A3E0] flex items-center justify-center transition-all">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-white opacity-0 group-has-[:checked]:opacity-100"></span>
+                                </span>
+                            </div>
+                            <strong class="text-xs font-bold text-slate-800 block">SMA/SMK</strong>
+                            <span class="text-[10px] text-slate-400">Pelajar SMA/SMK/MA</span>
+                        </label>
+
+                        <!-- Perguruan Tinggi -->
+                        <label class="relative flex flex-col p-3 border-2 rounded-xl cursor-pointer transition-all hover:border-indigo-600 has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/50 border-slate-200 group">
+                            <input type="radio" name="kategori" value="Perguruan Tinggi" class="sr-only" {{ old('kategori', 'Perguruan Tinggi') === 'Perguruan Tinggi' ? 'checked' : '' }} required>
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="w-7 h-7 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center material-symbols-outlined text-base">account_balance</span>
+                                <span class="w-4 h-4 rounded-full border-2 border-slate-300 group-has-[:checked]:border-indigo-600 group-has-[:checked]:bg-indigo-600 flex items-center justify-center transition-all">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-white opacity-0 group-has-[:checked]:opacity-100"></span>
+                                </span>
+                            </div>
+                            <strong class="text-xs font-bold text-slate-800 block">Perguruan Tinggi</strong>
+                            <span class="text-[10px] text-slate-400">Mahasiswa D3/S1/S2</span>
+                        </label>
+
+                        <!-- Umum -->
+                        <label class="relative flex flex-col p-3 border-2 rounded-xl cursor-pointer transition-all hover:border-amber-500 has-[:checked]:border-amber-500 has-[:checked]:bg-amber-50/50 border-slate-200 group">
+                            <input type="radio" name="kategori" value="Umum" class="sr-only" {{ old('kategori') === 'Umum' ? 'checked' : '' }} required>
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="w-7 h-7 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center material-symbols-outlined text-base">groups</span>
+                                <span class="w-4 h-4 rounded-full border-2 border-slate-300 group-has-[:checked]:border-amber-500 group-has-[:checked]:bg-amber-500 flex items-center justify-center transition-all">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-white opacity-0 group-has-[:checked]:opacity-100"></span>
+                                </span>
+                            </div>
+                            <strong class="text-xs font-bold text-slate-800 block">Umum</strong>
+                            <span class="text-[10px] text-slate-400">Praktisi / Masyarakat</span>
+                        </label>
+                    </div>
+                    <p class="text-[10px] text-slate-400 mt-1">Akun Anda akan terkunci pada kategori yang dipilih dan tidak dapat mendaftar di kategori lain.</p>
                 </div>
 
                 <!-- Grid: Password & Konfirmasi -->

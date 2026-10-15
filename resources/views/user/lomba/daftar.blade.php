@@ -43,7 +43,7 @@
 
     <!-- 1. NAVBAR / HEADER -->
     <header class="bg-white/95 backdrop-blur-md sticky top-0 z-50 border-b border-slate-100 shadow-sm transition-all m-0" style="top: 0; margin-top: 0;">
-        <div class="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
 
             <!-- Logo & Brand Name -->
             <a href="/" class="flex items-center gap-3 shrink-0 group">
@@ -55,7 +55,7 @@
             </a>
 
             <!-- Desktop Navigation Links -->
-            <nav class="hidden md:flex items-center gap-5 xl:gap-7 font-semibold text-sm whitespace-nowrap">
+            <nav class="hidden md:flex items-center gap-6 xl:gap-8 font-semibold text-sm whitespace-nowrap">
                 @if(!Auth::guard('peserta')->check())
                 <a href="/" class="text-slate-600 hover:text-[#00A3E0] transition-colors py-1 whitespace-nowrap">Beranda</a>
                 @endif
@@ -86,8 +86,8 @@
                 <a href="{{ route('public.ebook') }}" class="text-slate-600 hover:text-[#00A3E0] transition-colors py-1 whitespace-nowrap">E-Book Kajian</a>
                 <a href="{{ route('public.telaahan-staf') }}" class="text-slate-600 hover:text-[#00A3E0] transition-colors py-1 whitespace-nowrap">Telaahan Staf</a>
                 <a href="{{ route('public.galeri') }}" class="text-slate-600 hover:text-[#00A3E0] transition-colors py-1 whitespace-nowrap">Galeri</a>
-                <a href="{{ route('lomba.info') }}" class="text-amber-500 hover:text-amber-600 transition-colors py-1 flex items-center gap-1 font-bold whitespace-nowrap">
-                    <span class="material-symbols-outlined text-base">emoji_events</span>
+                <a href="{{ route('lomba.info') }}" class="text-amber-500 border-b-2 border-amber-500 pb-1 flex items-center gap-1 font-bold whitespace-nowrap transition-colors">
+                    <span class="material-symbols-outlined text-base text-amber-500">emoji_events</span>
                     <span>Lomba TTG</span>
                 </a>
                 <a href="{{ route('public.tentang') }}" class="text-slate-600 hover:text-[#00A3E0] transition-colors py-1 whitespace-nowrap">Tentang</a>
@@ -106,7 +106,7 @@
                         </div>
                         <div class="text-left hidden lg:block">
                             <span class="block text-xs font-bold leading-tight max-w-[90px] xl:max-w-[120px] truncate text-slate-800">{{ $namaPanggilan }}</span>
-                            <span class="block text-[9px] font-semibold text-emerald-600 leading-none">Peserta TTG</span>
+                            <span class="block text-[9px] font-semibold text-emerald-600 leading-none">{{ $pesertaUser->kategori ?? 'Peserta TTG' }}</span>
                         </div>
                         <span class="material-symbols-outlined text-base text-slate-400 group-hover:text-[#00A3E0] transition-transform duration-200 group-hover:rotate-180">expand_more</span>
                     </button>
@@ -116,8 +116,13 @@
                         <div class="bg-white rounded-2xl shadow-xl border border-slate-100 py-1.5 overflow-hidden">
                             <!-- User Info Header -->
                             <div class="px-4 py-3 border-b border-slate-100 bg-slate-50/70">
-                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Akun Peserta Lomba</span>
-                                <p class="text-xs font-bold text-slate-800 truncate mt-0.5">{{ $pesertaUser->name }}</p>
+                                <div class="flex items-center justify-between gap-1 mb-0.5">
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Akun Peserta Lomba</span>
+                                    @if($pesertaUser->kategori)
+                                    <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-[#00A3E0]/10 text-[#00A3E0] border border-[#00A3E0]/20">{{ $pesertaUser->kategori }}</span>
+                                    @endif
+                                </div>
+                                <p class="text-xs font-bold text-slate-800 truncate">{{ $pesertaUser->name }}</p>
                                 <p class="text-[11px] text-slate-500 truncate">{{ $pesertaUser->email }}</p>
                             </div>
 
@@ -195,7 +200,7 @@
             <a href="{{ route('public.telaahan-staf') }}" class="block text-slate-600">Telaahan Staf</a>
             <a href="{{ route('public.galeri') }}" class="block text-slate-600">Galeri</a>
             <a href="{{ route('lomba.info') }}" class="flex items-center gap-1.5 text-amber-500 font-bold">
-                <span class="material-symbols-outlined text-base">emoji_events</span>
+                <span class="material-symbols-outlined text-base text-amber-500">emoji_events</span>
                 <span>Lomba TTG</span>
             </a>
             <a href="{{ route('public.tentang') }}" class="block text-slate-600">Tentang</a>
@@ -300,7 +305,13 @@
                         <span class="material-symbols-outlined text-xl">category</span>
                         <h3 class="text-base sm:text-lg font-extrabold text-slate-900">1. Kategori Peserta Lomba</h3>
                     </div>
-                    <p class="text-xs text-slate-500 mt-0.5">Pilih salah satu dari 3 kategori peserta yang sesuai dengan identitas inovator/tim Anda.</p>
+                    <p class="text-xs text-slate-500 mt-0.5">
+                        @if(!empty($lockedKategori))
+                            Akun Anda terdaftar pada kategori <strong>{{ $lockedKategori }}</strong>. Anda dapat mendaftarkan karya inovasi baru pada kategori ini.
+                        @else
+                            Pilih salah satu dari 3 kategori peserta yang sesuai dengan identitas inovator/tim Anda. (Akun akan terkunci pada kategori yang pertama kali dipilih).
+                        @endif
+                    </p>
                 </div>
 
                 @php
@@ -313,16 +324,68 @@
                     $jadwalUmum = $jadwalKategori->get('Umum');
                     $isUmumBuka = $jadwalUmum ? $jadwalUmum->isPendaftaranDibuka() : true;
 
-                    $openCategory = $jadwalKategori->first(fn($j) => $j->isPendaftaranDibuka())?->kategori;
-                    $preferred = old('kategori_peserta', request('kategori'));
-                    $selectedKategori = ($preferred && $jadwalKategori->get($preferred)?->isPendaftaranDibuka()) 
-                        ? $preferred 
-                        : $openCategory;
+                    $hasLockedKategori = !empty($lockedKategori);
+
+                    $karyaSMA = isset($userRegistrations) ? $userRegistrations->where('kategori_peserta', 'SMA/SMK Sederajat') : collect();
+                    $karyaPT = isset($userRegistrations) ? $userRegistrations->where('kategori_peserta', 'Perguruan Tinggi') : collect();
+                    $karyaUmum = isset($userRegistrations) ? $userRegistrations->where('kategori_peserta', 'Umum') : collect();
+
+                    $countSMA = $karyaSMA->count();
+                    $countPT = $karyaPT->count();
+                    $countUmum = $karyaUmum->count();
+
+                    $isSMAAvailable = $isSMABuka && (!$hasLockedKategori || $lockedKategori === 'SMA/SMK Sederajat');
+                    $isPTAvailable = $isPTBuka && (!$hasLockedKategori || $lockedKategori === 'Perguruan Tinggi');
+                    $isUmumAvailable = $isUmumBuka && (!$hasLockedKategori || $lockedKategori === 'Umum');
+
+                    if ($hasLockedKategori) {
+                        $selectedKategori = $lockedKategori;
+                    } else {
+                        $preferred = old('kategori_peserta', request('kategori'));
+                        $isPreferredAvailable = match($preferred) {
+                            'SMA/SMK Sederajat' => $isSMAAvailable,
+                            'Perguruan Tinggi' => $isPTAvailable,
+                            'Umum' => $isUmumAvailable,
+                            default => false,
+                        };
+                        if ($isPreferredAvailable) {
+                            $selectedKategori = $preferred;
+                        } elseif ($isSMAAvailable) {
+                            $selectedKategori = 'SMA/SMK Sederajat';
+                        } elseif ($isPTAvailable) {
+                            $selectedKategori = 'Perguruan Tinggi';
+                        } elseif ($isUmumAvailable) {
+                            $selectedKategori = 'Umum';
+                        } else {
+                            $selectedKategori = null;
+                        }
+                    }
 
                     $semuaTutup = !$isSMABuka && !$isPTBuka && !$isUmumBuka;
+                    $lockedKategoriTutup = $hasLockedKategori && (
+                        ($lockedKategori === 'SMA/SMK Sederajat' && !$isSMABuka) ||
+                        ($lockedKategori === 'Perguruan Tinggi' && !$isPTBuka) ||
+                        ($lockedKategori === 'Umum' && !$isUmumBuka)
+                    );
                 @endphp
 
-                @if($semuaTutup)
+                @if($hasLockedKategori)
+                <div class="p-4 bg-sky-50 rounded-2xl border border-sky-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-sky-900">
+                    <div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-2xl text-[#00A3E0] shrink-0">verified</span>
+                        <div class="text-xs">
+                            <strong class="font-extrabold block text-sm">Akun Terdaftar di Kategori {{ $lockedKategori }}</strong>
+                            <span>Satu akun hanya diperbolehkan mendaftar pada 1 kategori dan tidak dapat mendaftar di kategori lain.@if($totalKaryaUser > 0) Anda dapat mendaftarkan <strong>lebih dari 1 karya</strong> pada kategori ini (Saat ini: <strong>{{ $totalKaryaUser }} karya terdaftar</strong>).@else Silakan daftarkan karya inovasi TTG Anda pada kategori ini.@endif</span>
+                        </div>
+                    </div>
+                    @if($totalKaryaUser > 0)
+                    <a href="{{ route('lomba.status') }}" class="px-3.5 py-2 bg-white border border-sky-200 text-[#00A3E0] hover:bg-sky-100 text-xs font-bold rounded-xl shrink-0 transition-colors flex items-center gap-1.5 shadow-2xs whitespace-nowrap">
+                        <span class="material-symbols-outlined text-sm">inventory_2</span>
+                        <span>Lihat Karya Saya ({{ $totalKaryaUser }})</span>
+                    </a>
+                    @endif
+                </div>
+                @elseif($semuaTutup)
                 <div class="p-4 bg-rose-50 rounded-2xl border border-rose-200 flex items-center gap-3 text-rose-800">
                     <span class="material-symbols-outlined text-2xl text-rose-600 shrink-0">lock</span>
                     <div class="text-xs">
@@ -334,7 +397,56 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <!-- Kategori SMA/SMK -->
-                    @if($isSMABuka)
+                    @if($hasLockedKategori && $lockedKategori !== 'SMA/SMK Sederajat')
+                    <div class="relative flex flex-col p-5 border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/70 opacity-60 cursor-not-allowed select-none space-y-2">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="w-10 h-10 rounded-xl bg-slate-200 text-slate-500 flex items-center justify-center material-symbols-outlined text-xl">school</span>
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-200 text-slate-600">
+                                <span class="material-symbols-outlined text-xs">lock</span> Terkunci
+                            </span>
+                        </div>
+                        <strong class="text-sm font-extrabold text-slate-700 block">SMA / SMK Sederajat</strong>
+                        <span class="text-xs text-slate-500 font-medium">Akun Anda terdaftar di kategori <strong>{{ $lockedKategori }}</strong>. Tidak dapat mendaftar di kategori lain.</span>
+                    </div>
+                    @elseif($lockedKategori === 'SMA/SMK Sederajat')
+                        @if($isSMABuka)
+                        <label class="relative flex flex-col p-5 border-2 border-[#00A3E0] bg-sky-50/50 rounded-2xl cursor-pointer transition-all shadow-xs group">
+                            <input type="radio" name="kategori_peserta" value="SMA/SMK Sederajat" class="sr-only" checked required>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="w-10 h-10 rounded-xl bg-sky-100 text-[#00A3E0] flex items-center justify-center material-symbols-outlined text-xl">school</span>
+                                <div class="flex items-center gap-1.5">
+                                    @if($countSMA > 0)
+                                    <span class="text-[10px] font-bold text-sky-700 bg-sky-100 px-2 py-0.5 rounded-md border border-sky-200">{{ $countSMA }} Karya Terdaftar</span>
+                                    @endif
+                                    <span class="w-5 h-5 rounded-full border-2 border-[#00A3E0] bg-[#00A3E0] flex items-center justify-center">
+                                        <span class="w-2 h-2 rounded-full bg-white"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="space-y-1">
+                                <div class="flex items-center justify-between">
+                                    <strong class="text-sm font-extrabold text-slate-900 block">SMA / SMK Sederajat</strong>
+                                    <span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">Kategori Akun Anda</span>
+                                </div>
+                                <span class="text-xs text-slate-600 block">Pelajar SMA, SMK, atau MA aktif di Kota Tasikmalaya.</span>
+                                <span class="text-[10px] font-bold text-[#00A3E0] block pt-1 border-t border-sky-100 flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-xs">check_circle</span> {{ $countSMA > 0 ? 'Mendaftarkan karya berikutnya' : 'Kategori akun Anda' }}
+                                </span>
+                            </div>
+                        </label>
+                        @else
+                        <div class="relative flex flex-col p-5 border-2 border-dashed border-rose-200 rounded-2xl bg-rose-50/40 opacity-80 cursor-not-allowed select-none space-y-2">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center material-symbols-outlined text-xl">school</span>
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-rose-100 text-rose-700">
+                                    <span class="material-symbols-outlined text-xs">lock</span> Ditutup
+                                </span>
+                            </div>
+                            <strong class="text-sm font-extrabold text-slate-700 block">SMA / SMK Sederajat</strong>
+                            <span class="text-xs text-rose-600 font-medium">{{ $jadwalSMA ? $jadwalSMA->status_label : 'Pendaftaran Ditutup' }}</span>
+                        </div>
+                        @endif
+                    @elseif($isSMABuka)
                     <label class="relative flex flex-col p-5 border-2 rounded-2xl cursor-pointer transition-all hover:border-[#00A3E0] has-[:checked]:border-[#00A3E0] has-[:checked]:bg-sky-50/50 border-slate-200 group">
                         <input type="radio" name="kategori_peserta" value="SMA/SMK Sederajat" class="sr-only" {{ $selectedKategori === 'SMA/SMK Sederajat' ? 'checked' : '' }} required>
                         <div class="flex items-center justify-between mb-3">
@@ -368,7 +480,56 @@
                     @endif
 
                     <!-- Kategori Perguruan Tinggi -->
-                    @if($isPTBuka)
+                    @if($hasLockedKategori && $lockedKategori !== 'Perguruan Tinggi')
+                    <div class="relative flex flex-col p-5 border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/70 opacity-60 cursor-not-allowed select-none space-y-2">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="w-10 h-10 rounded-xl bg-slate-200 text-slate-500 flex items-center justify-center material-symbols-outlined text-xl">account_balance</span>
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-200 text-slate-600">
+                                <span class="material-symbols-outlined text-xs">lock</span> Terkunci
+                            </span>
+                        </div>
+                        <strong class="text-sm font-extrabold text-slate-700 block">Perguruan Tinggi</strong>
+                        <span class="text-xs text-slate-500 font-medium">Akun Anda terdaftar di kategori <strong>{{ $lockedKategori }}</strong>. Tidak dapat mendaftar di kategori lain.</span>
+                    </div>
+                    @elseif($lockedKategori === 'Perguruan Tinggi')
+                        @if($isPTBuka)
+                        <label class="relative flex flex-col p-5 border-2 border-indigo-600 bg-indigo-50/50 rounded-2xl cursor-pointer transition-all shadow-xs group">
+                            <input type="radio" name="kategori_peserta" value="Perguruan Tinggi" class="sr-only" checked required>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center material-symbols-outlined text-xl">account_balance</span>
+                                <div class="flex items-center gap-1.5">
+                                    @if($countPT > 0)
+                                    <span class="text-[10px] font-bold text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded-md border border-indigo-200">{{ $countPT }} Karya Terdaftar</span>
+                                    @endif
+                                    <span class="w-5 h-5 rounded-full border-2 border-indigo-600 bg-indigo-600 flex items-center justify-center">
+                                        <span class="w-2 h-2 rounded-full bg-white"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="space-y-1">
+                                <div class="flex items-center justify-between">
+                                    <strong class="text-sm font-extrabold text-slate-900 block">Perguruan Tinggi</strong>
+                                    <span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">Kategori Akun Anda</span>
+                                </div>
+                                <span class="text-xs text-slate-600 block">Mahasiswa Diploma / Sarjana perguruan tinggi.</span>
+                                <span class="text-[10px] font-bold text-indigo-600 block pt-1 border-t border-indigo-100 flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-xs">check_circle</span> {{ $countPT > 0 ? 'Mendaftarkan karya berikutnya' : 'Kategori akun Anda' }}
+                                </span>
+                            </div>
+                        </label>
+                        @else
+                        <div class="relative flex flex-col p-5 border-2 border-dashed border-rose-200 rounded-2xl bg-rose-50/40 opacity-80 cursor-not-allowed select-none space-y-2">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center material-symbols-outlined text-xl">account_balance</span>
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-rose-100 text-rose-700">
+                                    <span class="material-symbols-outlined text-xs">lock</span> Ditutup
+                                </span>
+                            </div>
+                            <strong class="text-sm font-extrabold text-slate-700 block">Perguruan Tinggi</strong>
+                            <span class="text-xs text-rose-600 font-medium">{{ $jadwalPT ? $jadwalPT->status_label : 'Pendaftaran Ditutup' }}</span>
+                        </div>
+                        @endif
+                    @elseif($isPTBuka)
                     <label class="relative flex flex-col p-5 border-2 rounded-2xl cursor-pointer transition-all hover:border-indigo-600 has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/50 border-slate-200 group">
                         <input type="radio" name="kategori_peserta" value="Perguruan Tinggi" class="sr-only" {{ $selectedKategori === 'Perguruan Tinggi' ? 'checked' : '' }}>
                         <div class="flex items-center justify-between mb-3">
@@ -402,7 +563,56 @@
                     @endif
 
                     <!-- Kategori Umum -->
-                    @if($isUmumBuka)
+                    @if($hasLockedKategori && $lockedKategori !== 'Umum')
+                    <div class="relative flex flex-col p-5 border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/70 opacity-60 cursor-not-allowed select-none space-y-2">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="w-10 h-10 rounded-xl bg-slate-200 text-slate-500 flex items-center justify-center material-symbols-outlined text-xl">groups</span>
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-200 text-slate-600">
+                                <span class="material-symbols-outlined text-xs">lock</span> Terkunci
+                            </span>
+                        </div>
+                        <strong class="text-sm font-extrabold text-slate-700 block">Masyarakat Umum</strong>
+                        <span class="text-xs text-slate-500 font-medium">Akun Anda terdaftar di kategori <strong>{{ $lockedKategori }}</strong>. Tidak dapat mendaftar di kategori lain.</span>
+                    </div>
+                    @elseif($lockedKategori === 'Umum')
+                        @if($isUmumBuka)
+                        <label class="relative flex flex-col p-5 border-2 border-amber-500 bg-amber-50/50 rounded-2xl cursor-pointer transition-all shadow-xs group">
+                            <input type="radio" name="kategori_peserta" value="Umum" class="sr-only" checked required>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center material-symbols-outlined text-xl">groups</span>
+                                <div class="flex items-center gap-1.5">
+                                    @if($countUmum > 0)
+                                    <span class="text-[10px] font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-md border border-amber-200">{{ $countUmum }} Karya Terdaftar</span>
+                                    @endif
+                                    <span class="w-5 h-5 rounded-full border-2 border-amber-500 bg-amber-500 flex items-center justify-center">
+                                        <span class="w-2 h-2 rounded-full bg-white"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="space-y-1">
+                                <div class="flex items-center justify-between">
+                                    <strong class="text-sm font-extrabold text-slate-900 block">Masyarakat Umum</strong>
+                                    <span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">Kategori Akun Anda</span>
+                                </div>
+                                <span class="text-xs text-slate-600 block">Praktisi, pegiat UMKM, inovator mandiri, & komunitas.</span>
+                                <span class="text-[10px] font-bold text-amber-600 block pt-1 border-t border-amber-100 flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-xs">check_circle</span> {{ $countUmum > 0 ? 'Mendaftarkan karya berikutnya' : 'Kategori akun Anda' }}
+                                </span>
+                            </div>
+                        </label>
+                        @else
+                        <div class="relative flex flex-col p-5 border-2 border-dashed border-rose-200 rounded-2xl bg-rose-50/40 opacity-80 cursor-not-allowed select-none space-y-2">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center material-symbols-outlined text-xl">groups</span>
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-rose-100 text-rose-700">
+                                    <span class="material-symbols-outlined text-xs">lock</span> Ditutup
+                                </span>
+                            </div>
+                            <strong class="text-sm font-extrabold text-slate-700 block">Masyarakat Umum</strong>
+                            <span class="text-xs text-rose-600 font-medium">{{ $jadwalUmum ? $jadwalUmum->status_label : 'Pendaftaran Ditutup' }}</span>
+                        </div>
+                        @endif
+                    @elseif($isUmumBuka)
                     <label class="relative flex flex-col p-5 border-2 rounded-2xl cursor-pointer transition-all hover:border-amber-500 has-[:checked]:border-amber-500 has-[:checked]:bg-amber-50/50 border-slate-200 group">
                         <input type="radio" name="kategori_peserta" value="Umum" class="sr-only" {{ $selectedKategori === 'Umum' ? 'checked' : '' }}>
                         <div class="flex items-center justify-between mb-3">
@@ -595,41 +805,57 @@
                 </div>
             </div>
 
-            <!-- SECTION 4: UPLOAD BERKAS PROPOSAL & FOTO ALAT -->
+            <!-- SECTION 4: LINK PROPOSAL (GOOGLE DRIVE) & FOTO ALAT -->
             <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-5">
                 <div class="border-b border-slate-100 pb-4">
                     <div class="flex items-center gap-2 text-[#00A3E0]">
-                        <span class="material-symbols-outlined text-xl">upload_file</span>
-                        <h3 class="text-base sm:text-lg font-extrabold text-slate-900">4. Unggah Berkas Proposal & Foto Alat</h3>
+                        <span class="material-symbols-outlined text-xl">link</span>
+                        <h3 class="text-base sm:text-lg font-extrabold text-slate-900">4. Tautan Proposal & Foto Dokumentasi Alat</h3>
                     </div>
-                    <p class="text-xs text-slate-500 mt-0.5">Dokumen proposal dan foto dokumentasi alat wajib diunggah untuk kelengkapan administrasi dan penilaian dewan juri.</p>
+                    <p class="text-xs text-slate-500 mt-0.5">Sertakan link Google Drive dokumen proposal karya dan unggah foto dokumentasi alat untuk kelengkapan administrasi serta penilaian dewan juri.</p>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <!-- File Proposal -->
-                    <div class="space-y-2">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 items-start">
+                    <!-- Link Proposal (Google Drive) -->
+                    <div class="space-y-2.5">
                         <div class="flex items-center justify-between flex-wrap gap-2">
-                            <label class="block text-xs font-bold text-slate-700">
-                                File Proposal Lengkap <span class="text-rose-500"></span>
+                            <label for="file_proposal" class="block text-xs font-bold text-slate-700">
+                                Link Proposal (Google Drive) <span class="text-rose-500">*</span>
                             </label>
-                            <a href="{{ env('GDRIVE_TEMPLATE_LOMBA_URL', 'https://drive.google.com/') }}" target="_blank" rel="noopener noreferrer" class="text-[11px] font-bold text-[#00A3E0] hover:underline inline-flex items-center gap-1">
+                            <a href="{{ $linkTemplateProposal ?? \App\Models\PengaturanLomba::getTemplateUrl() }}" target="_blank" rel="noopener noreferrer" class="text-[11px] font-bold text-[#00A3E0] hover:underline inline-flex items-center gap-1">
                                 <span class="material-symbols-outlined text-sm">download</span>
-                                <span>Unduh Template Proposal (Google Drive)</span>
+                                <span>Unduh Template Proposal</span>
                             </a>
                         </div>
-                        <div class="border-2 border-dashed border-slate-300 hover:border-[#00A3E0] rounded-2xl p-5 text-center transition-colors bg-slate-50/50">
-                            <span class="material-symbols-outlined text-3xl text-[#00A3E0] mb-2 block">description</span>
-                            <p class="text-xs font-bold text-slate-700 mb-1">Pilih Dokumen Proposal</p>
-                            <p class="text-[11px] text-slate-400 mb-3">Format: PDF, DOC, atau DOCX (Maksimal 15 MB)</p>
-                            <input type="file" name="file_proposal" id="file_proposal" accept=".pdf,.doc,.docx" required 
-                                   class="block w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[#00A3E0] file:text-white hover:file:bg-[#008cc0] cursor-pointer">
+
+                        <!-- Banner Peringatan Merah (Persis seperti Permintaan) -->
+                        <div class="p-3 bg-[#c5221f] text-white rounded-xl text-xs font-bold flex items-center gap-2 shadow-xs">
+                            <span class="material-symbols-outlined text-lg shrink-0">warning</span>
+                            <span>Pastikan Link google drive anda tidak di private</span>
                         </div>
+
+                        <!-- Input URL Link Google Drive -->
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                                <span class="material-symbols-outlined text-lg text-[#00A3E0]">link</span>
+                            </span>
+                            <input type="url" name="file_proposal" id="file_proposal" 
+                                   value="{{ old('file_proposal') }}" 
+                                   placeholder="https://drive.google.com/file/d/..." 
+                                   class="w-full pl-10 pr-3.5 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-[#00A3E0] outline-none transition-all font-mono" 
+                                   required>
+                        </div>
+
+                        <p class="text-[11px] text-slate-500 leading-relaxed bg-slate-50 p-2.5 rounded-xl border border-slate-200/80 flex items-start gap-1.5">
+                            <span class="material-symbols-outlined text-sm text-[#00A3E0] shrink-0 mt-0.5">info</span>
+                            <span>Unggah file proposal Anda ke Google Drive, ubah akses tautan menjadi <strong>"Siapa saja yang memiliki link" (Anyone with the link can view)</strong>, lalu tempelkan link-nya pada kolom di atas.</span>
+                        </p>
                     </div>
 
                     <!-- Foto Alat TTG  -->
-                    <div class="space-y-2">
+                    <div class="space-y-2.5">
                         <label class="block text-xs font-bold text-slate-700">
-                            Foto Dokumentasi Alat TTG <span class="text-rose-500"></span>
+                            Foto Dokumentasi Alat TTG <span class="text-rose-500">*</span>
                         </label>
                         <div class="border-2 border-dashed border-slate-300 hover:border-[#00A3E0] rounded-2xl p-5 text-center transition-colors bg-slate-50/50 relative">
                             <div id="foto-preview-box" class="hidden mb-3">
@@ -659,15 +885,15 @@
                     <a href="{{ route('lomba.info') }}" class="text-xs font-bold text-slate-500 hover:text-slate-800 transition-colors">
                         Batal & Kembali
                     </a>
-                    @if($semuaTutup)
+                    @if($semuaTutup || $lockedKategoriTutup)
                     <button type="button" disabled class="w-full sm:w-auto px-8 py-3.5 bg-slate-300 text-slate-500 font-extrabold text-sm rounded-xl transition-all flex items-center justify-center gap-2 cursor-not-allowed border border-slate-300 shadow-none">
                         <span class="material-symbols-outlined text-lg">block</span>
-                        <span>Pendaftaran Ditutup</span>
+                        <span>{{ $lockedKategoriTutup ? 'Pendaftaran Kategori Anda Ditutup' : 'Pendaftaran Ditutup' }}</span>
                     </button>
                     @else
                     <button type="submit" id="btn-submit" class="w-full sm:w-auto px-8 py-3.5 bg-[#00A3E0] hover:bg-[#008cc0] active:scale-[0.99] text-white font-extrabold text-sm rounded-xl shadow-lg shadow-sky-500/20 transition-all flex items-center justify-center gap-2 cursor-pointer">
                         <span class="material-symbols-outlined text-lg">send</span>
-                        <span>Kirim Pendaftaran Lomba</span>
+                        <span>{{ $totalKaryaUser > 0 ? 'Kirim Pendaftaran Karya Baru' : 'Kirim Pendaftaran Lomba' }}</span>
                     </button>
                     @endif
                 </div>

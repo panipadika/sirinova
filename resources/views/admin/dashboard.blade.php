@@ -64,7 +64,7 @@
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4.5 sm:p-5 rounded-2xl border border-gray-100 shadow-[0_2px_10px_rgba(0,0,0,0.03)]">
                 <div>
                     <h2 class="text-2xl font-bold text-gray-900 tracking-tight">Dashboard Overview</h2>
-                    <p class="text-xs text-gray-500 mt-1">Ringkasan data, Indikator Makro, dan sebaran Teknologi Tepat Guna Kota Tasikmalaya hari ini.</p>
+                    <p class="text-xs text-gray-500 mt-1">Ringkasan data, Indikator Makro, sebaran Teknologi Tepat Guna, serta pendaftaran Lomba Inovasi TTG Kota Tasikmalaya hari ini.</p>
                 </div>
                 <div class="flex items-center gap-2 sm:gap-2.5 flex-wrap sm:flex-nowrap shrink-0">
                     <a href="/admin/indikator-makro"
@@ -90,31 +90,14 @@
                 </div>
             </div>
 
-            <!-- Refined Metric Cards (9 Grid Layout) -->
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-9 gap-3">
+            <!-- Refined Metric Cards (10 Cards in 5x2 Grid Layout) -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-5 xl:grid-cols-5 gap-3">
 
-                <!-- Card 1: Total Alat -->
-                <a href="/admin/alat"
-                    class="bg-white rounded-xl p-3.5 border border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.03)] hover:border-[#29abe2] hover:shadow-md transition-all group cursor-pointer flex flex-col justify-between">
-                    <div class="flex items-start justify-between gap-1">
-                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider group-hover:text-[#29abe2] transition-colors truncate" title="Total Alat TTG">Total Alat TTG</p>
-                        <div class="w-8 h-8 rounded-lg bg-blue-50 text-[#29abe2] flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
-                            <span class="material-symbols-outlined text-[18px]">inventory_2</span>
-                        </div>
-                    </div>
-                    <div class="mt-2">
-                        <p class="text-2xl font-bold text-gray-900 leading-none">{{ $totalAlat }}</p>
-                        <span class="text-[10px] text-emerald-600 font-semibold flex items-center gap-1 mt-1.5 whitespace-nowrap truncate">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0"></span> {{ $statusPublik }} Publik
-                        </span>
-                    </div>
-                </a>
-
-                <!-- Card 2: Indikator Makro -->
+                <!-- Card 1: Indikator Makro (Swapped to position 1) -->
                 <a href="/admin/indikator-makro"
                     class="bg-white rounded-xl p-3.5 border border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.03)] hover:border-sky-400 hover:shadow-md transition-all group cursor-pointer flex flex-col justify-between">
-                    <div class="flex items-start justify-between gap-1">
-                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider group-hover:text-sky-500 transition-colors truncate" title="Indikator Makro">Indikator Makro</p>
+                    <div class="flex items-start justify-between gap-1.5">
+                        <p class="text-[11px] font-bold text-gray-500 uppercase tracking-wider group-hover:text-sky-500 transition-colors leading-tight" title="Indikator Makro">Indikator</p>
                         <div class="w-8 h-8 rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
                             <span class="material-symbols-outlined text-[18px]">equalizer</span>
                         </div>
@@ -127,11 +110,28 @@
                     </div>
                 </a>
 
+                <!-- Card 2: Alat TTG (Swapped to position 2) -->
+                <a href="/admin/alat"
+                    class="bg-white rounded-xl p-3.5 border border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.03)] hover:border-[#29abe2] hover:shadow-md transition-all group cursor-pointer flex flex-col justify-between">
+                    <div class="flex items-start justify-between gap-1.5">
+                        <p class="text-[11px] font-bold text-gray-500 uppercase tracking-wider group-hover:text-[#29abe2] transition-colors leading-tight" title="Alat TTG">Alat TTG</p>
+                        <div class="w-8 h-8 rounded-lg bg-blue-50 text-[#29abe2] flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
+                            <span class="material-symbols-outlined text-[18px]">inventory_2</span>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <p class="text-2xl font-bold text-gray-900 leading-none">{{ $totalAlat }}</p>
+                        <span class="text-[10px] text-emerald-600 font-semibold flex items-center gap-1 mt-1.5 whitespace-nowrap truncate">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0"></span> {{ $statusPublik }} Publik
+                        </span>
+                    </div>
+                </a>
+
                 <!-- Card 3: Inovator -->
                 <a href="/admin/inovator"
                     class="bg-white rounded-xl p-3.5 border border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.03)] hover:border-amber-400 hover:shadow-md transition-all group cursor-pointer flex flex-col justify-between">
-                    <div class="flex items-start justify-between gap-1">
-                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider group-hover:text-amber-500 transition-colors truncate" title="Inovator">Inovator</p>
+                    <div class="flex items-start justify-between gap-1.5">
+                        <p class="text-[11px] font-bold text-gray-500 uppercase tracking-wider group-hover:text-amber-500 transition-colors leading-tight" title="Inovator">Inovator</p>
                         <div class="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
                             <span class="material-symbols-outlined text-[18px]">groups</span>
                         </div>
@@ -147,8 +147,8 @@
                 <!-- Card 4: Kategori -->
                 <a href="/admin/kategori"
                     class="bg-white rounded-xl p-3.5 border border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.03)] hover:border-purple-400 hover:shadow-md transition-all group cursor-pointer flex flex-col justify-between">
-                    <div class="flex items-start justify-between gap-1">
-                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider group-hover:text-purple-500 transition-colors truncate" title="Kategori">Kategori</p>
+                    <div class="flex items-start justify-between gap-1.5">
+                        <p class="text-[11px] font-bold text-gray-500 uppercase tracking-wider group-hover:text-purple-500 transition-colors leading-tight" title="Kategori Sektor">Kategori</p>
                         <div class="w-8 h-8 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
                             <span class="material-symbols-outlined text-[18px]">category</span>
                         </div>
@@ -164,8 +164,8 @@
                 <!-- Card 5: Wilayah -->
                 <a href="/admin/wilayah"
                     class="bg-white rounded-xl p-3.5 border border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.03)] hover:border-[#29abe2] hover:shadow-md transition-all group cursor-pointer flex flex-col justify-between">
-                    <div class="flex items-start justify-between gap-1">
-                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider group-hover:text-[#29abe2] transition-colors truncate" title="Wilayah">Wilayah</p>
+                    <div class="flex items-start justify-between gap-1.5">
+                        <p class="text-[11px] font-bold text-gray-500 uppercase tracking-wider group-hover:text-[#29abe2] transition-colors leading-tight" title="Wilayah Kecamatan">Wilayah</p>
                         <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
                             <span class="material-symbols-outlined text-[18px]">map</span>
                         </div>
@@ -181,8 +181,8 @@
                 <!-- Card 6: E-Book Kajian -->
                 <a href="/admin/ebook"
                     class="bg-white rounded-xl p-3.5 border border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.03)] hover:border-cyan-400 hover:shadow-md transition-all group cursor-pointer flex flex-col justify-between">
-                    <div class="flex items-start justify-between gap-1">
-                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider group-hover:text-cyan-500 transition-colors truncate" title="E-Book Kajian">E-Book Kajian</p>
+                    <div class="flex items-start justify-between gap-1.5">
+                        <p class="text-[11px] font-bold text-gray-500 uppercase tracking-wider group-hover:text-cyan-500 transition-colors leading-tight" title="E-Book Kajian">E-Book</p>
                         <div class="w-8 h-8 rounded-lg bg-cyan-50 text-cyan-600 flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
                             <span class="material-symbols-outlined text-[18px]">menu_book</span>
                         </div>
@@ -198,8 +198,8 @@
                 <!-- Card 7: Telaahan Staf -->
                 <a href="/admin/telaahan-staf"
                     class="bg-white rounded-xl p-3.5 border border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.03)] hover:border-indigo-400 hover:shadow-md transition-all group cursor-pointer flex flex-col justify-between">
-                    <div class="flex items-start justify-between gap-1">
-                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider group-hover:text-indigo-500 transition-colors truncate" title="Telaahan Staf">Telaahan Staf</p>
+                    <div class="flex items-start justify-between gap-1.5">
+                        <p class="text-[11px] font-bold text-gray-500 uppercase tracking-wider group-hover:text-indigo-500 transition-colors leading-tight" title="Telaahan Staf">Telaahan Staf</p>
                         <div class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
                             <span class="material-symbols-outlined text-[18px]">description</span>
                         </div>
@@ -215,8 +215,8 @@
                 <!-- Card 8: Galeri Kegiatan -->
                 <a href="/admin/galeri"
                     class="bg-white rounded-xl p-3.5 border border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.03)] hover:border-rose-400 hover:shadow-md transition-all group cursor-pointer flex flex-col justify-between">
-                    <div class="flex items-start justify-between gap-1">
-                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider group-hover:text-rose-500 transition-colors truncate" title="Galeri Kegiatan">Galeri Kegiatan</p>
+                    <div class="flex items-start justify-between gap-1.5">
+                        <p class="text-[11px] font-bold text-gray-500 uppercase tracking-wider group-hover:text-rose-500 transition-colors leading-tight" title="Galeri Kegiatan">Galeri</p>
                         <div class="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
                             <span class="material-symbols-outlined text-[18px]">photo_library</span>
                         </div>
@@ -232,8 +232,8 @@
                 <!-- Card 9: Lomba TTG -->
                 <a href="{{ route('admin.lomba.index') }}"
                     class="bg-white rounded-xl p-3.5 border border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.03)] hover:border-amber-400 hover:shadow-md transition-all group cursor-pointer flex flex-col justify-between">
-                    <div class="flex items-start justify-between gap-1">
-                        <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider group-hover:text-amber-500 transition-colors truncate" title="Lomba TTG">Lomba TTG</p>
+                    <div class="flex items-start justify-between gap-1.5">
+                        <p class="text-[11px] font-bold text-gray-500 uppercase tracking-wider group-hover:text-amber-500 transition-colors leading-tight" title="Lomba TTG">Lomba TTG</p>
                         <div class="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
                             <span class="material-symbols-outlined text-[18px]">emoji_events</span>
                         </div>
@@ -242,6 +242,23 @@
                         <p class="text-2xl font-bold text-gray-900 leading-none">{{ $totalLomba }}</p>
                         <span class="text-[10px] {{ $lombaMenunggu > 0 ? 'text-amber-600 font-bold' : 'text-slate-500 font-semibold' }} flex items-center gap-1 mt-1.5 whitespace-nowrap truncate">
                             <span class="w-1.5 h-1.5 rounded-full {{ $lombaMenunggu > 0 ? 'bg-amber-500' : 'bg-slate-400' }} shrink-0"></span> {{ $lombaMenunggu }} Menunggu
+                        </span>
+                    </div>
+                </a>
+
+                <!-- Card 10: Pesan Masuk (Added to complete 10 cards) -->
+                <a href="/admin/pesan"
+                    class="bg-white rounded-xl p-3.5 border border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.03)] hover:border-teal-400 hover:shadow-md transition-all group cursor-pointer flex flex-col justify-between">
+                    <div class="flex items-start justify-between gap-1.5">
+                        <p class="text-[11px] font-bold text-gray-500 uppercase tracking-wider group-hover:text-teal-600 transition-colors leading-tight" title="Pesan Masuk">Pesan Masuk</p>
+                        <div class="w-8 h-8 rounded-lg bg-teal-50 text-teal-600 flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
+                            <span class="material-symbols-outlined text-[18px]">inbox</span>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <p class="text-2xl font-bold text-gray-900 leading-none">{{ $totalPesan }}</p>
+                        <span class="text-[10px] {{ $totalPesanBelumDibaca > 0 ? 'text-rose-600 font-bold' : 'text-teal-600 font-semibold' }} flex items-center gap-1 mt-1.5 whitespace-nowrap truncate">
+                            <span class="w-1.5 h-1.5 rounded-full {{ $totalPesanBelumDibaca > 0 ? 'bg-rose-500 animate-pulse' : 'bg-teal-500' }} shrink-0"></span> {{ $totalPesanBelumDibaca }} Belum Dibaca
                         </span>
                     </div>
                 </a>
@@ -271,7 +288,7 @@
                         </h3>
                     </div>
 
-                    <div id="chart-kategori" class="w-full flex justify-center items-center py-1"></div>
+                    <div id="chart-kategori" class="w-full min-h-[230px]"></div>
 
                     <!-- Mini Footer Status -->
                     <div class="mt-2 pt-2.5 border-t border-gray-100 flex justify-around text-center text-xs">
@@ -413,14 +430,15 @@
             labels: kategoriLabels,
             chart: {
                 type: 'donut',
-                height: 220,
+                height: 250,
                 fontFamily: 'Inter, sans-serif'
             },
             colors: ['#29abe2', '#10b981', '#8b5cf6', '#f59e0b', '#ef4444', '#06b6d4'],
             legend: {
                 position: 'bottom',
                 fontSize: '11px',
-                labels: { colors: '#475569' }
+                labels: { colors: '#475569' },
+                itemMargin: { horizontal: 6, vertical: 2 }
             },
             dataLabels: {
                 enabled: true,
@@ -432,13 +450,14 @@
             plotOptions: {
                 pie: {
                     donut: {
-                        size: '60%',
+                        size: '65%',
                         labels: {
                             show: true,
                             total: {
                                 show: true,
                                 label: 'Total',
                                 fontSize: '11px',
+                                fontWeight: 600,
                                 color: '#64748b',
                                 formatter: function (w) {
                                     return w.globals.seriesTotals.reduce((a, b) => a + b, 0);

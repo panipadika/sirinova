@@ -12,7 +12,10 @@ class Admin extends Authenticatable
     const CREATED_AT = 'dibuat_pada';
     const UPDATED_AT = 'diperbarui_pada';
 
-    protected $hidden = ['kata_sandi'];
+    protected $hidden = [
+        'kata_sandi',
+        'remember_token',
+    ];
 
     // Memberitahu Laravel bahwa kolom password kita bernama 'kata_sandi'
     public function getAuthPassword()

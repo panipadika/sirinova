@@ -157,10 +157,8 @@
                             <select name="status" onchange="document.getElementById('filter-form').submit()"
                                 class="px-3 py-2 pr-9 bg-white border border-gray-200 rounded-lg text-sm text-gray-600 outline-none focus:ring-1 focus:ring-[#29abe2] cursor-pointer transition-all min-w-[100px]">
                                 <option value="">Status</option>
-                                <option value="Aktif" {{ request('status') == 'Aktif' ? 'selected' : '' }}>Publik
-                                </option>
-                                <option value="Draft" {{ request('status') == 'Draft' ? 'selected' : '' }}>Draft
-                                </option>
+                                <option value="Publik" {{ request('status') == 'Publik' ? 'selected' : '' }}>Publik</option>
+                                <option value="Draft" {{ request('status') == 'Draft' ? 'selected' : '' }}>Draft</option>
                             </select>
 
                             <!-- Tombol Reset Filter Warna Biru -->
@@ -199,7 +197,7 @@
                                             class="w-10 h-10 rounded-md bg-gray-100 flex items-center justify-center overflow-hidden border border-gray-200">
                                             <img alt="{{ $item->nama_alat }}" class="w-full h-full object-cover"
                                                 src="{{ asset('storage/' . $item->foto) }}"
-                                                onerror="this.onerror=null; this.src='https://placehold.co/150x150/f3f4f6/9ca3af?text=No+Foto'">
+                                                onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'60\' height=\'60\' viewBox=\'0 0 24 24\' fill=\'%23f3f4f6\' stroke=\'%239ca3af\' stroke-width=\'1.5\'><rect width=\'18\' height=\'18\' x=\'3\' y=\'3\' rx=\'2\'/><circle cx=\'8.5\' cy=\'8.5\' r=\'1.5\'/><path d=\'m21 15-5-5L5 21\'/></svg>'">
                                         </div>
                                     </td>
                                     <td class="py-3 px-3 font-medium text-[#29abe2] leading-tight pr-2">

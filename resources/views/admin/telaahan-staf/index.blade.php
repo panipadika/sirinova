@@ -144,7 +144,7 @@
                                         </div>
                                     </td>
                                     <td class="py-3 px-4">
-                                        <span class="px-2.5 py-1 bg-blue-50 text-[#29abe2] border border-blue-200/60 rounded-md font-bold text-xs">
+                                        <span class="inline-block px-2.5 py-1 bg-blue-50 text-[#29abe2] border border-blue-200/60 rounded-md font-bold text-xs leading-normal">
                                             {{ $item->pembuat_bidang }}
                                         </span>
                                     </td>
