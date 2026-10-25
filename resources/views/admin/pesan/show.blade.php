@@ -162,7 +162,7 @@
                             }
                         @endphp
                         <!-- Balas via WhatsApp -->
-                        <a href="https://wa.me/{{ $waNum }}?text={{ urlencode('Halo ' . $pesan->nama . ', kami dari Bappelitbangda Kota Tasikmalaya menindaklanjuti pesan Anda terkait: ' . $pesan->subjek) }}"
+                        <a href="https://wa.me/{{ $waNum }}?text={{ urlencode('Halo ' . $pesan->nama . ', kami dari Bapperida Kota Tasikmalaya menindaklanjuti pesan Anda terkait: ' . $pesan->subjek) }}"
                             target="_blank"
                             class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-md transition-colors flex items-center gap-2 font-medium text-sm shadow-sm">
                             <span class="material-symbols-outlined text-[18px]">chat</span> Balas via WhatsApp

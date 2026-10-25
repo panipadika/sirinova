@@ -247,13 +247,78 @@
 
             </div>
 
-            <!-- Security Advisory Banner -->
-            <div class="p-4 bg-sky-50/70 border border-sky-100 rounded-2xl flex items-start gap-3 shadow-2xs">
-                <span class="text-xl select-none shrink-0 mt-0.5">🛡️</span>
-                <div class="text-xs text-sky-950 space-y-0.5 leading-relaxed">
-                    <p class="font-bold">Tips Keamanan Akun:</p>
-                    <p class="text-sky-800">Jangan pernah membagikan email dan kata sandi administrator kepada pihak lain. Jika ada indikasi aktivitas mencurigakan, segera perbarui kata sandi Anda dan laporkan ke tim teknis Bappelitbangda Kota Tasikmalaya.</p>
+            <!-- CARD 3: URL Khusus Login Admin -->
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-[0_2px_10px_rgba(0,0,0,0.03)] p-6 space-y-6">
+                
+                <div class="flex items-center gap-3 pb-4 border-b border-gray-100">
+                    <div class="w-10 h-10 rounded-xl bg-sky-50 text-[#29abe2] flex items-center justify-center shrink-0 shadow-xs">
+                        <span class="material-symbols-outlined text-2xl">link</span>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-gray-900 tracking-tight">URL Khusus Login Admin</h3>
+                        <p class="text-xs text-gray-500">Ubah alamat URL rahasia untuk masuk ke portal admin (default: /admin-dashboard)</p>
+                    </div>
                 </div>
+
+                <!-- URL Login Aktif Banner -->
+                <div class="p-4 sm:p-5 bg-sky-50/50 border border-sky-100 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-2xs">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-1.5 text-[11px] font-bold text-[#1a95c9] tracking-wider uppercase">
+                            <span class="material-symbols-outlined text-sm">shield</span>
+                            <span>URL LOGIN ADMIN AKTIF SAAT INI</span>
+                        </div>
+                        <div class="text-sm sm:text-base font-bold font-mono text-sky-950 break-all select-all tracking-tight" id="active-url-text">
+                            {{ url($adminLoginSlug) }}
+                        </div>
+                    </div>
+                    <button type="button" 
+                            onclick="copyAdminUrl()" 
+                            id="btn-copy-url"
+                            class="inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-white hover:bg-sky-50 border border-sky-200 text-sky-700 text-xs font-bold rounded-xl shadow-2xs transition-all shrink-0 cursor-pointer active:scale-95">
+                        <span class="material-symbols-outlined text-base" id="copy-icon">content_copy</span>
+                        <span id="copy-text">Salin URL</span>
+                    </button>
+                </div>
+
+                <!-- Form Ubah Path / Slug -->
+                <form action="{{ route('admin.pengaturan.url-login') }}" method="POST" class="space-y-4">
+                    @csrf
+                    @method('PUT')
+
+                    <div class="space-y-1.5">
+                        <label for="admin_login_slug" class="block text-xs font-bold text-gray-700">Path / Slug URL Login Baru</label>
+                        <div class="flex rounded-xl overflow-hidden shadow-2xs border border-gray-200 focus-within:ring-2 focus-within:ring-[#29abe2] focus-within:border-[#29abe2] transition-all">
+                            <span class="inline-flex items-center px-4 py-2.5 bg-gray-50 text-gray-500 text-xs sm:text-sm font-semibold border-r border-gray-200 select-none">
+                                {{ url('/') }}/
+                            </span>
+                            <input type="text" 
+                                   id="admin_login_slug" 
+                                   name="admin_login_slug" 
+                                   value="{{ old('admin_login_slug', $adminLoginSlug) }}" 
+                                   required
+                                   placeholder="admin-dashboard"
+                                   class="block w-full px-3.5 py-2.5 text-xs sm:text-sm font-bold text-gray-900 bg-white border-0 focus:ring-0 outline-none">
+                        </div>
+                        <p class="text-[11px] text-gray-400">Hanya gunakan huruf (a-z), angka (0-9), strip (-), atau garis bawah (_). Minimal 3 karakter.</p>
+                    </div>
+
+                    <!-- Warning Alert -->
+                    <div class="p-4 bg-amber-50/80 border border-amber-200/90 rounded-2xl flex items-start gap-3 shadow-2xs">
+                        <span class="material-symbols-outlined text-amber-600 text-xl shrink-0 mt-0.5">warning</span>
+                        <div class="text-xs text-amber-900 leading-relaxed font-normal">
+                            <strong class="font-bold text-amber-950">Penting:</strong> Setelah URL diubah, URL login lama serta URL umum seperti <code>/admin</code> atau <code>/login</code> akan otomatis menghasilkan <strong>404 (Tidak Ditemukan)</strong>. Pastikan Anda menyalin atau mem-bookmark URL baru ini agar tidak lupa saat ingin login kembali.
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="flex justify-end pt-2">
+                        <button type="submit" 
+                                class="w-full sm:w-auto px-6 py-2.5 bg-[#29abe2] hover:bg-[#1a95c9] active:scale-[0.99] text-white font-bold text-xs rounded-xl shadow-md shadow-sky-500/20 transition-all flex items-center justify-center gap-2 cursor-pointer">
+                            <span class="material-symbols-outlined text-base">verified_user</span>
+                            <span>Simpan URL Login Baru</span>
+                        </button>
+                    </div>
+                </form>
             </div>
 
         </main>
@@ -281,6 +346,47 @@
                 input.type = 'password';
                 icon.textContent = 'visibility_off';
             }
+        }
+
+        // Copy Admin Active Login URL
+        function copyAdminUrl() {
+            const text = document.getElementById('active-url-text')?.innerText.trim();
+            if (!text) return;
+
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(showCopiedState).catch(() => fallbackCopy(text));
+            } else {
+                fallbackCopy(text);
+            }
+        }
+
+        function showCopiedState() {
+            const btnText = document.getElementById('copy-text');
+            const btnIcon = document.getElementById('copy-icon');
+            if (btnText) btnText.textContent = 'Tersalin!';
+            if (btnIcon) btnIcon.textContent = 'check';
+            setTimeout(() => {
+                if (btnText) btnText.textContent = 'Salin URL';
+                if (btnIcon) btnIcon.textContent = 'content_copy';
+            }, 2000);
+        }
+
+        function fallbackCopy(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showCopiedState();
+            } catch (err) {
+                console.error('Fallback copy failed', err);
+            }
+            document.body.removeChild(textArea);
         }
     </script>
 

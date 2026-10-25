@@ -120,7 +120,7 @@
 
         <!-- Footer Copyright -->
         <div class="text-center mt-6 text-xs text-slate-400">
-            &copy; 2026 Bappelitbangda Kota Tasikmalaya
+            &copy; 2026 Bapperida Kota Tasikmalaya
         </div>
     </div>
 

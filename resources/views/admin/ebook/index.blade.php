@@ -66,7 +66,7 @@
             <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
                 <div>
                     <h2 class="text-3xl font-bold text-gray-900 tracking-tight">E-Book Kajian</h2>
-                    <p class="text-sm text-gray-600 mt-1">Kelola data e-book dan publikasi hasil kajian Bappelitbangda.</p>
+                    <p class="text-sm text-gray-600 mt-1">Kelola data e-book dan publikasi hasil kajian Bapperida.</p>
                 </div>
                 <a href="{{ route('admin.ebook.create') }}"
                     class="bg-[#29abe2] text-white px-5 py-2.5 rounded-md hover:bg-[#1a95c9] transition-colors flex items-center justify-center gap-2 font-medium text-sm shadow-sm">

@@ -9,7 +9,7 @@
     <link rel="icon" type="image/png" href="{{ asset('storage/images/favicon_tasik.png') }}?v=3">
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}?v=3">
     <link rel="apple-touch-icon" href="{{ asset('storage/images/favicon_tasik.png') }}?v=3">
-    <meta name="description" content="Dokumentasi foto kegiatan, pameran, dan sosialisasi Teknologi Tepat Guna (TTG) Bappelitbangda Kota Tasikmalaya.">
+    <meta name="description" content="Dokumentasi foto kegiatan, pameran, dan sosialisasi Teknologi Tepat Guna (TTG) Bapperida Kota Tasikmalaya.">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -206,7 +206,7 @@
                     Galeri <span class="text-[#29abe2]">Kegiatan & Dokumentasi</span>
                 </h1>
                 <p class="text-slate-500 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
-                    Dokumentasi ragam aktivitas, pameran inovasi, bimbingan teknis, serta pendampingan Teknologi Tepat Guna oleh Bappelitbangda Kota Tasikmalaya.
+                    Dokumentasi ragam aktivitas, pameran inovasi, bimbingan teknis, serta pendampingan Teknologi Tepat Guna oleh Bapperida Kota Tasikmalaya.
                 </p>
             </div>
 

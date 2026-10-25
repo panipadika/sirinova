@@ -66,10 +66,12 @@ Route::middleware('auth:peserta')->prefix('lomba-ttg')->group(function () {
 // Download Proposal Lomba (Dapat diakses oleh Peserta pemilik proposal atau Admin)
 Route::middleware('auth:peserta,web')->get('/lomba-ttg/proposal/{id}', [LombaController::class, 'downloadProposal'])->name('lomba.proposal.download');
 
-// Route Autentikasi Admin & Lupa Password (Guest / Logged Out dengan Proteksi Rate Limiting)
-Route::middleware(['guest', 'throttle:10,1'])->group(function () {
-    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [AuthController::class, 'prosesLogin']);
+$adminLoginSlug = \App\Models\PengaturanSistem::getAdminLoginSlug();
+
+// Route Autentikasi Admin Khusus (Custom Admin Login URL) & Lupa Password
+Route::middleware(['guest', 'throttle:10,1'])->group(function () use ($adminLoginSlug) {
+    Route::get('/' . $adminLoginSlug, [AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/' . $adminLoginSlug, [AuthController::class, 'prosesLogin']);
 
     // Fitur Lupa Password Admin
     Route::get('/admin/lupa-password', [AuthController::class, 'showForgotPasswordForm'])->name('admin.password.request');
@@ -78,12 +80,23 @@ Route::middleware(['guest', 'throttle:10,1'])->group(function () {
     Route::post('/admin/reset-password', [AuthController::class, 'resetPassword'])->name('admin.password.update');
 });
 
-// Alias & Redirect Route Admin/Login jika diakses langsung
+// URL login umum seperti /login akan otomatis menghasilkan 404 jika bukan slug aktif
+Route::any('/login', function () use ($adminLoginSlug) {
+    if ($adminLoginSlug === 'login') {
+        return app(AuthController::class)->showLoginForm();
+    }
+    abort(404);
+});
+
+// Alias & Proteksi Route /admin dan /admin/login (Otomatis 404 jika belum login)
 Route::get('/admin', function () {
-    return redirect()->route('admin.dashboard');
+    if (Auth::check()) {
+        return redirect()->route('admin.dashboard');
+    }
+    abort(404);
 });
 Route::get('/admin/login', function () {
-    return redirect()->route('login');
+    abort(404);
 });
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
@@ -132,8 +145,9 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::patch('/lomba/{id}/status', [AdminLombaController::class, 'updateStatus'])->name('admin.lomba.update-status');
     Route::delete('/lomba/{id}', [AdminLombaController::class, 'destroy'])->name('admin.lomba.destroy');
 
-    // Fitur Pengaturan Admin (Ubah Email & Password)
+    // Fitur Pengaturan Admin (Ubah Email, Password & URL Login Khusus)
     Route::get('/pengaturan', [AdminController::class, 'pengaturan'])->name('admin.pengaturan');
     Route::put('/pengaturan/profile', [AdminController::class, 'updateProfile'])->name('admin.pengaturan.profile');
     Route::put('/pengaturan/password', [AdminController::class, 'updatePassword'])->name('admin.pengaturan.password');
+    Route::put('/pengaturan/url-login', [AdminController::class, 'updateAdminLoginUrl'])->name('admin.pengaturan.url-login');
 });

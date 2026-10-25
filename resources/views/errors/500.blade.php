@@ -69,7 +69,7 @@
 
         <!-- Footer Note -->
         <p class="text-xs text-slate-500 pt-6">
-            SI-RINOVA &copy; Bappelitbangda Kota Tasikmalaya
+            SI-RINOVA &copy; Bapperida Kota Tasikmalaya
         </p>
 
     </div>

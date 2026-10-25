@@ -877,7 +877,7 @@
                 <div class="flex items-start gap-3">
                     <input type="checkbox" id="setuju" required class="mt-1 h-4 w-4 rounded border-slate-300 text-[#00A3E0] focus:ring-[#00A3E0]">
                     <label for="setuju" class="text-xs text-slate-600 leading-relaxed cursor-pointer select-none">
-                        Saya menyatakan bahwa karya inovasi teknologi tepat guna yang didaftarkan adalah karya asli tim kami, bebas dari plagiasi, dan bersedia mengikuti seluruh ketentuan perlombaan yang ditetapkan oleh Bappelitbangda Kota Tasikmalaya.
+                        Saya menyatakan bahwa karya inovasi teknologi tepat guna yang didaftarkan adalah karya asli tim kami, bebas dari plagiasi, dan bersedia mengikuti seluruh ketentuan perlombaan yang ditetapkan oleh Bapperida Kota Tasikmalaya.
                     </label>
                 </div>
 
@@ -997,7 +997,7 @@
 
             <!-- Title & Subtitle -->
             <h3 class="text-xl font-black text-slate-900 tracking-tight">Pendaftaran Berhasil Dikirim!</h3>
-            <p class="text-xs text-slate-500 mt-1">Karya inovasi teknologi tepat guna Anda telah sukses diajukan ke panitia lomba Bappelitbangda.</p>
+            <p class="text-xs text-slate-500 mt-1">Karya inovasi teknologi tepat guna Anda telah sukses diajukan ke panitia lomba Bapperida.</p>
 
             <!-- Card Summary Info -->
             <div class="bg-slate-50/90 rounded-2xl p-4 my-5 border border-slate-200/70 text-left space-y-3">

@@ -20,6 +20,11 @@ class Authenticate extends Middleware
             return route('peserta.login');
         }
 
+        // Jika rute admin diakses tanpa login, jangan bocorkan URL rahasia login melainkan return 404
+        if ($request->is('admin*')) {
+            abort(404);
+        }
+
         return route('login');
     }
 }

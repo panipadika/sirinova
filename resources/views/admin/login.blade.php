@@ -86,7 +86,7 @@
 
         <!-- Footer Notice -->
         <div class="relative z-20 text-xs text-cyan-100/70 font-medium">
-            &copy; 2026 Bappelitbangda Kota Tasikmalaya. 
+            &copy; 2026 Bapperida Kota Tasikmalaya. 
         </div>
     </div>
 
@@ -132,7 +132,7 @@
             @endphp
 
             <!-- Login Form -->
-            <form action="/login" class="space-y-4" method="POST" autocomplete="{{ $isRememberChecked ? 'on' : 'off' }}">
+            <form action="{{ route('login') }}" class="space-y-4" method="POST" autocomplete="{{ $isRememberChecked ? 'on' : 'off' }}">
                 @csrf
 
                 <!-- Email Input -->

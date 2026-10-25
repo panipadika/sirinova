@@ -13,7 +13,9 @@ use App\Models\IndikatorMakro;
 use App\Models\DataIndikatorMakro;
 use App\Models\Pesan;
 use App\Models\PendaftaranLomba;
+use App\Models\PengaturanSistem;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -129,7 +131,8 @@ class AdminController extends Controller
     public function pengaturan()
     {
         $admin = Auth::user();
-        return view('admin.pengaturan.index', compact('admin'));
+        $adminLoginSlug = PengaturanSistem::getAdminLoginSlug();
+        return view('admin.pengaturan.index', compact('admin', 'adminLoginSlug'));
     }
 
     /**
@@ -182,5 +185,51 @@ class AdminController extends Controller
         $admin->save();
 
         return back()->with('success', 'Kata sandi administrator berhasil diperbarui! Silakan gunakan kata sandi baru untuk login berikutnya.');
+    }
+
+    /**
+     * Perbarui Path / Slug URL Khusus Login Admin
+     */
+    public function updateAdminLoginUrl(Request $request)
+    {
+        $slug = trim($request->input('admin_login_slug', ''));
+        $slug = trim($slug, '/');
+        $slug = strtolower($slug);
+        $request->merge(['admin_login_slug' => $slug]);
+
+        $reservedSlugs = [
+            'admin', 'login', 'logout', 'register', 'dashboard', 'api',
+            'katalog', 'kategori', 'wilayah', 'tentang', 'indikator-makro',
+            'ebook-kajian', 'telaahan-staf', 'galeri', 'alat', 'pesan',
+            'lomba-ttg', 'storage', 'build', 'css', 'js', 'images', 'favicon.ico',
+            'robots.txt', 'sitemap.xml', 'home'
+        ];
+
+        $request->validate([
+            'admin_login_slug' => [
+                'required',
+                'string',
+                'min:3',
+                'max:50',
+                'regex:/^[a-z0-9_\-]+$/',
+                Rule::notIn($reservedSlugs),
+            ],
+        ], [
+            'admin_login_slug.required' => 'Path / Slug URL Login Baru wajib diisi.',
+            'admin_login_slug.min' => 'Slug URL login minimal 3 karakter.',
+            'admin_login_slug.max' => 'Slug URL login maksimal 50 karakter.',
+            'admin_login_slug.regex' => 'Hanya gunakan huruf (a-z), angka (0-9), strip (-), atau garis bawah (_).',
+            'admin_login_slug.not_in' => 'Slug tersebut tidak dapat digunakan karena merupakan rute atau kata kunci sistem.',
+        ]);
+
+        PengaturanSistem::set('admin_login_slug', $slug, 'Path/slug URL khusus login administrator');
+
+        try {
+            \Illuminate\Support\Facades\Artisan::call('route:clear');
+        } catch (\Throwable $e) {
+            // Abaikan jika route:clear tidak bisa dieksekusi
+        }
+
+        return back()->with('success', 'URL khusus login admin berhasil diperbarui! Alamat baru Anda: ' . url($slug));
     }
 }
