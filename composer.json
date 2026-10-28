@@ -63,17 +63,13 @@
             "ext-zip": "1.21.1"
         },
         "audit": {
-            "ignore": [
-                "CVE-2026-114509",
-                "CVE-2026-102279",
-                "PKSA-m5cs-t1y6-qpcs",
-                "PKSA-3r5d-mb8f-1qw9",
-                "CVE-2026-48019",
-                "GHSA-f9x3-7vq9-cph6",
-                "GHSA-jh5r-qr3c-85q8",
-                "GHSA-crmm-hgp2-wgrp",
-                "GHSA-5vg9-5847-vvmq"
-            ]
+            "ignore": {
+                "CVE-2026-114509": "TokenGuard tidak digunakan dalam aplikasi ini",
+                "CVE-2026-102279": "Debug mode dinonaktifkan (APP_DEBUG=false)",
+                "PKSA-m5cs-t1y6-qpcs": "Temporary signed URL tidak digunakan",
+                "PKSA-3r5d-mb8f-1qw9": "Email validation menggunakan validasi ketat",
+                "CVE-2026-48019": "Email validation menggunakan validasi ketat"
+            }
         },
         "allow-plugins": {
             "pestphp/pest-plugin": true,
