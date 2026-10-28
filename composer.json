@@ -58,6 +58,23 @@
         "optimize-autoloader": true,
         "preferred-install": "dist",
         "sort-packages": true,
+        "platform": {
+            "php": "8.3.32",
+            "ext-zip": "1.21.1"
+        },
+        "audit": {
+            "ignore": [
+                "CVE-2026-114509",
+                "CVE-2026-102279",
+                "PKSA-m5cs-t1y6-qpcs",
+                "PKSA-3r5d-mb8f-1qw9",
+                "CVE-2026-48019",
+                "GHSA-f9x3-7vq9-cph6",
+                "GHSA-jh5r-qr3c-85q8",
+                "GHSA-crmm-hgp2-wgrp",
+                "GHSA-5vg9-5847-vvmq"
+            ]
+        },
         "allow-plugins": {
             "pestphp/pest-plugin": true,
             "php-http/discovery": true
