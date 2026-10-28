@@ -89,11 +89,15 @@ class SecureFileUploadService
         // 4. Validasi MIME Type di sisi server menggunakan finfo (MIME Sniffing Prevention)
         $filePath = $file->getPathname() ?: (string) $file->getRealPath();
         $serverMime = null;
-        if (!empty($filePath) && file_exists($filePath) && function_exists('finfo_open')) {
-            $finfo = @finfo_open(FILEINFO_MIME_TYPE);
-            if ($finfo) {
-                $serverMime = @finfo_file($finfo, $filePath);
-                @finfo_close($finfo);
+        if (!empty($filePath) && file_exists($filePath) && class_exists('finfo')) {
+            try {
+                $finfo = new \finfo(FILEINFO_MIME_TYPE);
+                $detectedMime = @$finfo->file($filePath);
+                if (is_string($detectedMime) && !empty($detectedMime)) {
+                    $serverMime = $detectedMime;
+                }
+            } catch (\Throwable) {
+                // Fallback ke getMimeType()
             }
         }
         if (!$serverMime) {
@@ -221,11 +225,15 @@ class SecureFileUploadService
         // 4. Validasi Server-Side MIME Type
         $filePath = $file->getPathname() ?: (string) $file->getRealPath();
         $serverMime = null;
-        if (!empty($filePath) && file_exists($filePath) && function_exists('finfo_open')) {
-            $finfo = @finfo_open(FILEINFO_MIME_TYPE);
-            if ($finfo) {
-                $serverMime = @finfo_file($finfo, $filePath);
-                @finfo_close($finfo);
+        if (!empty($filePath) && file_exists($filePath) && class_exists('finfo')) {
+            try {
+                $finfo = new \finfo(FILEINFO_MIME_TYPE);
+                $detectedMime = @$finfo->file($filePath);
+                if (is_string($detectedMime) && !empty($detectedMime)) {
+                    $serverMime = $detectedMime;
+                }
+            } catch (\Throwable) {
+                // Fallback ke getMimeType()
             }
         }
         if (!$serverMime) {
