@@ -67,8 +67,16 @@
             <!-- Banner Info Verifikasi -->
             <div class="mb-5 p-3 bg-sky-50/70 border border-sky-100 rounded-xl text-xs text-sky-900 flex items-center justify-center gap-2 text-center shadow-xs">
                 <span class="text-base select-none">💡</span>
-                <span>Masukkan <strong class="font-bold text-sky-950">Email</strong> dan <strong class="font-bold text-sky-950">Nomor WhatsApp</strong> yang digunakan saat pendaftaran.</span>
+                <span>Masukkan <strong class="font-bold text-sky-950">Email</strong> dan <strong class="font-bold text-sky-950">Nomor WhatsApp</strong> yang digunakan saat pendaftaran. Tautan pemulihan kata sandi akan dikirimkan ke email terdaftar.</span>
             </div>
+
+            <!-- Generic Status Message -->
+            @if(session('status'))
+            <div class="mb-5 p-3.5 bg-emerald-50 rounded-xl border border-emerald-200 text-xs font-semibold text-emerald-800 flex items-center gap-2">
+                <span class="material-symbols-outlined text-base text-emerald-600 shrink-0">mark_email_read</span>
+                <span>{{ session('status') }}</span>
+            </div>
+            @endif
 
             <!-- Error Alerts -->
             @if(isset($errors) && $errors->any())
@@ -104,8 +112,8 @@
 
                 <button type="submit" 
                         class="w-full py-3 px-4 bg-[#00A3E0] hover:bg-[#008cc0] active:scale-[0.99] text-white font-bold text-sm rounded-xl shadow-md shadow-sky-500/20 transition-all flex items-center justify-center gap-2 cursor-pointer mt-4">
-                    <span class="material-symbols-outlined text-lg">verified_user</span>
-                    <span>Verifikasi & Buat Kata Sandi Baru</span>
+                    <span class="material-symbols-outlined text-lg">send</span>
+                    <span>Kirim Tautan Atur Ulang Kata Sandi</span>
                 </button>
             </form>
 

@@ -52,9 +52,9 @@ Route::get('/lomba-ttg/login', [PesertaAuthController::class, 'showLoginForm'])-
 Route::post('/lomba-ttg/login', [PesertaAuthController::class, 'login'])->name('peserta.login.post');
 Route::post('/lomba-ttg/logout', [PesertaAuthController::class, 'logout'])->name('peserta.logout');
 Route::get('/lomba-ttg/lupa-password', [PesertaAuthController::class, 'showForgotPasswordForm'])->name('peserta.password.request');
-Route::post('/lomba-ttg/lupa-password', [PesertaAuthController::class, 'sendResetLinkEmail'])->name('peserta.password.email');
+Route::post('/lomba-ttg/lupa-password', [PesertaAuthController::class, 'sendResetLinkEmail'])->middleware('throttle:forgot-password')->name('peserta.password.email');
 Route::get('/lomba-ttg/reset-password/{token}', [PesertaAuthController::class, 'showResetPasswordForm'])->name('peserta.password.reset');
-Route::post('/lomba-ttg/reset-password', [PesertaAuthController::class, 'resetPassword'])->name('peserta.password.update');
+Route::post('/lomba-ttg/reset-password', [PesertaAuthController::class, 'resetPassword'])->middleware('throttle:reset-password')->name('peserta.password.update');
 
 // Rute Pendaftaran Lomba (Wajib Login Peserta / Guard: peserta)
 Route::middleware('auth:peserta')->prefix('lomba-ttg')->group(function () {
@@ -75,9 +75,9 @@ Route::middleware(['guest', 'throttle:10,1'])->group(function () use ($adminLogi
 
     // Fitur Lupa Password Admin
     Route::get('/admin/lupa-password', [AuthController::class, 'showForgotPasswordForm'])->name('admin.password.request');
-    Route::post('/admin/lupa-password', [AuthController::class, 'sendResetLinkEmail'])->name('admin.password.email');
+    Route::post('/admin/lupa-password', [AuthController::class, 'sendResetLinkEmail'])->middleware('throttle:forgot-password')->name('admin.password.email');
     Route::get('/admin/reset-password/{token}', [AuthController::class, 'showResetPasswordForm'])->name('admin.password.reset');
-    Route::post('/admin/reset-password', [AuthController::class, 'resetPassword'])->name('admin.password.update');
+    Route::post('/admin/reset-password', [AuthController::class, 'resetPassword'])->middleware('throttle:reset-password')->name('admin.password.update');
 });
 
 // URL login umum seperti /login akan otomatis menghasilkan 404 jika bukan slug aktif

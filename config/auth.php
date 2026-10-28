@@ -103,13 +103,13 @@ return [
         'users' => [
             'provider' => 'users',
             'table' => 'password_reset_token',
-            'expire' => 60,
+            'expire' => 15,
             'throttle' => 60,
         ],
         'peserta' => [
             'provider' => 'peserta',
             'table' => 'password_reset_token',
-            'expire' => 60,
+            'expire' => 15,
             'throttle' => 60,
         ],
     ],

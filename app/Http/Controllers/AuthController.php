@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
+use App\Notifications\AdminResetPasswordNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 
@@ -66,7 +68,9 @@ class AuthController extends Controller
     }
 
     /**
-     * Verifikasi Email & Nama Admin untuk membuat token reset password
+     * Proses permohonan reset password admin secara aman:
+     * - Mencegah account enumeration dengan selalu mengembalikan generic response.
+     * - Token hanya dikirimkan melalui tautan email/notifikasi terverifikasi (bukan redirect langsung di browser).
      */
     public function sendResetLinkEmail(Request $request)
     {
@@ -80,28 +84,24 @@ class AuthController extends Controller
         ]);
 
         $admin = Admin::where('email', $request->email)->first();
-        if (!$admin) {
-            return back()->withInput($request->only('email', 'nama'))->withErrors([
-                'email' => 'Email tersebut belum terdaftar sebagai akun Administrator.',
-            ]);
+
+        // Validasi identitas secara aman tanpa membocorkan eksistensi akun
+        if ($admin && hash_equals(strtolower(trim($admin->nama)), strtolower(trim($request->nama)))) {
+            /** @var \Illuminate\Auth\Passwords\PasswordBroker $broker */
+            $broker = Password::broker('users');
+            $token = $broker->createToken($admin);
+
+            $resetUrl = route('admin.password.reset', ['token' => $token, 'email' => $admin->email]);
+            Log::info("Tautan Reset Password Admin [{$admin->email}]: {$resetUrl}");
+
+            try {
+                $admin->notify(new AdminResetPasswordNotification($token, $admin->email));
+            } catch (\Throwable $e) {
+                Log::error("Gagal mengirimkan email reset password admin [{$admin->email}]: " . $e->getMessage());
+            }
         }
 
-        // Cocokkan nama admin (case-insensitive & trim)
-        if (trim(strtolower($admin->nama)) !== trim(strtolower($request->nama))) {
-            return back()->withInput($request->only('email', 'nama'))->withErrors([
-                'nama' => 'Nama administrator tidak cocok dengan data akun terdaftar.',
-            ]);
-        }
-
-        // Buat token reset password yang aman
-        /** @var \Illuminate\Auth\Passwords\PasswordBroker $broker */
-        $broker = Password::broker('users');
-        $token = $broker->createToken($admin);
-
-        return redirect()->route('admin.password.reset', [
-            'token' => $token,
-            'email' => $admin->email,
-        ])->with('info', 'Identitas Administrator terverifikasi! Silakan tentukan kata sandi baru Anda.');
+        return back()->with('status', 'Jika informasi yang dimasukkan sesuai, instruksi pengaturan ulang kata sandi telah dikirimkan ke kanal terdaftar.');
     }
 
     /**
@@ -116,7 +116,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Proses pembaruan kata sandi admin
+     * Proses pembaruan kata sandi admin dengan token sekali pakai dan rotasi sesi
      */
     public function resetPassword(Request $request)
     {
@@ -135,22 +135,26 @@ class AuthController extends Controller
 
         $admin = Admin::where('email', $request->email)->first();
         if (!$admin) {
-            return back()->withErrors(['email' => 'Akun Administrator tidak ditemukan.']);
+            return back()->withErrors(['token' => 'Permintaan reset kata sandi tidak valid atau telah kedaluwarsa.']);
         }
 
         /** @var \Illuminate\Auth\Passwords\PasswordBroker $broker */
         $broker = Password::broker('users');
 
         if (!$broker->tokenExists($admin, $request->token)) {
-            return back()->withErrors(['token' => 'Token reset password tidak valid atau sudah kedaluwarsa. Silakan ajukan reset ulang.']);
+            return back()->withErrors(['token' => 'Token reset password tidak valid atau sudah kedaluwarsa. Silakan ajukan permohonan baru.']);
         }
 
         // Update kata sandi baru
         $admin->kata_sandi = Hash::make($request->password);
         $admin->save();
 
-        // Hapus token yang sudah digunakan
+        // Hapus token yang sudah digunakan (one-time expiring token)
         $broker->deleteToken($admin);
+
+        // Rotasi sesi untuk mencegah session fixation / hijacking
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return redirect()->route('login')->with('success', 'Kata sandi Administrator berhasil diperbarui! Silakan masuk menggunakan kata sandi baru Anda.');
     }

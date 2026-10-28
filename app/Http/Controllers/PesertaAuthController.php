@@ -102,11 +102,13 @@ class PesertaAuthController extends Controller
     }
 
     /**
-     * Logout akun peserta
+     * Logout akun peserta dengan rotasi sesi
      */
     public function logout(Request $request)
     {
         Auth::guard('peserta')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
         return redirect()->route('lomba.info')->with('info', 'Anda telah keluar dari akun peserta.');
     }
 
@@ -122,7 +124,9 @@ class PesertaAuthController extends Controller
     }
 
     /**
-     * Verifikasi Email & Nomor WhatsApp untuk reset kata sandi peserta
+     * Proses permohonan reset kata sandi peserta secara aman:
+     * - Mencegah account enumeration dengan selalu mengembalikan generic response.
+     * - Token hanya dikirimkan melalui tautan email/notifikasi terverifikasi (bukan redirect langsung di browser).
      */
     public function sendResetLinkEmail(Request $request)
     {
@@ -135,41 +139,40 @@ class PesertaAuthController extends Controller
             'no_wa.required' => 'Nomor WhatsApp wajib diisi.',
         ]);
 
-        // Cek apakah email terdaftar di tabel user peserta
         $user = User::where('email', $request->email)->first();
-        if (!$user) {
-            return back()->withInput($request->only('email', 'no_wa'))->withErrors([
-                'email' => 'Email tersebut belum terdaftar sebagai akun peserta.',
-            ]);
+        $isMatched = false;
+
+        if ($user) {
+            $cleanInputWa = preg_replace('/[^0-9]/', '', (string)$request->no_wa);
+            $cleanUserWa = preg_replace('/[^0-9]/', '', (string)$user->no_wa);
+
+            if (str_starts_with($cleanInputWa, '62')) {
+                $cleanInputWa = '0' . substr($cleanInputWa, 2);
+            }
+            if (str_starts_with($cleanUserWa, '62')) {
+                $cleanUserWa = '0' . substr($cleanUserWa, 2);
+            }
+
+            $isMatched = ($cleanInputWa === $cleanUserWa);
         }
 
-        // Cocokkan nomor WhatsApp (normalisasi digit nomor telepon)
-        $cleanInputWa = preg_replace('/[^0-9]/', '', (string)$request->no_wa);
-        $cleanUserWa = preg_replace('/[^0-9]/', '', (string)$user->no_wa);
+        // Buat dan kirimkan token hanya jika identitas valid
+        if ($user && $isMatched) {
+            /** @var \Illuminate\Auth\Passwords\PasswordBroker $broker */
+            $broker = Password::broker('peserta');
+            $token = $broker->createToken($user);
 
-        if (str_starts_with($cleanInputWa, '62')) {
-            $cleanInputWa = '0' . substr($cleanInputWa, 2);
+            $resetUrl = route('peserta.password.reset', ['token' => $token, 'email' => $user->email]);
+            Log::info("Tautan Reset Password Peserta [{$user->email}]: {$resetUrl}");
+
+            try {
+                $user->notify(new \App\Notifications\PesertaResetPasswordNotification($token, $user->email));
+            } catch (\Throwable $e) {
+                Log::error("Gagal mengirimkan email reset password peserta [{$user->email}]: " . $e->getMessage());
+            }
         }
-        if (str_starts_with($cleanUserWa, '62')) {
-            $cleanUserWa = '0' . substr($cleanUserWa, 2);
-        }
 
-        if ($cleanInputWa !== $cleanUserWa) {
-            return back()->withInput($request->only('email', 'no_wa'))->withErrors([
-                'no_wa' => 'Nomor WhatsApp tidak cocok dengan data pendaftaran akun Anda.',
-            ]);
-        }
-
-        // Buat token reset password yang valid
-        /** @var \Illuminate\Auth\Passwords\PasswordBroker $broker */
-        $broker = Password::broker('peserta');
-        $token = $broker->createToken($user);
-
-        // Langsung arahkan ke halaman pembuatan kata sandi baru secara instan
-        return redirect()->route('peserta.password.reset', [
-            'token' => $token,
-            'email' => $user->email,
-        ])->with('info', 'Identitas akun berhasil diverifikasi! Silakan tentukan kata sandi baru Anda.');
+        return back()->with('status', 'Jika informasi yang dimasukkan sesuai, instruksi pengaturan ulang kata sandi telah dikirimkan ke kanal terdaftar.');
     }
 
     /**
@@ -184,7 +187,7 @@ class PesertaAuthController extends Controller
     }
 
     /**
-     * Proses pembaruan kata sandi peserta
+     * Proses pembaruan kata sandi peserta dengan token sekali pakai dan rotasi sesi
      */
     public function resetPassword(Request $request)
     {
@@ -212,11 +215,15 @@ class PesertaAuthController extends Controller
         );
 
         if ($status === Password::PASSWORD_RESET) {
+            // Rotasi sesi setelah kata sandi diubah
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
             return redirect()->route('peserta.login')->with('success', 'Kata sandi Anda berhasil diperbarui! Silakan masuk menggunakan kata sandi baru Anda.');
         }
 
         return back()->withInput($request->only('email'))->withErrors([
-            'email' => __($status),
+            'token' => 'Token reset password tidak valid atau sudah kedaluwarsa. Silakan ajukan permohonan baru.',
         ]);
     }
 }

@@ -116,8 +116,16 @@
             <!-- Info Box -->
             <div class="p-3 bg-sky-50 border border-sky-100 rounded-xl text-xs text-sky-900 flex items-center gap-2.5 shadow-2xs">
                 <span class="text-base select-none">💡</span>
-                <span>Masukkan <strong class="font-bold text-sky-950">Email</strong> dan <strong class="font-bold text-sky-950">Nama Lengkap Admin</strong> yang terdaftar.</span>
+                <span>Masukkan <strong class="font-bold text-sky-950">Email</strong> dan <strong class="font-bold text-sky-950">Nama Lengkap Admin</strong> yang terdaftar. Tautan pemulihan kata sandi akan dikirimkan ke email terdaftar.</span>
             </div>
+
+            <!-- Generic Status Message -->
+            @if(session('status'))
+            <div class="p-3.5 bg-emerald-50 rounded-2xl border border-emerald-200 flex items-center gap-3">
+                <span class="material-symbols-outlined text-emerald-600 shrink-0">mark_email_read</span>
+                <p class="text-xs font-bold text-emerald-800 leading-relaxed">{{ session('status') }}</p>
+            </div>
+            @endif
 
             <!-- Dynamic Error State -->
             @if($errors->any())
@@ -164,8 +172,8 @@
 
                 <!-- Submit Button -->
                 <button class="w-full py-3.5 px-5 bg-[#29abe2] hover:bg-[#1f96c8] active:scale-[0.99] text-white font-bold text-sm rounded-xl shadow-md shadow-sky-500/20 transition-all duration-200 flex items-center justify-center gap-2 group cursor-pointer" type="submit">
-                    <span class="material-symbols-outlined text-lg">verified_user</span>
-                    <span>Verifikasi & Buat Password Baru</span>
+                    <span class="material-symbols-outlined text-lg">send</span>
+                    <span>Kirim Tautan Atur Ulang Kata Sandi</span>
                 </button>
             </form>
 
