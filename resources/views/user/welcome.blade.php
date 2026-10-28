@@ -50,7 +50,7 @@
         }
 
         .bg-hero {
-            background-image: url("{{ asset('images/hero-bg.jpg') }}");
+            background-image: url("{{ asset('images/hero-bg.jpg') }}?v=2");
             background-size: cover;
             background-position: center right;
         }
