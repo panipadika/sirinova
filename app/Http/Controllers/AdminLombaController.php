@@ -39,7 +39,12 @@ class AdminLombaController extends Controller
             $query->where('status', $request->status);
         }
 
-        $pendaftar = $query->paginate(10)->appends($request->query());
+        $perPage = (int) $request->input('per_page', 10);
+        if (!in_array($perPage, [5, 10, 25, 50, 100], true)) {
+            $perPage = 10;
+        }
+
+        $pendaftar = $query->paginate($perPage)->appends($request->query());
 
         // Data Jadwal & Gembok Pendaftaran per Kategori
         $jadwalLomba = JadwalLomba::orderBy('id')->get();

@@ -37,7 +37,7 @@
             <span class="text-lg font-bold text-gray-900">Pendaftaran Lomba TTG</span>
         </header>
 
-        <div class="p-4 sm:p-6 lg:p-8 space-y-6">
+        <div class="p-3 sm:p-5 lg:p-6 space-y-5">
 
             <!-- Top Page Title & Quick Actions -->
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -314,25 +314,25 @@
                 </form>
             </div>
 
-            <!-- TABLE DAFTAR PESERTA LOMBA (Ultra Compact & Elegant) -->
+            <!-- TABLE DAFTAR PESERTA LOMBA (Ultra Compact, Responsive & Non-Truncated Actions) -->
             <div class="bg-white rounded-xl border border-gray-100 shadow-xs overflow-hidden">
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs">
-                        <thead class="bg-slate-50/90 border-b border-slate-100 text-slate-500 font-bold uppercase tracking-wider text-[10px]">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead class="bg-slate-50/90 border-b border-slate-200/80 text-slate-500 font-bold uppercase tracking-wider text-[10px]">
                             <tr>
-                                <th class="py-2 px-3 whitespace-nowrap">No. Registrasi</th>
-                                <th class="py-2 px-2.5 text-center whitespace-nowrap">Foto</th>
-                                <th class="py-2 px-3 whitespace-nowrap">Nama Alat TTG</th>
-                                <th class="py-2 px-2.5 whitespace-nowrap">Kategori</th>
-                                <th class="py-2 px-3 whitespace-nowrap">Inovator & Instansi</th>
-                                <th class="py-2 px-3 whitespace-nowrap">Biaya & Harga</th>
-                                <th class="py-2 px-2.5 text-center whitespace-nowrap">Status</th>
-                                <th class="py-2 px-2.5 text-center whitespace-nowrap">Aksi</th>
+                                <th class="py-2.5 px-3 whitespace-nowrap w-[110px]">No. Registrasi</th>
+                                <th class="py-2.5 px-2 text-center whitespace-nowrap w-[48px]">Foto</th>
+                                <th class="py-2.5 px-3 min-w-[150px] max-w-[210px]">Nama Alat TTG</th>
+                                <th class="py-2.5 px-2 text-center whitespace-nowrap w-[115px]">Kategori</th>
+                                <th class="py-2.5 px-2.5 min-w-[130px] max-w-[160px]">Inovator & Instansi</th>
+                                <th class="py-2.5 px-2.5 whitespace-nowrap w-[120px]">Biaya & Harga</th>
+                                <th class="py-2.5 px-2 text-center whitespace-nowrap w-[115px]">Status</th>
+                                <th class="py-2.5 px-2.5 text-center whitespace-nowrap w-[90px] sticky right-0 bg-slate-50/95 backdrop-blur-xs shadow-[-3px_0_6px_-2px_rgba(0,0,0,0.06)]">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100">
                             @forelse($pendaftar as $item)
-                            <tr class="hover:bg-slate-50/70 transition-colors">
+                            <tr class="hover:bg-slate-50/80 transition-colors group">
                                 <!-- No. Registrasi -->
                                 <td class="py-2 px-3 whitespace-nowrap align-middle">
                                     <span class="font-mono font-bold text-slate-800 bg-slate-100/90 border border-slate-200/80 px-1.5 py-0.5 rounded text-[10px] inline-block tracking-tight">
@@ -343,76 +343,83 @@
                                     </span>
                                 </td>
 
-                                <!-- Foto Alat -->
-                                <td class="py-2 px-2.5 whitespace-nowrap text-center align-middle">
-                                    @if($item->foto_alat)
-                                        <button type="button" 
-                                                onclick="openAdminPhotoModal('{{ asset('storage/' . $item->foto_alat) }}', '{{ addslashes($item->nama_alat) }}', '{{ $item->nomor_registrasi }}', '{{ addslashes($item->nama_inovator) }}')" 
-                                                class="inline-block group relative cursor-pointer focus:outline-none" 
-                                                title="Klik untuk Pratinjau Foto">
-                                            <img src="{{ asset('storage/' . $item->foto_alat) }}" alt="{{ $item->nama_alat }}" class="w-8.5 h-8.5 object-cover rounded-md border border-slate-200 shadow-2xs group-hover:scale-105 group-hover:border-[#00A3E0] transition-all">
-                                            <span class="absolute inset-0 bg-black/35 rounded-md opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-white">
-                                                <span class="material-symbols-outlined text-xs">zoom_in</span>
-                                            </span>
-                                        </button>
-                                    @else
-                                        <div class="w-8.5 h-8.5 rounded-md bg-slate-50 border border-dashed border-slate-200 flex items-center justify-center text-slate-300 mx-auto" title="Tidak ada foto">
-                                            <span class="material-symbols-outlined text-sm">image_not_supported</span>
-                                        </div>
-                                    @endif
+                                <!-- Foto Alat (Fixed size container, no alt text spill) -->
+                                <td class="py-2 px-2 whitespace-nowrap text-center align-middle">
+                                    <div class="w-8.5 h-8.5 min-w-[34px] max-w-[34px] rounded-lg overflow-hidden border border-slate-200 bg-slate-100/80 flex items-center justify-center mx-auto shadow-2xs">
+                                        @if($item->foto_alat)
+                                            <button type="button" 
+                                                    onclick="openAdminPhotoModal('{{ asset('storage/' . $item->foto_alat) }}', '{{ addslashes($item->nama_alat) }}', '{{ $item->nomor_registrasi }}', '{{ addslashes($item->nama_inovator) }}')" 
+                                                    class="w-full h-full block group/foto relative cursor-pointer focus:outline-none" 
+                                                    title="Pratinjau Foto">
+                                                <img src="{{ asset('storage/' . $item->foto_alat) }}" 
+                                                     alt="Foto" 
+                                                     class="w-full h-full object-cover group-hover/foto:scale-110 transition-transform"
+                                                     onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'material-symbols-outlined text-slate-400 text-sm\'>image</span>';">
+                                                <span class="absolute inset-0 bg-black/35 opacity-0 group-hover/foto:opacity-100 flex items-center justify-center transition-opacity text-white">
+                                                    <span class="material-symbols-outlined text-xs">zoom_in</span>
+                                                </span>
+                                            </button>
+                                        @else
+                                            <span class="material-symbols-outlined text-slate-300 text-base" title="Tidak ada foto">image_not_supported</span>
+                                        @endif
+                                    </div>
                                 </td>
 
                                 <!-- Nama Alat -->
-                                <td class="py-2 px-3 max-w-[200px] align-middle">
-                                    <a href="{{ route('admin.lomba.show', $item->id) }}" class="font-bold text-slate-900 hover:text-[#00A3E0] transition-colors line-clamp-1 block text-xs leading-snug">
+                                <td class="py-2 px-3 min-w-[150px] max-w-[210px] align-middle">
+                                    <a href="{{ route('admin.lomba.show', $item->id) }}" class="font-bold text-slate-900 hover:text-[#00A3E0] transition-colors truncate block text-xs leading-snug" title="{{ $item->nama_alat }}">
                                         {{ $item->nama_alat }}
                                     </a>
-                                    <span class="text-[10px] text-slate-400 line-clamp-1 mt-0.5 leading-none">
+                                    @if($item->fungsi)
+                                    <span class="text-[10px] text-slate-400 truncate block mt-0.5 leading-none" title="{{ $item->fungsi }}">
                                         {{ $item->fungsi }}
                                     </span>
+                                    @endif
                                 </td>
 
                                 <!-- Kategori -->
-                                <td class="py-2 px-2.5 whitespace-nowrap align-middle">
+                                <td class="py-2 px-2 whitespace-nowrap text-center align-middle">
                                     <span class="px-2 py-0.5 bg-sky-50 text-[#00A3E0] font-bold rounded-md text-[10px] border border-sky-100/80 inline-block leading-tight">
                                         {{ $item->kategori_peserta }}
                                     </span>
                                 </td>
 
                                 <!-- Inovator & Instansi -->
-                                <td class="py-2 px-3 align-middle">
-                                    <strong class="text-slate-800 block font-bold text-xs leading-snug truncate max-w-[140px]">{{ $item->nama_inovator }}</strong>
-                                    <span class="text-slate-500 text-[10px] block truncate max-w-[140px] leading-tight mt-0.5">{{ $item->asal_instansi }}</span>
+                                <td class="py-2 px-2.5 min-w-[130px] max-w-[160px] align-middle">
+                                    <strong class="text-slate-800 block font-bold text-xs leading-snug truncate" title="{{ $item->nama_inovator }}">{{ $item->nama_inovator }}</strong>
+                                    <span class="text-slate-500 text-[10px] block truncate leading-tight mt-0.5" title="{{ $item->asal_instansi }}">{{ $item->asal_instansi }}</span>
+                                    @if($item->nomor_wa)
                                     <span class="text-slate-400 text-[9px] block font-mono leading-none mt-0.5">{{ $item->nomor_wa }}</span>
+                                    @endif
                                 </td>
 
                                 <!-- Biaya & Harga -->
-                                <td class="py-2 px-3 whitespace-nowrap align-middle">
+                                <td class="py-2 px-2.5 whitespace-nowrap align-middle">
                                     <span class="text-slate-500 block text-[10px] leading-tight">Biaya: <span class="text-slate-700 font-medium">Rp {{ number_format($item->biaya_pembuatan, 0, ',', '.') }}</span></span>
                                     <span class="text-emerald-600 font-bold block text-[10px] leading-tight mt-0.5">Jual: Rp {{ number_format($item->estimasi_harga_jual, 0, ',', '.') }}</span>
                                 </td>
 
                                 <!-- Status Badge -->
-                                <td class="py-2 px-2.5 whitespace-nowrap text-center align-middle">
+                                <td class="py-2 px-2 whitespace-nowrap text-center align-middle">
                                     <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-bold text-[10px] border leading-tight {{ $item->status_badge }}">
                                         <span class="material-symbols-outlined text-[13px] leading-none">{{ $item->status_icon }}</span>
                                         <span>{{ $item->status }}</span>
                                     </span>
                                 </td>
 
-                                <!-- Aksi -->
-                                <td class="py-2 px-2.5 whitespace-nowrap text-center align-middle">
+                                <!-- Aksi (Sticky Right - Never Cut Off) -->
+                                <td class="py-2 px-2.5 whitespace-nowrap text-center align-middle sticky right-0 bg-white group-hover:bg-slate-50 transition-colors shadow-[-3px_0_6px_-2px_rgba(0,0,0,0.06)]">
                                     <div class="flex items-center justify-center gap-1">
-                                        <a href="{{ route('admin.lomba.show', $item->id) }}" class="p-1 bg-sky-50 hover:bg-[#00A3E0] text-[#00A3E0] hover:text-white rounded-md transition-colors" title="Lihat Detail & Verifikasi">
+                                        <a href="{{ route('admin.lomba.show', $item->id) }}" class="p-1 bg-sky-50 hover:bg-[#00A3E0] text-[#00A3E0] hover:text-white rounded-md transition-colors shadow-2xs" title="Lihat Detail & Verifikasi">
                                             <span class="material-symbols-outlined text-base">visibility</span>
                                         </a>
-                                        <a href="{{ route('lomba.proposal.download', $item->id) }}" target="_blank" rel="noopener noreferrer" class="p-1 bg-slate-50 hover:bg-[#00A3E0] text-slate-600 hover:text-white rounded-md transition-colors" title="Buka Link Proposal (Google Drive)">
-                                            <span class="material-symbols-outlined text-base">link</span>
+                                        <a href="{{ route('lomba.proposal.download', $item->id) }}" target="_blank" rel="noopener noreferrer" class="p-1 bg-slate-50 hover:bg-[#00A3E0] text-slate-600 hover:text-white rounded-md transition-colors shadow-2xs" title="Unduh / Buka Berkas Proposal">
+                                            <span class="material-symbols-outlined text-base">description</span>
                                         </a>
                                         <form action="{{ route('admin.lomba.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data pendaftaran karya ini?')" class="inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="p-1 bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white rounded-md transition-colors cursor-pointer" title="Hapus">
+                                            <button type="submit" class="p-1 bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white rounded-md transition-colors cursor-pointer shadow-2xs" title="Hapus Data">
                                                 <span class="material-symbols-outlined text-base">delete</span>
                                             </button>
                                         </form>
@@ -432,12 +439,10 @@
                     </table>
                 </div>
 
-                <!-- Pagination -->
-                @if($pendaftar->hasPages())
-                <div class="p-2.5 border-t border-gray-100 bg-gray-50/50">
-                    {{ $pendaftar->links() }}
+                <!-- Bagian Bawah Tabel: Standardized Pagination Partial -->
+                <div class="p-3 sm:p-4 border-t border-slate-100 bg-white">
+                    @include('partials.pagination', ['paginator' => $pendaftar, 'itemLabel' => 'Pendaftar'])
                 </div>
-                @endif
             </div>
 
         </div>
