@@ -26,5 +26,24 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+
+        // Pastikan permintaan API / JSON selalu mengembalikan pesan generik yang bersih
+        $this->renderable(function (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e, $request) {
+            if ($request->is('api/*') || $request->expectsJson()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Halaman atau sumber daya tidak ditemukan.'
+                ], 404);
+            }
+        });
+
+        $this->renderable(function (\Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException $e, $request) {
+            if ($request->is('api/*') || $request->expectsJson()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Metode HTTP tidak diizinkan.'
+                ], 405);
+            }
+        });
     }
 }
