@@ -90,7 +90,7 @@ Route::any('/login', function () use ($adminLoginSlug) {
 
 // Alias & Proteksi Route /admin dan /admin/login (Otomatis 404 jika belum login)
 Route::get('/admin', function () {
-    if (Auth::check()) {
+    if (Auth::guard('web')->check()) {
         return redirect()->route('admin.dashboard');
     }
     abort(404);
@@ -99,10 +99,10 @@ Route::get('/admin/login', function () {
     abort(404);
 });
 
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth:web');
 
-// Route Kelompok Admin (Wajib Login / Protected Middleware Auth)
-Route::middleware('auth')->prefix('admin')->group(function () {
+// Route Kelompok Admin (Wajib Login Admin / Protected Middleware Auth Guard: web)
+Route::middleware('auth:web')->prefix('admin')->group(function () {
     // Dashboard Admin
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 

@@ -15,8 +15,8 @@ class RemoveHeaders
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Hapus header X-Powered-By dari level PHP runtime
-        if (function_exists('header_remove')) {
+        // Hapus header X-Powered-By dari level PHP runtime jika headers belum terkirim
+        if (function_exists('header_remove') && !headers_sent()) {
             header_remove('X-Powered-By');
         }
 

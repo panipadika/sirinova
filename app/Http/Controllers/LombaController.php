@@ -8,6 +8,7 @@ use App\Models\PengaturanLomba;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -238,14 +239,16 @@ class LombaController extends Controller
     public function downloadProposal($id)
     {
         $pendaftaran = PendaftaranLomba::findOrFail($id);
-        $user = Auth::guard('peserta')->user();
-        $isAdmin = Auth::guard('web')->check();
+        $currentUser = Auth::guard('web')->user() ?? Auth::guard('peserta')->user();
 
-        // Admin memiliki akses penuh; Peserta hanya bisa mengakses proposal miliknya sendiri
-        if (!$isAdmin) {
-            if (!$user || (int) $pendaftaran->id_user !== (int) $user->id) {
-                abort(403, 'Anda tidak memiliki hak akses untuk mengakses berkas ini.');
-            }
+        if (!$currentUser) {
+            abort(401, 'Silakan login terlebih dahulu untuk mengakses berkas ini.');
+        }
+
+        // Otorisasi melalui Laravel Policy (IDOR prevention)
+        $response = Gate::forUser($currentUser)->inspect('view', $pendaftaran);
+        if (!$response->allowed()) {
+            abort(403, $response->message() ?: 'Anda tidak memiliki hak akses untuk mengakses berkas ini.');
         }
 
         // Jika berupa tautan URL (seperti Google Drive)
