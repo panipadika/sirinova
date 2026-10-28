@@ -7,6 +7,7 @@ use App\Models\JadwalLomba;
 use App\Models\PengaturanLomba;
 use App\Services\SecureFileUploadService;
 use App\Services\SecurityAuditLogger;
+use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -299,25 +300,29 @@ class LombaController extends Controller
         }
 
         // 2. Jika berkas tersimpan pada PRIVATE STORAGE (disk: local)
-        if ($pendaftaran->file_proposal && Storage::disk('local')->exists($pendaftaran->file_proposal)) {
+        /** @var FilesystemAdapter $localDisk */
+        $localDisk = Storage::disk('local');
+        if ($pendaftaran->file_proposal && $localDisk->exists($pendaftaran->file_proposal)) {
             SecurityAuditLogger::log('PROPOSAL_DOWNLOAD_ACCESSED', [
                 'proposal_id' => $pendaftaran->id,
                 'storage' => 'private_local',
             ], 'info');
 
             $namaFileDownload = 'Proposal_' . Str::slug($pendaftaran->nama_alat) . '_' . $pendaftaran->nomor_registrasi . '.' . pathinfo($pendaftaran->file_proposal, PATHINFO_EXTENSION);
-            return Storage::disk('local')->download($pendaftaran->file_proposal, $namaFileDownload);
+            return $localDisk->download($pendaftaran->file_proposal, $namaFileDownload);
         }
 
         // 3. Fallback untuk berkas lokal lama jika masih ada di disk public
-        if ($pendaftaran->file_proposal && Storage::disk('public')->exists($pendaftaran->file_proposal)) {
+        /** @var FilesystemAdapter $publicDisk */
+        $publicDisk = Storage::disk('public');
+        if ($pendaftaran->file_proposal && $publicDisk->exists($pendaftaran->file_proposal)) {
             SecurityAuditLogger::log('PROPOSAL_DOWNLOAD_ACCESSED', [
                 'proposal_id' => $pendaftaran->id,
                 'storage' => 'legacy_public',
             ], 'info');
 
             $namaFileDownload = 'Proposal_' . Str::slug($pendaftaran->nama_alat) . '_' . $pendaftaran->nomor_registrasi . '.' . pathinfo($pendaftaran->file_proposal, PATHINFO_EXTENSION);
-            return Storage::disk('public')->download($pendaftaran->file_proposal, $namaFileDownload);
+            return $publicDisk->download($pendaftaran->file_proposal, $namaFileDownload);
         }
 
         abort(404, 'Tautan atau berkas proposal tidak ditemukan.');

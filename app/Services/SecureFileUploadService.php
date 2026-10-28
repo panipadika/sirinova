@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -138,9 +139,11 @@ class SecureFileUploadService
 
         // 7. Simpan dengan Nama Acak Berbasis UUID (Mencegah Path Traversal & File Overwrite)
         $canonicalExt = ($clientExt === 'jpeg') ? 'jpg' : $clientExt;
-        $safeFilename = Str::uuid()->toString() . '.' . $canonicalExt;
+        $safeFilename = (string) Str::uuid() . '.' . $canonicalExt;
 
-        $storedPath = Storage::disk($disk)->putFileAs($directory, $file, $safeFilename);
+        /** @var FilesystemAdapter $storageDisk */
+        $storageDisk = Storage::disk($disk);
+        $storedPath = $storageDisk->putFileAs($directory, $file, $safeFilename);
 
         SecurityAuditLogger::log('FILE_UPLOAD_SUCCESS', [
             'directory' => $directory,
@@ -262,8 +265,11 @@ class SecureFileUploadService
         }
 
         // 6. Simpan ke PRIVATE STORAGE (disk: local) dengan UUID
-        $safeFilename = Str::uuid()->toString() . '.' . $clientExt;
-        $privatePath = Storage::disk('local')->putFileAs('proposals', $file, $safeFilename);
+        $safeFilename = (string) Str::uuid() . '.' . $clientExt;
+
+        /** @var FilesystemAdapter $privateStorageDisk */
+        $privateStorageDisk = Storage::disk('local');
+        $privatePath = $privateStorageDisk->putFileAs('proposals', $file, $safeFilename);
 
         SecurityAuditLogger::log('PROPOSAL_FILE_STORED_SECURELY', [
             'storage_disk' => 'local (private)',
