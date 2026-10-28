@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use App\Notifications\AdminResetPasswordNotification;
+use App\Services\SecurityAuditLogger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -36,6 +37,11 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
 
+            SecurityAuditLogger::log('AUTH_LOGIN_SUCCESS', [
+                'email' => $request->email,
+                'guard' => 'web',
+            ], 'info');
+
             if ($remember) {
                 // Simpan email di cookie selama 30 hari untuk kemudahan auto-fill email saja (tanpa password demi keamanan)
                 \Illuminate\Support\Facades\Cookie::queue('remember_email', $request->email, 60 * 24 * 30);
@@ -50,6 +56,11 @@ class AuthController extends Controller
 
             return redirect()->intended('/admin/dashboard');
         }
+
+        SecurityAuditLogger::log('AUTH_LOGIN_FAILED', [
+            'email' => $request->email,
+            'guard' => 'web',
+        ], 'warning');
 
         return back()->withErrors([
             'email' => 'Email atau password tidak sesuai.',
@@ -101,6 +112,11 @@ class AuthController extends Controller
             }
         }
 
+        SecurityAuditLogger::log('PASSWORD_RESET_LINK_REQUESTED', [
+            'email' => $request->email,
+            'guard' => 'web',
+        ], 'info');
+
         return back()->with('status', 'Jika informasi yang dimasukkan sesuai, instruksi pengaturan ulang kata sandi telah dikirimkan ke kanal terdaftar.');
     }
 
@@ -135,6 +151,11 @@ class AuthController extends Controller
 
         $admin = Admin::where('email', $request->email)->first();
         if (!$admin) {
+            SecurityAuditLogger::log('PASSWORD_RESET_FAILED', [
+                'email' => $request->email,
+                'guard' => 'web',
+                'reason' => 'Account not found',
+            ], 'warning');
             return back()->withErrors(['token' => 'Permintaan reset kata sandi tidak valid atau telah kedaluwarsa.']);
         }
 
@@ -142,6 +163,11 @@ class AuthController extends Controller
         $broker = Password::broker('users');
 
         if (!$broker->tokenExists($admin, $request->token)) {
+            SecurityAuditLogger::log('PASSWORD_RESET_FAILED', [
+                'email' => $request->email,
+                'guard' => 'web',
+                'reason' => 'Invalid or expired token',
+            ], 'warning');
             return back()->withErrors(['token' => 'Token reset password tidak valid atau sudah kedaluwarsa. Silakan ajukan permohonan baru.']);
         }
 
@@ -156,11 +182,20 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
+        SecurityAuditLogger::log('PASSWORD_RESET_COMPLETED', [
+            'email' => $request->email,
+            'guard' => 'web',
+        ], 'info');
+
         return redirect()->route('login')->with('success', 'Kata sandi Administrator berhasil diperbarui! Silakan masuk menggunakan kata sandi baru Anda.');
     }
 
     public function logout(Request $request)
     {
+        SecurityAuditLogger::log('AUTH_LOGOUT', [
+            'guard' => 'web',
+        ], 'info');
+
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();

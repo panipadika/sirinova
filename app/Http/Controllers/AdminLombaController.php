@@ -98,8 +98,13 @@ class AdminLombaController extends Controller
         $item = PendaftaranLomba::findOrFail($id);
 
         // Hapus file proposal dan foto dari storage jika ada (hanya jika berupa berkas lokal)
-        if ($item->file_proposal && !Str::startsWith($item->file_proposal, ['http://', 'https://']) && Storage::disk('public')->exists($item->file_proposal)) {
-            Storage::disk('public')->delete($item->file_proposal);
+        if ($item->file_proposal && !Str::startsWith($item->file_proposal, ['http://', 'https://'])) {
+            if (Storage::disk('local')->exists($item->file_proposal)) {
+                Storage::disk('local')->delete($item->file_proposal);
+            }
+            if (Storage::disk('public')->exists($item->file_proposal)) {
+                Storage::disk('public')->delete($item->file_proposal);
+            }
         }
         if ($item->foto_alat && Storage::disk('public')->exists($item->foto_alat)) {
             Storage::disk('public')->delete($item->foto_alat);

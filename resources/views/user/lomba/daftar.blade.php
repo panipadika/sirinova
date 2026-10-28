@@ -817,10 +817,11 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 items-start">
                     <!-- Link Proposal (Google Drive) -->
-                    <div class="space-y-2.5">
+                    <!-- Dokumen Proposal Lomba (Unggah Berkas Privat atau Tautan Google Drive) -->
+                    <div class="space-y-3 p-4 bg-slate-50/80 rounded-2xl border border-slate-200">
                         <div class="flex items-center justify-between flex-wrap gap-2">
-                            <label for="file_proposal" class="block text-xs font-bold text-slate-700">
-                                Link Proposal (Google Drive) <span class="text-rose-500">*</span>
+                            <label class="block text-xs font-bold text-slate-800">
+                                Berkas Dokumen Proposal Lomba <span class="text-rose-500">*</span>
                             </label>
                             <a href="{{ $linkTemplateProposal ?? \App\Models\PengaturanLomba::getTemplateUrl() }}" target="_blank" rel="noopener noreferrer" class="text-[11px] font-bold text-[#00A3E0] hover:underline inline-flex items-center gap-1">
                                 <span class="material-symbols-outlined text-sm">download</span>
@@ -828,28 +829,42 @@
                             </a>
                         </div>
 
-                        <!-- Banner Peringatan Merah (Persis seperti Permintaan) -->
-                        <div class="p-3 bg-[#c5221f] text-white rounded-xl text-xs font-bold flex items-center gap-2 shadow-xs">
-                            <span class="material-symbols-outlined text-lg shrink-0">warning</span>
-                            <span>Pastikan Link google drive anda tidak di private</span>
+                        <!-- Opsi 1: Unggah Langsung Berkas Proposal (Tersimpan di Private Storage) -->
+                        <div class="space-y-1.5 bg-white p-3.5 rounded-xl border border-slate-200">
+                            <span class="block text-[11px] font-bold text-slate-700 flex items-center gap-1.5">
+                                <span class="material-symbols-outlined text-sm text-[#00A3E0]">upload_file</span>
+                                <span>Opsi A: Unggah Berkas Proposal (PDF / DOC / DOCX, Maks. 10 MB)</span>
+                            </span>
+                            <input type="file" name="file_proposal_file" id="file_proposal_file" accept=".pdf,.doc,.docx"
+                                   class="block w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[#00A3E0] file:text-white hover:file:bg-[#008cc0] cursor-pointer">
+                            <p class="text-[10px] text-slate-400">Berkas akan dienkripsi dan disimpan secara terisolasi pada private storage.</p>
                         </div>
 
-                        <!-- Input URL Link Google Drive -->
-                        <div class="relative">
-                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                                <span class="material-symbols-outlined text-lg text-[#00A3E0]">link</span>
+                        <!-- Divider / Opsi Lain -->
+                        <div class="flex items-center gap-2">
+                            <div class="flex-1 border-t border-slate-200"></div>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">ATAU</span>
+                            <div class="flex-1 border-t border-slate-200"></div>
+                        </div>
+
+                        <!-- Opsi 2: Link Google Drive -->
+                        <div class="space-y-2 bg-white p-3.5 rounded-xl border border-slate-200">
+                            <span class="block text-[11px] font-bold text-slate-700 flex items-center gap-1.5">
+                                <span class="material-symbols-outlined text-sm text-[#00A3E0]">link</span>
+                                <span>Opsi B: Tautan Berkas Google Drive</span>
                             </span>
+
+                            <!-- Banner Peringatan Merah -->
+                            <div class="p-2.5 bg-[#c5221f] text-white rounded-lg text-xs font-bold flex items-center gap-2 shadow-xs">
+                                <span class="material-symbols-outlined text-base shrink-0">warning</span>
+                                <span>Pastikan Link Google Drive Anda disetel ke "Siapa saja yang memiliki link" (tidak di-private).</span>
+                            </div>
+
                             <input type="url" name="file_proposal" id="file_proposal" 
                                    value="{{ old('file_proposal') }}" 
                                    placeholder="https://drive.google.com/file/d/..." 
-                                   class="w-full pl-10 pr-3.5 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-[#00A3E0] outline-none transition-all font-mono" 
-                                   required>
+                                   class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-[#00A3E0] outline-none transition-all font-mono">
                         </div>
-
-                        <p class="text-[11px] text-slate-500 leading-relaxed bg-slate-50 p-2.5 rounded-xl border border-slate-200/80 flex items-start gap-1.5">
-                            <span class="material-symbols-outlined text-sm text-[#00A3E0] shrink-0 mt-0.5">info</span>
-                            <span>Unggah file proposal Anda ke Google Drive, ubah akses tautan menjadi <strong>"Siapa saja yang memiliki link" (Anyone with the link can view)</strong>, lalu tempelkan link-nya pada kolom di atas.</span>
-                        </p>
                     </div>
 
                     <!-- Foto Alat TTG  -->

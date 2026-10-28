@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\PendaftaranLomba;
 use App\Models\JadwalLomba;
 use App\Models\PengaturanLomba;
+use App\Services\SecureFileUploadService;
+use App\Services\SecurityAuditLogger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class LombaController extends Controller
 {
@@ -100,6 +103,16 @@ class LombaController extends Controller
             ]);
         }
 
+        // 1. Verifikasi kelengkapan dokumen proposal (bisa berupa file dokumen atau link Google Drive)
+        $hasProposalFile = $request->hasFile('file_proposal_file') || $request->hasFile('file_proposal');
+        $hasProposalUrl = $request->filled('file_proposal') && !is_object($request->file_proposal);
+
+        if (!$hasProposalFile && !$hasProposalUrl) {
+            throw ValidationException::withMessages([
+                'file_proposal' => 'Dokumen proposal lomba (berkas PDF/DOC/DOCX atau tautan Google Drive) wajib disertakan.',
+            ]);
+        }
+
         $validated = $request->validate([
             'kategori_peserta' => 'required|in:SMA/SMK Sederajat,Perguruan Tinggi,Umum',
             'nama_inovator' => 'required|string|max:255',
@@ -113,8 +126,9 @@ class LombaController extends Controller
             'fungsi' => 'required|string',
             'spesifikasi_bahan' => 'required|string',
             'latar_belakang' => 'nullable|string',
-            'file_proposal' => 'required|url|max:1000',
-            'foto_alat' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120', // Maks 5MB (Wajib)
+            'file_proposal' => 'nullable',
+            'file_proposal_file' => 'nullable|file',
+            'foto_alat' => 'required|file',
             'link_video' => 'nullable|url|max:255',
         ], [
             'kategori_peserta.required' => 'Pilih kategori peserta yang sesuai.',
@@ -128,22 +142,34 @@ class LombaController extends Controller
             'estimasi_harga_jual.required' => 'Estimasi harga jual wajib diisi dalam angka.',
             'fungsi.required' => 'Fungsi alat TTG wajib dijelaskan.',
             'spesifikasi_bahan.required' => 'Spesifikasi teknis & bahan alat wajib dicantumkan.',
-            'file_proposal.required' => 'Link proposal Google Drive wajib diisi.',
-            'file_proposal.url' => 'Format link proposal Google Drive harus berupa tautan URL valid (contoh: https://drive.google.com/...).',
             'foto_alat.required' => 'Foto dokumentasi alat TTG wajib diunggah.',
-            'foto_alat.image' => 'File foto dokumentasi alat harus berupa gambar (JPG, PNG, atau WEBP).',
-            'foto_alat.max' => 'Ukuran foto alat maksimal 5 MB.',
             'link_video.url' => 'Format tautan video harus berupa URL valid (contoh: https://youtube.com/...).',
         ]);
 
-        // 1. Ambil link proposal & simpan foto alat
-        $fileProposalLink = trim($request->file_proposal);
-        $fotoAlatPath = null;
-        if ($request->hasFile('foto_alat')) {
-            $fotoAlatPath = $request->file('foto_alat')->store('foto_lomba', 'public');
+        // 2. Simpan dokumen proposal secara aman
+        // Jika diunggah sebagai file -> simpan di PRIVATE STORAGE (disk 'local')
+        // Jika berupa tautan URL (misal Google Drive) -> simpan link setelah validasi
+        $isPrivateDocument = false;
+        if ($request->hasFile('file_proposal_file')) {
+            $fileProposalPath = SecureFileUploadService::validateAndStoreProposalDocument($request->file('file_proposal_file'));
+            $isPrivateDocument = true;
+        } elseif ($request->hasFile('file_proposal')) {
+            $fileProposalPath = SecureFileUploadService::validateAndStoreProposalDocument($request->file('file_proposal'));
+            $isPrivateDocument = true;
+        } else {
+            $url = trim($request->file_proposal);
+            if (!filter_var($url, FILTER_VALIDATE_URL) && !Str::startsWith($url, ['http://', 'https://'])) {
+                throw ValidationException::withMessages([
+                    'file_proposal' => 'Format tautan Google Drive harus berupa URL valid (contoh: https://drive.google.com/...).',
+                ]);
+            }
+            $fileProposalPath = $url;
         }
 
-        // 2. Generate nomor registrasi atomik & simpan ke database dengan proteksi race condition
+        // 3. Simpan foto dokumentasi alat secara aman (Validasi MIME ketat & nama file UUID)
+        $fotoAlatPath = SecureFileUploadService::validateAndStoreImage($request->file('foto_alat'), 'foto_lomba', 'public');
+
+        // 4. Generate nomor registrasi atomik & simpan ke database dengan proteksi race condition
         $tahun = date('Y');
         $nomorRegistrasi = null;
         $pendaftaran = null;
@@ -151,7 +177,7 @@ class LombaController extends Controller
 
         for ($attempt = 1; $attempt <= $maxAttempts; $attempt++) {
             try {
-                $pendaftaran = DB::transaction(function () use ($user, $validated, $tahun, $fileProposalLink, $fotoAlatPath, &$nomorRegistrasi) {
+                $pendaftaran = DB::transaction(function () use ($user, $validated, $tahun, $fileProposalPath, $fotoAlatPath, &$nomorRegistrasi) {
                     $lastRegistration = PendaftaranLomba::where('nomor_registrasi', 'LIKE', "TTG-{$tahun}-%")
                         ->orderByDesc('id')
                         ->lockForUpdate()
@@ -187,7 +213,7 @@ class LombaController extends Controller
                         'fungsi' => $validated['fungsi'],
                         'spesifikasi_bahan' => $validated['spesifikasi_bahan'],
                         'latar_belakang' => $validated['latar_belakang'] ?? null,
-                        'file_proposal' => $fileProposalLink,
+                        'file_proposal' => $fileProposalPath,
                         'foto_alat' => $fotoAlatPath,
                         'link_video' => $validated['link_video'] ?? null,
                         'status' => 'Menunggu Verifikasi',
@@ -197,9 +223,12 @@ class LombaController extends Controller
                 break; // Berhasil disimpan
             } catch (\Illuminate\Database\QueryException $e) {
                 if ($attempt === $maxAttempts) {
-                    // Bersihkan file foto yang sudah diunggah jika gagal total
-                    if ($fotoAlatPath) {
+                    // Bersihkan file yang sudah diunggah jika gagal simpan database
+                    if ($fotoAlatPath && Storage::disk('public')->exists($fotoAlatPath)) {
                         Storage::disk('public')->delete($fotoAlatPath);
+                    }
+                    if ($isPrivateDocument && $fileProposalPath && Storage::disk('local')->exists($fileProposalPath)) {
+                        Storage::disk('local')->delete($fileProposalPath);
                     }
                     throw $e;
                 }
@@ -242,26 +271,53 @@ class LombaController extends Controller
         $currentUser = Auth::guard('web')->user() ?? Auth::guard('peserta')->user();
 
         if (!$currentUser) {
+            SecurityAuditLogger::log('UNAUTHENTICATED_ACCESS_ATTEMPT', [
+                'target' => 'proposal_download',
+                'proposal_id' => $id,
+            ]);
             abort(401, 'Silakan login terlebih dahulu untuk mengakses berkas ini.');
         }
 
         // Otorisasi melalui Laravel Policy (IDOR prevention)
         $response = Gate::forUser($currentUser)->inspect('view', $pendaftaran);
         if (!$response->allowed()) {
+            SecurityAuditLogger::log('IDOR_ATTEMPT', [
+                'target_proposal_id' => $id,
+                'owner_user_id' => $pendaftaran->id_user,
+                'attempted_by_id' => $currentUser->id,
+            ], 'critical');
             abort(403, $response->message() ?: 'Anda tidak memiliki hak akses untuk mengakses berkas ini.');
         }
 
-        // Jika berupa tautan URL (seperti Google Drive)
+        // 1. Jika berupa tautan URL eksternal (seperti Google Drive)
         if (filter_var($pendaftaran->file_proposal, FILTER_VALIDATE_URL) || Str::startsWith($pendaftaran->file_proposal, ['http://', 'https://'])) {
+            SecurityAuditLogger::log('PROPOSAL_DOWNLOAD_ACCESSED', [
+                'proposal_id' => $pendaftaran->id,
+                'type' => 'external_url',
+            ], 'info');
             return redirect()->away($pendaftaran->file_proposal);
         }
 
-        // Fallback untuk berkas lokal lama jika ada
-        if ($pendaftaran->file_proposal && Storage::disk('public')->exists($pendaftaran->file_proposal)) {
+        // 2. Jika berkas tersimpan pada PRIVATE STORAGE (disk: local)
+        if ($pendaftaran->file_proposal && Storage::disk('local')->exists($pendaftaran->file_proposal)) {
+            SecurityAuditLogger::log('PROPOSAL_DOWNLOAD_ACCESSED', [
+                'proposal_id' => $pendaftaran->id,
+                'storage' => 'private_local',
+            ], 'info');
+
             $namaFileDownload = 'Proposal_' . Str::slug($pendaftaran->nama_alat) . '_' . $pendaftaran->nomor_registrasi . '.' . pathinfo($pendaftaran->file_proposal, PATHINFO_EXTENSION);
-            /** @var \Illuminate\Filesystem\FilesystemAdapter $disk */
-            $disk = Storage::disk('public');
-            return $disk->download($pendaftaran->file_proposal, $namaFileDownload);
+            return Storage::disk('local')->download($pendaftaran->file_proposal, $namaFileDownload);
+        }
+
+        // 3. Fallback untuk berkas lokal lama jika masih ada di disk public
+        if ($pendaftaran->file_proposal && Storage::disk('public')->exists($pendaftaran->file_proposal)) {
+            SecurityAuditLogger::log('PROPOSAL_DOWNLOAD_ACCESSED', [
+                'proposal_id' => $pendaftaran->id,
+                'storage' => 'legacy_public',
+            ], 'info');
+
+            $namaFileDownload = 'Proposal_' . Str::slug($pendaftaran->nama_alat) . '_' . $pendaftaran->nomor_registrasi . '.' . pathinfo($pendaftaran->file_proposal, PATHINFO_EXTENSION);
+            return Storage::disk('public')->download($pendaftaran->file_proposal, $namaFileDownload);
         }
 
         abort(404, 'Tautan atau berkas proposal tidak ditemukan.');

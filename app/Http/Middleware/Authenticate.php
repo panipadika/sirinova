@@ -16,6 +16,11 @@ class Authenticate extends Middleware
             return null;
         }
 
+        \App\Services\SecurityAuditLogger::log('UNAUTHENTICATED_ACCESS_ATTEMPT', [
+            'path' => $request->path(),
+            'target_url' => $request->fullUrl(),
+        ], 'warning');
+
         if ($request->is('lomba-ttg*')) {
             return route('peserta.login');
         }

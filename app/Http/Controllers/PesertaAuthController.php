@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Services\SecurityAuditLogger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -41,8 +42,19 @@ class PesertaAuthController extends Controller
 
         if (Auth::guard('peserta')->attempt($credentials, $remember)) {
             $request->session()->regenerate();
+
+            SecurityAuditLogger::log('AUTH_LOGIN_SUCCESS', [
+                'email' => $request->email,
+                'guard' => 'peserta',
+            ], 'info');
+
             return redirect()->intended(route('lomba.daftar'))->with('login_success', 'Selamat datang! Anda berhasil masuk ke akun peserta.');
         }
+
+        SecurityAuditLogger::log('AUTH_LOGIN_FAILED', [
+            'email' => $request->email,
+            'guard' => 'peserta',
+        ], 'warning');
 
         return back()->withInput($request->only('email'))->withErrors([
             'email' => 'Email atau password yang Anda masukkan tidak sesuai.',
@@ -106,6 +118,10 @@ class PesertaAuthController extends Controller
      */
     public function logout(Request $request)
     {
+        SecurityAuditLogger::log('AUTH_LOGOUT', [
+            'guard' => 'peserta',
+        ], 'info');
+
         Auth::guard('peserta')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
@@ -172,6 +188,11 @@ class PesertaAuthController extends Controller
             }
         }
 
+        SecurityAuditLogger::log('PASSWORD_RESET_LINK_REQUESTED', [
+            'email' => $request->email,
+            'guard' => 'peserta',
+        ], 'info');
+
         return back()->with('status', 'Jika informasi yang dimasukkan sesuai, instruksi pengaturan ulang kata sandi telah dikirimkan ke kanal terdaftar.');
     }
 
@@ -219,8 +240,18 @@ class PesertaAuthController extends Controller
             $request->session()->invalidate();
             $request->session()->regenerateToken();
 
+            SecurityAuditLogger::log('PASSWORD_RESET_COMPLETED', [
+                'email' => $request->email,
+                'guard' => 'peserta',
+            ], 'info');
+
             return redirect()->route('peserta.login')->with('success', 'Kata sandi Anda berhasil diperbarui! Silakan masuk menggunakan kata sandi baru Anda.');
         }
+
+        SecurityAuditLogger::log('PASSWORD_RESET_FAILED', [
+            'email' => $request->email,
+            'guard' => 'peserta',
+        ], 'warning');
 
         return back()->withInput($request->only('email'))->withErrors([
             'token' => 'Token reset password tidak valid atau sudah kedaluwarsa. Silakan ajukan permohonan baru.',
