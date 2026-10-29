@@ -18,51 +18,77 @@ class ImageHelper
      */
     public static function convertToWebp(UploadedFile $file, string $directory, int $quality = 80): string
     {
-        $extension = strtolower($file->getClientOriginalExtension());
-        $filename = Str::random(40) . '.webp';
-        $destinationDir = storage_path('app/public/' . trim($directory, '/'));
-
-        if (!file_exists($destinationDir)) {
-            mkdir($destinationDir, 0755, true);
-        }
-
-        $fullPath = $destinationDir . '/' . $filename;
+        $directory = trim($directory, '/');
 
         try {
-            $srcImage = null;
+            // Cek apakah ekstensi GD dan fungsi image WebP tersedia
+            if (extension_loaded('gd') && function_exists('imagewebp')) {
+                $extension = strtolower($file->getClientOriginalExtension());
+                $srcImage = null;
 
-            switch ($extension) {
-                case 'jpeg':
-                case 'jpg':
-                    $srcImage = @imagecreatefromjpeg($file->getRealPath());
-                    break;
-                case 'png':
-                    $srcImage = @imagecreatefrompng($file->getRealPath());
-                    break;
-                case 'webp':
-                    $srcImage = @imagecreatefromwebp($file->getRealPath());
-                    break;
-                case 'gif':
-                    $srcImage = @imagecreatefromgif($file->getRealPath());
-                    break;
-            }
+                switch ($extension) {
+                    case 'jpeg':
+                    case 'jpg':
+                        if (function_exists('imagecreatefromjpeg')) {
+                            $srcImage = @imagecreatefromjpeg($file->getRealPath());
+                        }
+                        break;
+                    case 'png':
+                        if (function_exists('imagecreatefrompng')) {
+                            $srcImage = @imagecreatefrompng($file->getRealPath());
+                        }
+                        break;
+                    case 'webp':
+                        if (function_exists('imagecreatefromwebp')) {
+                            $srcImage = @imagecreatefromwebp($file->getRealPath());
+                        }
+                        break;
+                    case 'gif':
+                        if (function_exists('imagecreatefromgif')) {
+                            $srcImage = @imagecreatefromgif($file->getRealPath());
+                        }
+                        break;
+                }
 
-            if ($srcImage) {
-                // Preserve transparency
-                imagealphablending($srcImage, true);
-                imagesavealpha($srcImage, true);
+                if ($srcImage) {
+                    // Pertahankan transparansi PNG / WebP
+                    imagealphablending($srcImage, true);
+                    imagesavealpha($srcImage, true);
 
-                // Convert & compress to WebP
-                imagewebp($srcImage, $fullPath, $quality);
-                imagedestroy($srcImage);
+                    // Konversi ke WebP dalam memory buffer (tanpa raw filesystem mkdir)
+                    ob_start();
+                    $success = @imagewebp($srcImage, null, $quality);
+                    $webpData = ob_get_clean();
 
-                return trim($directory, '/') . '/' . $filename;
+                    if (function_exists('imagedestroy')) {
+                        @imagedestroy($srcImage);
+                    }
+
+                    if ($success && !empty($webpData)) {
+                        $filename = Str::random(40) . '.webp';
+                        $relativePath = $directory . '/' . $filename;
+
+                        // Simpan menggunakan disk public Laravel (otomatis membuat direktori dengan izin yang benar)
+                        Storage::disk('public')->put($relativePath, $webpData);
+
+                        // Sinkronkan juga ke storage/app/public jika path public berbeda
+                        try {
+                            if (is_dir(base_path('../public_html/storage')) && is_dir(storage_path('app/public'))) {
+                                @file_put_contents(storage_path('app/public/' . $relativePath), $webpData);
+                            }
+                        } catch (\Throwable $e) {
+                            // Abaikan jika folder lokal tidak ada
+                        }
+
+                        return $relativePath;
+                    }
+                }
             }
         } catch (\Throwable $e) {
-            // Fallback if GD fails for any reason
+            // Jika ada kendala pada GD, lanjut ke fallback standar Laravel
         }
 
-        // Fallback to standard Laravel file store
+        // Fallback resmi dan aman Laravel
         return $file->store($directory, 'public');
     }
 }

@@ -72,8 +72,15 @@ class AlatController extends Controller
         // Jika admin mengunggah foto baru (Otomatis kompresi & konversi ke WebP)
         if ($request->hasFile('foto')) {
             // Hapus foto lama dari penyimpanan agar tidak menumpuk
-            if ($image && Storage::disk('public')->exists($image)) {
-                Storage::disk('public')->delete($image);
+            if ($image) {
+                try {
+                    $cleanPath = str_replace('storage/', '', $image);
+                    if (Storage::disk('public')->exists($cleanPath)) {
+                        Storage::disk('public')->delete($cleanPath);
+                    }
+                } catch (\Throwable $e) {
+                    // Abaikan kegagalan hapus file lama
+                }
             }
             // Simpan & Kompresi foto baru ke format WebP
             $image = ImageHelper::convertToWebp($request->file('foto'), 'alat_ttg');
