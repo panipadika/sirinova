@@ -60,9 +60,7 @@ class ImageHelper
                     $success = @imagewebp($srcImage, null, $quality);
                     $webpData = ob_get_clean();
 
-                    if (function_exists('imagedestroy')) {
-                        @imagedestroy($srcImage);
-                    }
+                    unset($srcImage);
 
                     if ($success && !empty($webpData)) {
                         $filename = Str::random(40) . '.webp';
