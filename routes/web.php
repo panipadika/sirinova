@@ -141,6 +141,8 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
     Route::put('/lomba/jadwal/{id}', [AdminLombaController::class, 'updateJadwal'])->name('admin.lomba.jadwal.update');
     Route::put('/lomba/template-proposal', [AdminLombaController::class, 'updateTemplateProposal'])->name('admin.lomba.template.update');
     Route::get('/lomba/print', [AdminLombaController::class, 'print'])->name('admin.lomba.print');
+    Route::get('/lomba/export/pdf', [AdminLombaController::class, 'exportPdf'])->name('admin.lomba.export.pdf');
+    Route::get('/lomba/export/excel', [AdminLombaController::class, 'exportExcel'])->name('admin.lomba.export.excel');
     Route::get('/lomba/{id}', [AdminLombaController::class, 'show'])->name('admin.lomba.show');
     Route::patch('/lomba/{id}/status', [AdminLombaController::class, 'updateStatus'])->name('admin.lomba.update-status');
     Route::delete('/lomba/{id}', [AdminLombaController::class, 'destroy'])->name('admin.lomba.destroy');

@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\PendaftaranLomba;
 use App\Models\JadwalLomba;
 use App\Models\PengaturanLomba;
+use App\Exports\PendaftaranLombaExport;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -121,25 +124,95 @@ class AdminLombaController extends Controller
 
         $item->delete();
 
-        return redirect()->route('admin.lomba.index')->with('success', 'Data pendaftaran berhasil dihapus.');
+        if (request()->wantsJson() || request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Data pendaftaran karya "' . $item->nama_alat . '" berhasil dihapus.',
+                'id' => $id,
+            ]);
+        }
+
+        return back()->with('success', 'Data pendaftaran karya "' . $item->nama_alat . '" berhasil dihapus.');
     }
 
     /**
-     * Cetak rekapitulasi pendaftar lomba
+     * Cetak rekapitulasi pendaftar lomba (Print View)
      */
     public function print(Request $request)
     {
         $query = PendaftaranLomba::with('user')->orderBy('dibuat_pada', 'asc');
 
+        if ($request->filled('q')) {
+            $keyword = $request->q;
+            $query->where(function ($q) use ($keyword) {
+                $q->where('nama_alat', 'like', "%{$keyword}%")
+                    ->orWhere('nama_inovator', 'like', "%{$keyword}%")
+                    ->orWhere('asal_instansi', 'like', "%{$keyword}%")
+                    ->orWhere('nomor_registrasi', 'like', "%{$keyword}%");
+            });
+        }
         if ($request->filled('kategori')) {
             $query->where('kategori_peserta', $request->kategori);
         }
         if ($request->filled('status')) {
-            $query->where('status', $request->status);
+            if (in_array($request->status, ['Ditolak / Perbaikan', 'ditolak_perbaikan'], true)) {
+                $query->whereIn('status', ['Ditolak', 'Perlu Perbaikan']);
+            } else {
+                $query->where('status', $request->status);
+            }
         }
 
         $pendaftar = $query->get();
         return view('admin.lomba.print', compact('pendaftar'));
+    }
+
+    /**
+     * Unduh Rekapitulasi Pendaftaran Lomba format PDF (DomPDF)
+     */
+    public function exportPdf(Request $request)
+    {
+        $query = PendaftaranLomba::with('user')->orderBy('dibuat_pada', 'asc');
+
+        if ($request->filled('q')) {
+            $keyword = $request->q;
+            $query->where(function ($q) use ($keyword) {
+                $q->where('nama_alat', 'like', "%{$keyword}%")
+                    ->orWhere('nama_inovator', 'like', "%{$keyword}%")
+                    ->orWhere('asal_instansi', 'like', "%{$keyword}%")
+                    ->orWhere('nomor_registrasi', 'like', "%{$keyword}%");
+            });
+        }
+        if ($request->filled('kategori')) {
+            $query->where('kategori_peserta', $request->kategori);
+        }
+        if ($request->filled('status')) {
+            if (in_array($request->status, ['Ditolak / Perbaikan', 'ditolak_perbaikan'], true)) {
+                $query->whereIn('status', ['Ditolak', 'Perlu Perbaikan']);
+            } else {
+                $query->where('status', $request->status);
+            }
+        }
+
+        $pendaftar = $query->get();
+        $kategoriFilter = $request->kategori ?? null;
+        $statusFilter = $request->status ?? null;
+        $keywordFilter = $request->q ?? null;
+
+        $pdf = Pdf::loadView('admin.lomba.pdf', compact('pendaftar', 'kategoriFilter', 'statusFilter', 'keywordFilter'))
+            ->setPaper('a4', 'landscape');
+
+        return $pdf->download('Rekap-Pendaftaran-Lomba-TTG-' . date('Ymd-His') . '.pdf');
+    }
+
+    /**
+     * Unduh Rekapitulasi Pendaftaran Lomba format Excel (.xlsx)
+     */
+    public function exportExcel(Request $request)
+    {
+        return Excel::download(
+            new PendaftaranLombaExport($request->kategori, $request->status, $request->q),
+            'Rekap-Pendaftaran-Lomba-TTG-' . date('Ymd-His') . '.xlsx'
+        );
     }
 
     /**

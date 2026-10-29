@@ -51,10 +51,23 @@
                     </p>
                 </div>
 
-                <div class="flex items-center gap-2.5">
-                    <a href="{{ route('admin.lomba.print', request()->query()) }}" target="_blank" class="px-4 py-2.5 bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 font-bold text-xs rounded-xl shadow-sm transition-all flex items-center gap-1.5">
-                        <span class="material-symbols-outlined text-base">print</span>
+                <div class="flex flex-wrap items-center gap-2">
+                    <!-- Cetak Rekap (Print View) -->
+                    <a href="{{ route('admin.lomba.print', request()->query()) }}" target="_blank" class="px-3.5 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-bold text-xs rounded-xl shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer" title="Cetak Rekapitulasi (Tampilan Cetak)">
+                        <span class="material-symbols-outlined text-[17px] text-slate-500">print</span>
                         <span>Cetak Rekap</span>
+                    </a>
+
+                    <!-- Download PDF -->
+                    <a href="{{ route('admin.lomba.export.pdf', request()->query()) }}" class="px-3.5 py-2 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 font-bold text-xs rounded-xl shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer" title="Unduh Laporan Format PDF">
+                        <span class="material-symbols-outlined text-[17px] text-rose-600">picture_as_pdf</span>
+                        <span>Download PDF</span>
+                    </a>
+
+                    <!-- Download Excel -->
+                    <a href="{{ route('admin.lomba.export.excel', request()->query()) }}" class="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-700 font-bold text-xs rounded-xl shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer" title="Unduh Rekap Data Format Excel (.xlsx)">
+                        <span class="material-symbols-outlined text-[17px] text-emerald-600">table_view</span>
+                        <span>Download Excel</span>
                     </a>
                 </div>
             </div>
@@ -431,7 +444,7 @@
                                             <span class="material-symbols-outlined text-[17px]">description</span>
                                         </a>
                                         <button type="button" 
-                                                onclick="openDeleteModal('{{ route('admin.lomba.destroy', $item->id) }}', '{{ addslashes($item->nama_alat) }}')"
+                                                onclick="openDeleteModal('{{ route('admin.lomba.destroy', $item->id) }}', '{{ addslashes($item->nama_alat) }}', this)"
                                                 class="p-1.5 bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white rounded-lg transition-all cursor-pointer shadow-2xs" 
                                                 title="Hapus Data Pendaftaran">
                                             <span class="material-symbols-outlined text-[17px]">delete</span>
@@ -789,18 +802,21 @@
             }
         });
 
-        // Handler Modal Hapus Pendaftaran Lomba (Custom SI-RINOVA)
+        // Handler Modal Hapus Pendaftaran Lomba (Custom SI-RINOVA - In-Place Delete & No Scroll Jump)
         const deleteModal = document.getElementById('delete-modal');
         const deleteModalContent = document.getElementById('delete-modal-content');
         const cancelDeleteBtn = document.getElementById('cancel-delete');
         const deleteForm = document.getElementById('delete-form');
         const deleteItemTitle = document.getElementById('delete-item-title');
+        let currentDeletingRow = null;
 
-        function openDeleteModal(actionUrl, itemTitle) {
+        function openDeleteModal(actionUrl, itemTitle, triggerBtn = null) {
             if (deleteForm) deleteForm.action = actionUrl;
             if (deleteItemTitle) {
                 deleteItemTitle.textContent = itemTitle ? `"${itemTitle}"` : 'ini';
             }
+            currentDeletingRow = triggerBtn ? triggerBtn.closest('tr') : null;
+
             if (deleteModal && deleteModalContent) {
                 deleteModal.classList.remove('hidden');
                 void deleteModal.offsetWidth;
@@ -825,6 +841,101 @@
             }
         });
 
+        // Submit Delete Form via AJAX (Tanpa Refresh Lompat ke Awal / Refresh di Tempat)
+        deleteForm?.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const submitBtn = deleteForm.querySelector('button[type="submit"]');
+            const originalBtnHtml = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="inline-block animate-spin mr-1.5">&#9696;</span>Menghapus...';
+
+            // Simpan posisi scroll saat ini sebagai antisipasi
+            sessionStorage.setItem('admin_lomba_scroll', window.scrollY);
+
+            fetch(deleteForm.action, {
+                method: 'POST',
+                body: new FormData(deleteForm),
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Gagal menghapus data.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                closeDeleteModal();
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnHtml;
+
+                // Animasi penghapusan baris tabel di tempat
+                if (currentDeletingRow) {
+                    currentDeletingRow.style.transition = 'all 0.35s ease-out';
+                    currentDeletingRow.style.backgroundColor = '#fee2e2';
+                    currentDeletingRow.style.opacity = '0';
+                    currentDeletingRow.style.transform = 'scale(0.97)';
+                    
+                    setTimeout(() => {
+                        currentDeletingRow.remove();
+                        currentDeletingRow = null;
+
+                        // Periksa apakah tabel kosong
+                        const tableBody = document.querySelector('table tbody');
+                        if (tableBody && tableBody.querySelectorAll('tr').length === 0) {
+                            tableBody.innerHTML = `
+                                <tr>
+                                    <td colspan="7" class="py-8 text-center text-gray-400">
+                                        <span class="material-symbols-outlined text-2xl mb-1 block">folder_off</span>
+                                        <p class="font-bold text-gray-500 text-xs">Tidak ada data pendaftaran ditemukan.</p>
+                                        <p class="text-[10px]">Data pendaftaran berhasil dihapus.</p>
+                                    </td>
+                                </tr>
+                            `;
+                        }
+                    }, 350);
+                }
+
+                // Tampilkan floating toast notifikasi sukses
+                showToast(data.message || 'Data pendaftaran berhasil dihapus.');
+            })
+            .catch(error => {
+                console.error(error);
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnHtml;
+                // Jika AJAX error, fallback submit form normal dengan posisi scroll tersimpan
+                deleteForm.submit();
+            });
+        });
+
+        // Floating Toast Notification Function
+        function showToast(message) {
+            const toast = document.getElementById('toast-notification');
+            const toastMsg = document.getElementById('toast-message');
+            if (!toast || !toastMsg) return;
+
+            toastMsg.textContent = message;
+            toast.classList.remove('translate-y-[-100px]', 'opacity-0', 'pointer-events-none');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-[-100px]', 'opacity-0', 'pointer-events-none');
+            }, 3500);
+        }
+
+        // Restore scroll position jika terjadi page reload
+        window.addEventListener('DOMContentLoaded', function() {
+            const savedScroll = sessionStorage.getItem('admin_lomba_scroll');
+            if (savedScroll !== null) {
+                window.scrollTo({ top: parseInt(savedScroll, 10), behavior: 'instant' });
+                sessionStorage.removeItem('admin_lomba_scroll');
+            }
+        });
+
         // Close modals on Escape key
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
@@ -835,6 +946,12 @@
             }
         });
     </script>
+
+    <!-- Floating Toast Notification (In-Place Feedback) -->
+    <div id="toast-notification" class="fixed top-5 right-5 z-[10000] flex items-center gap-2.5 px-4 py-3 bg-emerald-600 text-white text-xs font-bold rounded-xl shadow-2xl transition-all duration-300 transform translate-y-[-100px] opacity-0 pointer-events-none">
+        <span class="material-symbols-outlined text-lg leading-none">check_circle</span>
+        <span id="toast-message">Data berhasil diperbarui.</span>
+    </div>
 
 </body>
 </html>
