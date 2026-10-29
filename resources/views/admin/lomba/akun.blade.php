@@ -45,7 +45,6 @@
                    class="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200 shadow-2xs">
                     <span class="material-symbols-outlined text-[18px] text-slate-400">emoji_events</span>
                     <span>Data Karya Inovasi</span>
-                    <span class="px-2 py-0.5 rounded-full text-[10px] bg-slate-100 text-slate-600 font-extrabold">{{ $totalKarya }}</span>
                 </a>
 
                 <!-- Tab 2: Akun Peserta (Aktif) -->
@@ -53,7 +52,6 @@
                    class="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 bg-[#00A3E0] text-white shadow-xs">
                     <span class="material-symbols-outlined text-[18px]">group</span>
                     <span>Daftar Akun Peserta</span>
-                    <span class="px-2 py-0.5 rounded-full text-[10px] bg-red-500 text-white font-extrabold shadow-2xs">{{ $stats['total'] }}</span>
                 </a>
             </div>
 
@@ -248,19 +246,12 @@
 
                                 <!-- Nama & Email -->
                                 <td class="py-2.5 px-3 min-w-[190px] align-middle">
-                                    <div class="flex items-center gap-2.5">
-                                        <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-[#00A3E0] to-sky-400 text-white font-bold flex items-center justify-center text-xs shrink-0 shadow-2xs">
-                                            {{ strtoupper(substr($user->name, 0, 1)) }}
-                                        </div>
-                                        <div class="min-w-0">
-                                            <strong class="text-slate-900 block font-bold text-xs truncate" title="{{ $user->name }}">
-                                                {{ $user->name }}
-                                            </strong>
-                                            <span class="text-slate-400 text-[10px] block truncate font-mono mt-0.5" title="{{ $user->email }}">
-                                                {{ $user->email }}
-                                            </span>
-                                        </div>
-                                    </div>
+                                    <strong class="text-slate-900 block font-bold text-xs truncate" title="{{ $user->name }}">
+                                        {{ $user->name }}
+                                    </strong>
+                                    <span class="text-slate-400 text-[10px] block truncate font-mono mt-0.5" title="{{ $user->email }}">
+                                        {{ $user->email }}
+                                    </span>
                                 </td>
 
                                 <!-- Kategori -->

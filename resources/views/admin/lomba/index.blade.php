@@ -46,7 +46,6 @@
                    class="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 bg-[#00A3E0] text-white shadow-xs">
                     <span class="material-symbols-outlined text-[18px]">emoji_events</span>
                     <span>Data Karya Inovasi</span>
-                    <span class="px-2 py-0.5 rounded-full text-[10px] bg-white/20 text-white font-extrabold">{{ $pendaftar->total() }}</span>
                 </a>
 
                 <!-- Tab 2: Akun Peserta -->
@@ -54,7 +53,6 @@
                    class="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200 shadow-2xs">
                     <span class="material-symbols-outlined text-[18px] text-slate-400">group</span>
                     <span>Daftar Akun Peserta</span>
-                    <span class="px-2 py-0.5 rounded-full text-[10px] bg-red-500 text-white font-extrabold shadow-2xs">{{ \App\Models\User::count() }}</span>
                 </a>
             </div>
 
