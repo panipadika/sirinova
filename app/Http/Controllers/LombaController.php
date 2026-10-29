@@ -110,7 +110,7 @@ class LombaController extends Controller
 
         if (!$hasProposalFile && !$hasProposalUrl) {
             throw ValidationException::withMessages([
-                'file_proposal' => 'Dokumen proposal lomba (berkas PDF/DOC/DOCX atau tautan Google Drive) wajib disertakan.',
+                'file_proposal' => 'Tautan Google Drive berkas dokumen proposal dan kelengkapan lomba wajib disertakan.',
             ]);
         }
 

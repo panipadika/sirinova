@@ -816,12 +816,13 @@
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 items-start">
-                    <!-- Link Proposal (Google Drive) -->
-                    <!-- Dokumen Proposal Lomba (Unggah Berkas Privat atau Tautan Google Drive) -->
+                    <!-- Dokumen Proposal Lomba (Tautan Google Drive) -->
                     <div class="space-y-3 p-4 bg-slate-50/80 rounded-2xl border border-slate-200">
                         <div class="flex items-center justify-between flex-wrap gap-2">
-                            <label class="block text-xs font-bold text-slate-800">
-                                Berkas Dokumen Proposal Lomba <span class="text-rose-500">*</span>
+                            <label class="block text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                                <span class="material-symbols-outlined text-base text-[#00A3E0]">folder_zip</span>
+                                <span>Berkas Dokumen Proposal & Kelengkapan Lomba</span>
+                                <span class="text-rose-500">*</span>
                             </label>
                             <a href="{{ $linkTemplateProposal ?? \App\Models\PengaturanLomba::getTemplateUrl() }}" target="_blank" rel="noopener noreferrer" class="text-[11px] font-bold text-[#00A3E0] hover:underline inline-flex items-center gap-1">
                                 <span class="material-symbols-outlined text-sm">download</span>
@@ -829,41 +830,29 @@
                             </a>
                         </div>
 
-                        <!-- Opsi 1: Unggah Langsung Berkas Proposal (Tersimpan di Private Storage) -->
-                        <div class="space-y-1.5 bg-white p-3.5 rounded-xl border border-slate-200">
-                            <span class="block text-[11px] font-bold text-slate-700 flex items-center gap-1.5">
-                                <span class="material-symbols-outlined text-sm text-[#00A3E0]">upload_file</span>
-                                <span>Opsi A: Unggah Berkas Proposal (PDF / DOC / DOCX, Maks. 10 MB)</span>
-                            </span>
-                            <input type="file" name="file_proposal_file" id="file_proposal_file" accept=".pdf,.doc,.docx"
-                                   class="block w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[#00A3E0] file:text-white hover:file:bg-[#008cc0] cursor-pointer">
-                            <p class="text-[10px] text-slate-400">Berkas akan dienkripsi dan disimpan secara terisolasi pada private storage.</p>
-                        </div>
-
-                        <!-- Divider / Opsi Lain -->
-                        <div class="flex items-center gap-2">
-                            <div class="flex-1 border-t border-slate-200"></div>
-                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">ATAU</span>
-                            <div class="flex-1 border-t border-slate-200"></div>
-                        </div>
-
-                        <!-- Opsi 2: Link Google Drive -->
-                        <div class="space-y-2 bg-white p-3.5 rounded-xl border border-slate-200">
-                            <span class="block text-[11px] font-bold text-slate-700 flex items-center gap-1.5">
-                                <span class="material-symbols-outlined text-sm text-[#00A3E0]">link</span>
-                                <span>Opsi B: Tautan Berkas Google Drive</span>
-                            </span>
-
+                        <div class="space-y-2.5 bg-white p-3.5 rounded-xl border border-slate-200">
                             <!-- Banner Peringatan Merah -->
                             <div class="p-2.5 bg-[#c5221f] text-white rounded-lg text-xs font-bold flex items-center gap-2 shadow-xs">
                                 <span class="material-symbols-outlined text-base shrink-0">warning</span>
                                 <span>Pastikan Link Google Drive Anda disetel ke "Siapa saja yang memiliki link" (tidak di-private).</span>
                             </div>
 
-                            <input type="url" name="file_proposal" id="file_proposal" 
-                                   value="{{ old('file_proposal') }}" 
-                                   placeholder="https://drive.google.com/file/d/..." 
-                                   class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-[#00A3E0] outline-none transition-all font-mono">
+                            <p class="text-[11px] text-slate-500 leading-relaxed">
+                                Unggah berkas proposal, surat pernyataan, dan dokumen pendukung lainnya ke dalam folder Google Drive Anda, lalu tempelkan (*paste*) tautan link Google Drive tersebut di bawah ini:
+                            </p>
+
+                            <div>
+                                <label for="file_proposal" class="block text-[11px] font-bold text-slate-700 mb-1 flex items-center gap-1.5">
+                                    <span class="material-symbols-outlined text-sm text-[#00A3E0]">link</span>
+                                    <span>Tautan Berkas Google Drive</span>
+                                    <span class="text-rose-500">*</span>
+                                </label>
+                                <input type="url" name="file_proposal" id="file_proposal" 
+                                       value="{{ old('file_proposal') }}" 
+                                       required
+                                       placeholder="https://drive.google.com/drive/folders/... atau https://drive.google.com/file/d/..." 
+                                       class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-[#00A3E0] outline-none transition-all font-mono">
+                            </div>
                         </div>
                     </div>
 
