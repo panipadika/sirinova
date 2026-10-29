@@ -53,7 +53,7 @@
                    class="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 bg-[#00A3E0] text-white shadow-xs">
                     <span class="material-symbols-outlined text-[18px]">group</span>
                     <span>Daftar Akun Peserta</span>
-                    <span class="px-2 py-0.5 rounded-full text-[10px] bg-white/20 text-white font-extrabold">{{ $stats['total'] }}</span>
+                    <span class="px-2 py-0.5 rounded-full text-[10px] bg-red-500 text-white font-extrabold shadow-2xs">{{ $stats['total'] }}</span>
                 </a>
             </div>
 
@@ -235,7 +235,6 @@
                                 <th class="py-2.5 px-3 min-w-[160px]">Asal Instansi</th>
                                 <th class="py-2.5 px-3 whitespace-nowrap w-[130px]">Kontak WhatsApp</th>
                                 <th class="py-2.5 px-3 text-center whitespace-nowrap w-[140px]">Status Partisipasi</th>
-                                <th class="py-2.5 px-3 whitespace-nowrap w-[125px]">Terdaftar</th>
                                 <th class="py-2.5 px-3 text-center whitespace-nowrap w-[110px] sticky right-0 z-20 bg-slate-50 shadow-[-3px_0_6px_-2px_rgba(0,0,0,0.06)]">Aksi</th>
                             </tr>
                         </thead>
@@ -313,16 +312,6 @@
                                     @endif
                                 </td>
 
-                                <!-- Terdaftar Sejak -->
-                                <td class="py-2.5 px-3 whitespace-nowrap align-middle text-slate-500 text-[11px]">
-                                    <span class="block text-slate-700 font-medium">
-                                        {{ $user->created_at ? $user->created_at->format('d M Y') : '-' }}
-                                    </span>
-                                    <span class="block text-[9px] text-slate-400">
-                                        {{ $user->created_at ? $user->created_at->format('H:i') . ' WIB' : '' }}
-                                    </span>
-                                </td>
-
                                 <!-- Aksi (Sticky Right) -->
                                 <td class="py-2.5 px-3 whitespace-nowrap text-center align-middle sticky right-0 z-10 bg-white group-hover:bg-slate-50 transition-colors shadow-[-3px_0_6px_-2px_rgba(0,0,0,0.06)]">
                                     <div class="flex items-center justify-center gap-1">
@@ -355,7 +344,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="8" class="py-12 text-center text-gray-400">
+                                <td colspan="7" class="py-12 text-center text-gray-400">
                                     <span class="material-symbols-outlined text-3xl mb-1 block">group_off</span>
                                     <p class="font-bold text-gray-500 text-xs">Tidak ada akun peserta ditemukan.</p>
                                     <p class="text-[10px] mt-0.5">Belum ada akun yang terdaftar atau sesuaikan kata kunci pencarian Anda.</p>

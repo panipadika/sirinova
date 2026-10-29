@@ -139,7 +139,7 @@
             <a class="flex items-center gap-2.5 px-3 py-2 {{ $isLombaAkunActive ? 'bg-white/20 font-semibold' : 'hover:bg-white/10' }} rounded-lg transition-colors" href="/admin/lomba/akun">
                 <span class="material-symbols-outlined text-[20px]">group</span> Akun Peserta Lomba
                 @if($totalAkunPeserta > 0)
-                    <span class="ml-auto bg-white/20 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full leading-none">{{ $totalAkunPeserta }}</span>
+                    <span class="ml-auto bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full leading-none shadow-sm">{{ $totalAkunPeserta }}</span>
                 @endif
             </a>
         </li>
