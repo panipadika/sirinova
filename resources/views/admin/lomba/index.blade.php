@@ -39,33 +39,40 @@
 
         <div class="p-3 sm:p-5 lg:p-6 space-y-5">
 
-            <!-- Top Page Title & Quick Actions -->
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
-                    <h1 class="text-2xl font-black text-gray-900 tracking-tight flex items-center gap-2.5">
-                        <span class="material-symbols-outlined text-[#29abe2] text-3xl">emoji_events</span>
-                        <span>Pendaftaran Lomba Alat TTG</span>
+            <!-- Top Page Title & Quick Actions (Sejajar & Rapi) -->
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 sm:gap-4">
+                <div class="min-w-0">
+                    <h1 class="text-xl sm:text-2xl font-black text-gray-900 tracking-tight flex items-center gap-2.5">
+                        <span class="material-symbols-outlined text-[#29abe2] text-2xl sm:text-3xl shrink-0">emoji_events</span>
+                        <span class="truncate">Pendaftaran Lomba Alat TTG</span>
                     </h1>
-                    <p class="text-xs text-gray-500 mt-1">
+                    <p class="text-xs text-gray-500 mt-1 max-w-2xl">
                         Pusat verifikasi berkas, penilaian, dan rekapitulasi data pendaftar lomba teknologi tepat guna Kota Tasikmalaya.
                     </p>
                 </div>
 
-                <div class="flex flex-wrap items-center gap-2">
+                <!-- 3 Action Buttons (Sejajar Satu Baris - No Wrap) -->
+                <div class="flex items-center gap-2 shrink-0 flex-nowrap overflow-x-auto pb-1 lg:pb-0">
                     <!-- Cetak Rekap (Print View) -->
-                    <a href="{{ route('admin.lomba.print', request()->query()) }}" target="_blank" class="px-3.5 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-bold text-xs rounded-xl shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer" title="Cetak Rekapitulasi (Tampilan Cetak)">
+                    <a href="{{ route('admin.lomba.print', request()->query()) }}" target="_blank" 
+                       class="px-3.5 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-bold text-xs rounded-xl shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0" 
+                       title="Cetak Rekapitulasi (Tampilan Cetak)">
                         <span class="material-symbols-outlined text-[17px] text-slate-500">print</span>
                         <span>Cetak Rekap</span>
                     </a>
 
                     <!-- Download PDF -->
-                    <a href="{{ route('admin.lomba.export.pdf', request()->query()) }}" class="px-3.5 py-2 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 font-bold text-xs rounded-xl shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer" title="Unduh Laporan Format PDF">
+                    <a href="{{ route('admin.lomba.export.pdf', request()->query()) }}" 
+                       class="px-3.5 py-2 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 font-bold text-xs rounded-xl shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0" 
+                       title="Unduh Laporan Format PDF">
                         <span class="material-symbols-outlined text-[17px] text-rose-600">picture_as_pdf</span>
                         <span>Download PDF</span>
                     </a>
 
                     <!-- Download Excel -->
-                    <a href="{{ route('admin.lomba.export.excel', request()->query()) }}" class="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-700 font-bold text-xs rounded-xl shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer" title="Unduh Rekap Data Format Excel (.xlsx)">
+                    <a href="{{ route('admin.lomba.export.excel', request()->query()) }}" 
+                       class="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-700 font-bold text-xs rounded-xl shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0" 
+                       title="Unduh Rekap Data Format Excel (.xlsx)">
                         <span class="material-symbols-outlined text-[17px] text-emerald-600">table_view</span>
                         <span>Download Excel</span>
                     </a>
