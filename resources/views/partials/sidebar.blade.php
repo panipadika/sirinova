@@ -3,7 +3,7 @@
     <div class="p-4 sm:p-5 flex items-center gap-3">
         <img alt="SI RINOVA Logo" class="h-9 w-auto object-contain" src="{{ asset('storage/images/logo_tasik.png') }}">
         <div>
-            <h1 class="text-base font-bold leading-tight">SI RINOVA</h1>
+            <h1 class="text-base font-bold leading-tight" style="font-family: 'Public Sans', sans-serif;">SI RINOVA</h1>
             <p class="text-[11px] text-white/80">Admin Panel</p>
         </div>
     </div>
