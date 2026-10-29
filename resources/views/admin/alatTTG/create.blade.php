@@ -40,6 +40,16 @@
                 <h2 class="text-2xl font-bold text-gray-900 tracking-tight">Tambah Alat TTG</h2>
             </div>
 
+            @if (session('error'))
+                <div class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-lg mb-5 shadow-sm text-sm flex items-start gap-3">
+                    <span class="material-symbols-outlined text-red-500 text-xl">error</span>
+                    <div>
+                        <p class="font-semibold">Terjadi Kesalahan</p>
+                        <p class="text-xs mt-0.5">{{ session('error') }}</p>
+                    </div>
+                </div>
+            @endif
+
             @if ($errors->any())
                 <div class="bg-red-50 text-red-700 p-3 rounded-lg mb-5 border border-red-200 text-xs">
                     <ul class="list-disc list-inside">
@@ -49,7 +59,7 @@
             @endif
 
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                <form action="/admin/alat" method="POST" enctype="multipart/form-data" class="space-y-4">
+                <form action="{{ route('admin.alat.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
                     @csrf
 
                     <div class="grid grid-cols-1 md:grid-cols-12 gap-4">

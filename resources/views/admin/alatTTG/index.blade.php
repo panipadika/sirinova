@@ -75,6 +75,15 @@
                 </div>
             @endif
 
+            <!-- Alert Error -->
+            @if (session('error'))
+                <div
+                    class="mb-4 p-3 bg-red-50 text-red-700 border border-red-200 rounded-lg flex items-center gap-3 text-sm">
+                    <span class="material-symbols-outlined text-lg">error</span>
+                    {{ session('error') }}
+                </div>
+            @endif
+
             <!-- Judul & Tombol Tambah -->
             <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
                 <div>

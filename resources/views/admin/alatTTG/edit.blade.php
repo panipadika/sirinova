@@ -58,6 +58,26 @@
                 <h2 class="text-2xl md:text-3xl font-bold text-gray-900">Edit Alat TTG</h2>
             </div>
 
+            @if (session('error'))
+                <div class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-lg mb-5 shadow-sm text-sm flex items-start gap-3">
+                    <span class="material-symbols-outlined text-red-500 text-xl">error</span>
+                    <div>
+                        <p class="font-semibold">Terjadi Kesalahan</p>
+                        <p class="text-xs mt-0.5">{{ session('error') }}</p>
+                    </div>
+                </div>
+            @endif
+
+            @if (session('success'))
+                <div class="bg-green-50 border-l-4 border-green-500 text-green-700 p-4 rounded-lg mb-5 shadow-sm text-sm flex items-start gap-3">
+                    <span class="material-symbols-outlined text-green-500 text-xl">check_circle</span>
+                    <div>
+                        <p class="font-semibold">Berhasil</p>
+                        <p class="text-xs mt-0.5">{{ session('success') }}</p>
+                    </div>
+                </div>
+            @endif
+
             @if ($errors->any())
                 <div class="bg-red-50 text-red-700 p-3 rounded-lg mb-5 border border-red-200 text-sm">
                     <ul class="list-disc list-inside">
@@ -69,7 +89,7 @@
             @endif
 
             <!-- Form Edit dengan method PUT -->
-            <form action="/admin/alat/{{ $alat->id }}" method="POST" enctype="multipart/form-data"
+            <form action="{{ route('admin.alat.update', $alat->id) }}" method="POST" enctype="multipart/form-data"
                 class="flex flex-col lg:flex-row gap-5">
                 @csrf
                 @method('PUT')
