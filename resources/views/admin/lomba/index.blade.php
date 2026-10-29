@@ -317,23 +317,23 @@
             <!-- TABLE DAFTAR PESERTA LOMBA (Ultra Compact, Responsive & Non-Truncated Actions) -->
             <div class="bg-white rounded-xl border border-gray-100 shadow-xs overflow-hidden">
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs border-collapse">
+                    <table class="w-full text-left text-xs border-collapse min-w-[980px]">
                         <thead class="bg-slate-50/90 border-b border-slate-200/80 text-slate-500 font-bold uppercase tracking-wider text-[10px]">
                             <tr>
                                 <th class="py-2.5 px-3 whitespace-nowrap w-[115px]">No. Registrasi</th>
-                                <th class="py-2.5 px-3 min-w-[160px] max-w-[230px]">Nama Alat TTG</th>
+                                <th class="py-2.5 px-3 min-w-[170px] max-w-[240px]">Nama Alat TTG</th>
                                 <th class="py-2.5 px-2 text-center whitespace-nowrap w-[140px]">Kategori</th>
-                                <th class="py-2.5 px-3 min-w-[140px] max-w-[180px]">Inovator & Instansi</th>
-                                <th class="py-2.5 px-3 whitespace-nowrap w-[130px]">Biaya & Harga</th>
-                                <th class="py-2.5 px-2 text-center whitespace-nowrap w-[135px]">Status</th>
-                                <th class="py-2.5 px-2.5 text-center whitespace-nowrap w-[95px] sticky right-0 bg-slate-50/95 backdrop-blur-xs shadow-[-3px_0_6px_-2px_rgba(0,0,0,0.06)]">Aksi</th>
+                                <th class="py-2.5 px-3 min-w-[150px] max-w-[190px]">Inovator & Instansi</th>
+                                <th class="py-2.5 px-3 whitespace-nowrap w-[135px]">Biaya & Harga</th>
+                                <th class="py-2.5 px-3 text-center whitespace-nowrap min-w-[150px]">Status</th>
+                                <th class="py-2.5 px-3 text-center whitespace-nowrap w-[110px]">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100">
                             @forelse($pendaftar as $item)
                             <tr class="hover:bg-slate-50/80 transition-colors group">
                                 <!-- No. Registrasi -->
-                                <td class="py-2 px-3 whitespace-nowrap align-middle">
+                                <td class="py-2.5 px-3 whitespace-nowrap align-middle">
                                     <span class="font-mono font-bold text-slate-800 bg-slate-100/90 border border-slate-200/80 px-1.5 py-0.5 rounded text-[10px] inline-block tracking-tight">
                                         {{ $item->nomor_registrasi }}
                                     </span>
@@ -343,7 +343,7 @@
                                 </td>
 
                                 <!-- Nama Alat -->
-                                <td class="py-2 px-3 min-w-[160px] max-w-[230px] align-middle">
+                                <td class="py-2.5 px-3 min-w-[170px] max-w-[240px] align-middle">
                                     <a href="{{ route('admin.lomba.show', $item->id) }}" class="font-bold text-slate-900 hover:text-[#00A3E0] transition-colors truncate block text-xs leading-snug" title="{{ $item->nama_alat }}">
                                         {{ $item->nama_alat }}
                                     </a>
@@ -355,14 +355,14 @@
                                 </td>
 
                                 <!-- Kategori (Uniform Width & Symmetrical) -->
-                                <td class="py-2 px-2 whitespace-nowrap text-center align-middle">
-                                    <span class="inline-flex items-center justify-center w-[132px] py-1 px-2.5 bg-sky-50 text-[#00A3E0] font-bold rounded-lg text-[10px] border border-sky-200/80 shadow-2xs leading-tight tracking-tight text-center">
+                                <td class="py-2.5 px-2 whitespace-nowrap text-center align-middle">
+                                    <span class="inline-flex items-center justify-center min-w-[130px] py-1 px-2.5 bg-sky-50 text-[#00A3E0] font-bold rounded-lg text-[10px] border border-sky-200/80 shadow-2xs leading-tight tracking-tight text-center whitespace-nowrap">
                                         {{ $item->kategori_peserta }}
                                     </span>
                                 </td>
 
                                 <!-- Inovator & Instansi -->
-                                <td class="py-2 px-3 min-w-[140px] max-w-[180px] align-middle">
+                                <td class="py-2.5 px-3 min-w-[150px] max-w-[190px] align-middle">
                                     <strong class="text-slate-800 block font-bold text-xs leading-snug truncate" title="{{ $item->nama_inovator }}">{{ $item->nama_inovator }}</strong>
                                     <span class="text-slate-500 text-[10px] block truncate leading-tight mt-0.5" title="{{ $item->asal_instansi }}">{{ $item->asal_instansi }}</span>
                                     @if($item->nomor_wa)
@@ -371,21 +371,21 @@
                                 </td>
 
                                 <!-- Biaya & Harga -->
-                                <td class="py-2 px-3 whitespace-nowrap align-middle">
+                                <td class="py-2.5 px-3 whitespace-nowrap align-middle">
                                     <span class="text-slate-500 block text-[10px] leading-tight">Biaya: <span class="text-slate-700 font-medium">Rp {{ number_format($item->biaya_pembuatan, 0, ',', '.') }}</span></span>
                                     <span class="text-emerald-600 font-bold block text-[10px] leading-tight mt-0.5">Jual: Rp {{ number_format($item->estimasi_harga_jual, 0, ',', '.') }}</span>
                                 </td>
 
-                                <!-- Status Badge (Uniform Width Pill) -->
-                                <td class="py-2 px-2 whitespace-nowrap text-center align-middle">
-                                    <span class="inline-flex items-center justify-center gap-1 w-[130px] py-1 px-2 rounded-full font-bold text-[10px] border leading-tight {{ $item->status_badge }} shadow-2xs">
+                                <!-- Status Badge (Full Visibility & Never Truncated) -->
+                                <td class="py-2.5 px-3 whitespace-nowrap text-center align-middle">
+                                    <span class="inline-flex items-center justify-center gap-1.5 min-w-[140px] px-3 py-1 rounded-full font-bold text-[10px] border leading-tight {{ $item->status_badge }} shadow-2xs whitespace-nowrap">
                                         <span class="material-symbols-outlined text-[13px] leading-none shrink-0">{{ $item->status_icon }}</span>
-                                        <span class="truncate">{{ $item->status }}</span>
+                                        <span class="whitespace-nowrap">{{ $item->status }}</span>
                                     </span>
                                 </td>
 
-                                <!-- Aksi (Sticky Right - Never Cut Off) -->
-                                <td class="py-2 px-2.5 whitespace-nowrap text-center align-middle sticky right-0 bg-white group-hover:bg-slate-50 transition-colors shadow-[-3px_0_6px_-2px_rgba(0,0,0,0.06)]">
+                                <!-- Aksi (Normal Flow - No Overlapping) -->
+                                <td class="py-2.5 px-3 whitespace-nowrap text-center align-middle">
                                     <div class="flex items-center justify-center gap-1">
                                         <a href="{{ route('admin.lomba.show', $item->id) }}" class="p-1.5 bg-sky-50 hover:bg-[#00A3E0] text-[#00A3E0] hover:text-white rounded-lg transition-all shadow-2xs" title="Lihat Detail & Foto Dokumentasi">
                                             <span class="material-symbols-outlined text-[17px]">visibility</span>
@@ -393,13 +393,12 @@
                                         <a href="{{ route('lomba.proposal.download', $item->id) }}" target="_blank" rel="noopener noreferrer" class="p-1.5 bg-slate-50 hover:bg-[#00A3E0] text-slate-600 hover:text-white rounded-lg transition-all shadow-2xs" title="Unduh / Buka Berkas Proposal">
                                             <span class="material-symbols-outlined text-[17px]">description</span>
                                         </a>
-                                        <form action="{{ route('admin.lomba.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data pendaftaran karya ini?')" class="inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="p-1.5 bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white rounded-lg transition-all cursor-pointer shadow-2xs" title="Hapus Data">
-                                                <span class="material-symbols-outlined text-[17px]">delete</span>
-                                            </button>
-                                        </form>
+                                        <button type="button" 
+                                                onclick="openDeleteModal('{{ route('admin.lomba.destroy', $item->id) }}', '{{ addslashes($item->nama_alat) }}')"
+                                                class="p-1.5 bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white rounded-lg transition-all cursor-pointer shadow-2xs" 
+                                                title="Hapus Data Pendaftaran">
+                                            <span class="material-symbols-outlined text-[17px]">delete</span>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -424,6 +423,36 @@
 
         </div>
 
+    </div>
+
+    <!-- MODAL HAPUS PENDAFTARAN LOMBA (Sesuai Desain Sistem SI-RINOVA) -->
+    <div id="delete-modal" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300">
+        <div id="delete-modal-content" class="bg-white rounded-xl shadow-2xl w-full max-w-sm mx-4 p-6 transform scale-95 transition-transform duration-300 border border-gray-100">
+            <div class="flex items-center gap-3 text-red-600 mb-4">
+                <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center shrink-0">
+                    <span class="material-symbols-outlined text-red-600 text-xl">warning</span>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900">Hapus Data Pendaftaran?</h3>
+            </div>
+            <p class="text-sm text-gray-600 mb-6 leading-relaxed">
+                Apakah Anda yakin ingin menghapus data pendaftaran karya <span id="delete-item-title" class="font-bold text-gray-900"></span>? Tindakan ini tidak dapat dibatalkan.
+            </p>
+            <form id="delete-form" method="POST" action="">
+                @csrf
+                @method('DELETE')
+                <div class="flex items-center justify-end gap-2 mt-4">
+                    <button type="button"
+                        id="cancel-delete"
+                        class="px-4 py-2 border border-gray-300 text-gray-700 text-sm rounded-md hover:bg-gray-50 font-medium cursor-pointer transition-colors">
+                        Batal
+                    </button>
+                    <button type="submit"
+                        class="px-4 py-2 bg-red-600 text-white text-sm rounded-md hover:bg-red-700 shadow-sm font-medium cursor-pointer transition-colors">
+                        Hapus
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <!-- MODAL PRATINJAU FOTO ALAT ADMIN -->
@@ -723,11 +752,49 @@
             }
         });
 
+        // Handler Modal Hapus Pendaftaran Lomba (Custom SI-RINOVA)
+        const deleteModal = document.getElementById('delete-modal');
+        const deleteModalContent = document.getElementById('delete-modal-content');
+        const cancelDeleteBtn = document.getElementById('cancel-delete');
+        const deleteForm = document.getElementById('delete-form');
+        const deleteItemTitle = document.getElementById('delete-item-title');
+
+        function openDeleteModal(actionUrl, itemTitle) {
+            if (deleteForm) deleteForm.action = actionUrl;
+            if (deleteItemTitle) {
+                deleteItemTitle.textContent = itemTitle ? `"${itemTitle}"` : 'ini';
+            }
+            if (deleteModal && deleteModalContent) {
+                deleteModal.classList.remove('hidden');
+                void deleteModal.offsetWidth;
+                deleteModal.classList.remove('opacity-0');
+                deleteModalContent.classList.remove('scale-95');
+            }
+        }
+
+        function closeDeleteModal() {
+            if (!deleteModal || !deleteModalContent) return;
+            deleteModal.classList.add('opacity-0');
+            deleteModalContent.classList.add('scale-95');
+            setTimeout(() => {
+                deleteModal.classList.add('hidden');
+            }, 300);
+        }
+
+        cancelDeleteBtn?.addEventListener('click', closeDeleteModal);
+        deleteModal?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeDeleteModal();
+            }
+        });
+
         // Close modals on Escape key
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeEditJadwalModal();
                 closeEditTemplateModal();
+                closeAdminPhotoModal();
+                closeDeleteModal();
             }
         });
     </script>
