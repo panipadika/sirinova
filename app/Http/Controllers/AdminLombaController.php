@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\PendaftaranLomba;
 use App\Models\JadwalLomba;
 use App\Models\PengaturanLomba;
+use App\Models\User;
 use App\Exports\PendaftaranLombaExport;
+use App\Exports\AkunPesertaExport;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
@@ -286,5 +288,214 @@ class AdminLombaController extends Controller
         );
 
         return back()->with('success', 'Tautan Google Drive template proposal berhasil diperbarui dan langsung aktif di halaman peserta.');
+    }
+
+    /**
+     * Tampilkan daftar seluruh akun peserta lomba TTG
+     */
+    public function akunIndex(Request $request)
+    {
+        $query = User::withCount('pendaftaranLomba')->with('pendaftaranLomba')->orderBy('created_at', 'desc');
+
+        // Filter Pencarian
+        if ($request->filled('q')) {
+            $keyword = $request->q;
+            $query->where(function ($q) use ($keyword) {
+                $q->where('name', 'like', "%{$keyword}%")
+                    ->orWhere('email', 'like', "%{$keyword}%")
+                    ->orWhere('no_wa', 'like', "%{$keyword}%")
+                    ->orWhere('asal_instansi', 'like', "%{$keyword}%");
+            });
+        }
+
+        // Filter Kategori Akun
+        if ($request->filled('kategori')) {
+            $query->where('kategori', $request->kategori);
+        }
+
+        // Filter Status Partisipasi Lomba
+        if ($request->filled('partisipasi')) {
+            if ($request->partisipasi === 'sudah') {
+                $query->has('pendaftaranLomba');
+            } elseif ($request->partisipasi === 'belum') {
+                $query->doesntHave('pendaftaranLomba');
+            }
+        }
+
+        $perPage = (int) $request->input('per_page', 10);
+        if (!in_array($perPage, [5, 10, 25, 50, 100], true)) {
+            $perPage = 10;
+        }
+
+        $users = $query->paginate($perPage)->appends($request->query());
+
+        // Statistik Cepat Akun Peserta
+        $stats = [
+            'total' => User::count(),
+            'sma' => User::where('kategori', 'SMA/SMK Sederajat')->count(),
+            'pt' => User::where('kategori', 'Perguruan Tinggi')->count(),
+            'umum' => User::where('kategori', 'Umum')->count(),
+            'sudah_daftar' => User::has('pendaftaranLomba')->count(),
+            'belum_daftar' => User::doesntHave('pendaftaranLomba')->count(),
+        ];
+
+        $totalKarya = PendaftaranLomba::count();
+
+        return view('admin.lomba.akun', compact('users', 'stats', 'totalKarya'));
+    }
+
+    /**
+     * Detail akun peserta untuk modal AJAX
+     */
+    public function akunShow($id)
+    {
+        $user = User::with(['pendaftaranLomba' => function ($q) {
+            $q->orderBy('dibuat_pada', 'desc');
+        }])->findOrFail($id);
+
+        return response()->json([
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'no_wa' => $user->no_wa ?? '-',
+            'asal_instansi' => $user->asal_instansi ?? '-',
+            'kategori' => $user->kategori ?? '-',
+            'created_at_formatted' => $user->created_at ? $user->created_at->translatedFormat('d F Y, H:i') : '-',
+            'total_karya' => $user->pendaftaranLomba->count(),
+            'karya' => $user->pendaftaranLomba->map(function ($karya) {
+                return [
+                    'id' => $karya->id,
+                    'nomor_registrasi' => $karya->nomor_registrasi,
+                    'nama_alat' => $karya->nama_alat,
+                    'kategori_peserta' => $karya->kategori_peserta,
+                    'status' => $karya->status,
+                    'status_badge' => $karya->status_badge,
+                    'dibuat_pada' => $karya->dibuat_pada ? $karya->dibuat_pada->translatedFormat('d M Y') : '-',
+                    'detail_url' => route('admin.lomba.show', $karya->id),
+                ];
+            }),
+        ]);
+    }
+
+    /**
+     * Hapus akun peserta dan berkas/karya pendaftarannya
+     */
+    public function akunDestroy($id)
+    {
+        $user = User::with('pendaftaranLomba')->findOrFail($id);
+        $nama = $user->name;
+
+        // Bersihkan berkas karya jika ada
+        foreach ($user->pendaftaranLomba as $item) {
+            if ($item->file_proposal && !Str::startsWith($item->file_proposal, ['http://', 'https://'])) {
+                Storage::disk('local')->delete($item->file_proposal);
+                Storage::disk('public')->delete($item->file_proposal);
+            }
+            if ($item->foto_alat) {
+                Storage::disk('public')->delete($item->foto_alat);
+            }
+            $item->delete();
+        }
+
+        $user->delete();
+
+        if (request()->wantsJson() || request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => "Akun peserta '{$nama}' beserta riwayat pendaftarannya berhasil dihapus.",
+            ]);
+        }
+
+        return back()->with('success', "Akun peserta '{$nama}' berhasil dihapus.");
+    }
+
+    /**
+     * Cetak rekapitulasi akun peserta (Browser Print View)
+     */
+    public function akunPrint(Request $request)
+    {
+        $query = User::withCount('pendaftaranLomba')->with('pendaftaranLomba')->orderBy('created_at', 'desc');
+
+        if ($request->filled('q')) {
+            $keyword = $request->q;
+            $query->where(function ($q) use ($keyword) {
+                $q->where('name', 'like', "%{$keyword}%")
+                    ->orWhere('email', 'like', "%{$keyword}%")
+                    ->orWhere('no_wa', 'like', "%{$keyword}%")
+                    ->orWhere('asal_instansi', 'like', "%{$keyword}%");
+            });
+        }
+
+        if ($request->filled('kategori')) {
+            $query->where('kategori', $request->kategori);
+        }
+
+        if ($request->filled('partisipasi')) {
+            if ($request->partisipasi === 'sudah') {
+                $query->has('pendaftaranLomba');
+            } elseif ($request->partisipasi === 'belum') {
+                $query->doesntHave('pendaftaranLomba');
+            }
+        }
+
+        $users = $query->get();
+
+        return view('admin.lomba.akun_print', compact('users'));
+    }
+
+    /**
+     * Unduh PDF Rekapitulasi Akun Peserta (DomPDF)
+     */
+    public function akunExportPdf(Request $request)
+    {
+        $query = User::withCount('pendaftaranLomba')->with('pendaftaranLomba')->orderBy('created_at', 'desc');
+
+        if ($request->filled('q')) {
+            $keyword = $request->q;
+            $query->where(function ($q) use ($keyword) {
+                $q->where('name', 'like', "%{$keyword}%")
+                    ->orWhere('email', 'like', "%{$keyword}%")
+                    ->orWhere('no_wa', 'like', "%{$keyword}%")
+                    ->orWhere('asal_instansi', 'like', "%{$keyword}%");
+            });
+        }
+
+        if ($request->filled('kategori')) {
+            $query->where('kategori', $request->kategori);
+        }
+
+        if ($request->filled('partisipasi')) {
+            if ($request->partisipasi === 'sudah') {
+                $query->has('pendaftaranLomba');
+            } elseif ($request->partisipasi === 'belum') {
+                $query->doesntHave('pendaftaranLomba');
+            }
+        }
+
+        $users = $query->get();
+
+        $pdf = Pdf::loadView('admin.lomba.akun_pdf', [
+            'users' => $users,
+            'kategori' => $request->kategori,
+            'partisipasi' => $request->partisipasi,
+            'keyword' => $request->q,
+            'tanggal_cetak' => now()->translatedFormat('d F Y, H:i') . ' WIB',
+        ])->setPaper('a4', 'landscape');
+
+        $filename = 'Rekap-Akun-Peserta-Lomba-TTG-' . date('Ymd-His') . '.pdf';
+        return $pdf->download($filename);
+    }
+
+    /**
+     * Unduh Excel Rekapitulasi Akun Peserta (Laravel Excel)
+     */
+    public function akunExportExcel(Request $request)
+    {
+        $kategori = $request->filled('kategori') ? $request->kategori : null;
+        $partisipasi = $request->filled('partisipasi') ? $request->partisipasi : null;
+        $keyword = $request->filled('q') ? $request->q : null;
+
+        $filename = 'Rekap-Akun-Peserta-Lomba-TTG-' . date('Ymd-His') . '.xlsx';
+        return Excel::download(new AkunPesertaExport($kategori, $partisipasi, $keyword), $filename);
     }
 }

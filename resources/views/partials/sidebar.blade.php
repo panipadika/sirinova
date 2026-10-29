@@ -114,16 +114,32 @@
 
         <!-- Pendaftaran Lomba TTG -->
         @php
+            $isLombaKaryaActive = request()->is('admin/lomba') || (request()->is('admin/lomba/*') && !request()->is('admin/lomba/akun*'));
+            $isLombaAkunActive = request()->is('admin/lomba/akun*');
             $lombaMenunggu = \App\Models\PendaftaranLomba::where('status', 'Menunggu Verifikasi')->count();
+            $totalAkunPeserta = \App\Models\User::count();
         @endphp
-        <li class="{{ request()->is('admin/lomba*') ? 'relative' : '' }}">
-            @if(request()->is('admin/lomba*'))
+        <li class="{{ $isLombaKaryaActive ? 'relative' : '' }}">
+            @if($isLombaKaryaActive)
                 <div class="absolute left-[-12px] top-0 bottom-0 w-1 bg-[#fed000] rounded-r-md"></div>
             @endif
-            <a class="flex items-center gap-2.5 px-3 py-2 {{ request()->is('admin/lomba*') ? 'bg-white/20 font-semibold' : 'hover:bg-white/10' }} rounded-lg transition-colors" href="/admin/lomba">
+            <a class="flex items-center gap-2.5 px-3 py-2 {{ $isLombaKaryaActive ? 'bg-white/20 font-semibold' : 'hover:bg-white/10' }} rounded-lg transition-colors" href="/admin/lomba">
                 <span class="material-symbols-outlined text-[20px]">emoji_events</span> Pendaftaran Lomba
                 @if($lombaMenunggu > 0)
                     <span class="ml-auto bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full leading-none shadow-sm">{{ $lombaMenunggu }}</span>
+                @endif
+            </a>
+        </li>
+
+        <!-- Akun Peserta Lomba -->
+        <li class="{{ $isLombaAkunActive ? 'relative' : '' }}">
+            @if($isLombaAkunActive)
+                <div class="absolute left-[-12px] top-0 bottom-0 w-1 bg-[#fed000] rounded-r-md"></div>
+            @endif
+            <a class="flex items-center gap-2.5 px-3 py-2 {{ $isLombaAkunActive ? 'bg-white/20 font-semibold' : 'hover:bg-white/10' }} rounded-lg transition-colors" href="/admin/lomba/akun">
+                <span class="material-symbols-outlined text-[20px]">group</span> Akun Peserta Lomba
+                @if($totalAkunPeserta > 0)
+                    <span class="ml-auto bg-white/20 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full leading-none">{{ $totalAkunPeserta }}</span>
                 @endif
             </a>
         </li>

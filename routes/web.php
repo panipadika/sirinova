@@ -137,6 +137,12 @@ Route::middleware('auth:web')->prefix('admin')->group(function () {
 
     // Fitur Pendaftaran Lomba TTG (Admin Panel)
     Route::get('/lomba', [AdminLombaController::class, 'index'])->name('admin.lomba.index');
+    Route::get('/lomba/akun', [AdminLombaController::class, 'akunIndex'])->name('admin.lomba.akun.index');
+    Route::get('/lomba/akun/print', [AdminLombaController::class, 'akunPrint'])->name('admin.lomba.akun.print');
+    Route::get('/lomba/akun/export/pdf', [AdminLombaController::class, 'akunExportPdf'])->name('admin.lomba.akun.export.pdf');
+    Route::get('/lomba/akun/export/excel', [AdminLombaController::class, 'akunExportExcel'])->name('admin.lomba.akun.export.excel');
+    Route::get('/lomba/akun/{id}', [AdminLombaController::class, 'akunShow'])->name('admin.lomba.akun.show');
+    Route::delete('/lomba/akun/{id}', [AdminLombaController::class, 'akunDestroy'])->name('admin.lomba.akun.destroy');
     Route::post('/lomba/jadwal/{id}/toggle-gembok', [AdminLombaController::class, 'toggleGembok'])->name('admin.lomba.jadwal.toggle');
     Route::put('/lomba/jadwal/{id}', [AdminLombaController::class, 'updateJadwal'])->name('admin.lomba.jadwal.update');
     Route::put('/lomba/template-proposal', [AdminLombaController::class, 'updateTemplateProposal'])->name('admin.lomba.template.update');
