@@ -67,43 +67,79 @@
             </div>
             @endif
 
-            <!-- STATS CARDS (Compact) -->
+            <!-- STATS CARDS (Clickable Interactive Filter Cards) -->
+            @php
+                $currentStatus = request('status');
+                $baseQuery = request()->except(['status', 'page']);
+                $isTotalActive = empty($currentStatus);
+                $isMenungguActive = $currentStatus === 'Menunggu Verifikasi';
+                $isLolosActive = $currentStatus === 'Lolos Administrasi';
+                $isDitolakActive = in_array($currentStatus, ['Ditolak / Perbaikan', 'ditolak_perbaikan', 'Ditolak', 'Perlu Perbaikan'], true);
+            @endphp
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <!-- Total -->
-                <div class="bg-white p-3.5 sm:p-4 rounded-xl border border-gray-100 shadow-xs space-y-0.5">
-                    <span class="text-gray-400 text-[11px] font-medium block">Total Pendaftar</span>
+                <a href="{{ route('admin.lomba.index', $baseQuery) }}" 
+                   class="p-3.5 sm:p-4 rounded-xl border shadow-xs space-y-0.5 transition-all block group cursor-pointer hover:shadow-md hover:-translate-y-0.5 {{ $isTotalActive ? 'bg-sky-50/60 border-[#00A3E0] ring-2 ring-[#00A3E0]/20' : 'bg-white border-gray-100 hover:border-slate-300' }}"
+                   title="Klik untuk melihat Semua Data Pendaftar ({{ $stats['total'] }})">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[11px] font-bold block {{ $isTotalActive ? 'text-[#00A3E0]' : 'text-gray-400' }}">Total Pendaftar</span>
+                        @if($isTotalActive)
+                        <span class="w-1.5 h-1.5 rounded-full bg-[#00A3E0]"></span>
+                        @endif
+                    </div>
                     <div class="flex items-center justify-between">
                         <span class="text-xl sm:text-2xl font-black text-gray-900">{{ $stats['total'] }}</span>
-                        <span class="p-1.5 bg-sky-50 text-[#00A3E0] rounded-lg material-symbols-outlined text-lg">folder_shared</span>
+                        <span class="p-1.5 rounded-lg material-symbols-outlined text-lg transition-transform group-hover:scale-110 {{ $isTotalActive ? 'bg-[#00A3E0] text-white shadow-xs' : 'bg-sky-50 text-[#00A3E0]' }}">folder_shared</span>
                     </div>
-                </div>
+                </a>
 
                 <!-- Menunggu Verifikasi -->
-                <div class="bg-white p-3.5 sm:p-4 rounded-xl border border-gray-100 shadow-xs space-y-0.5">
-                    <span class="text-amber-500 text-[11px] font-bold block">Menunggu Verifikasi</span>
+                <a href="{{ route('admin.lomba.index', array_merge($baseQuery, ['status' => 'Menunggu Verifikasi'])) }}" 
+                   class="p-3.5 sm:p-4 rounded-xl border shadow-xs space-y-0.5 transition-all block group cursor-pointer hover:shadow-md hover:-translate-y-0.5 {{ $isMenungguActive ? 'bg-amber-50/60 border-amber-500 ring-2 ring-amber-500/20' : 'bg-white border-gray-100 hover:border-amber-200' }}"
+                   title="Klik untuk filter: Menunggu Verifikasi ({{ $stats['menunggu'] }})">
+                    <div class="flex items-center justify-between">
+                        <span class="text-amber-500 text-[11px] font-bold block">Menunggu Verifikasi</span>
+                        @if($isMenungguActive)
+                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                        @endif
+                    </div>
                     <div class="flex items-center justify-between">
                         <span class="text-xl sm:text-2xl font-black text-amber-600">{{ $stats['menunggu'] }}</span>
-                        <span class="p-1.5 bg-amber-50 text-amber-500 rounded-lg material-symbols-outlined text-lg">pending</span>
+                        <span class="p-1.5 rounded-lg material-symbols-outlined text-lg transition-transform group-hover:scale-110 {{ $isMenungguActive ? 'bg-amber-500 text-white shadow-xs' : 'bg-amber-50 text-amber-500' }}">pending</span>
                     </div>
-                </div>
+                </a>
 
                 <!-- Lolos Administrasi -->
-                <div class="bg-white p-3.5 sm:p-4 rounded-xl border border-gray-100 shadow-xs space-y-0.5">
-                    <span class="text-emerald-600 text-[11px] font-bold block">Lolos Administrasi</span>
+                <a href="{{ route('admin.lomba.index', array_merge($baseQuery, ['status' => 'Lolos Administrasi'])) }}" 
+                   class="p-3.5 sm:p-4 rounded-xl border shadow-xs space-y-0.5 transition-all block group cursor-pointer hover:shadow-md hover:-translate-y-0.5 {{ $isLolosActive ? 'bg-emerald-50/60 border-emerald-500 ring-2 ring-emerald-500/20' : 'bg-white border-gray-100 hover:border-emerald-200' }}"
+                   title="Klik untuk filter: Lolos Administrasi ({{ $stats['lolos'] }})">
+                    <div class="flex items-center justify-between">
+                        <span class="text-emerald-600 text-[11px] font-bold block">Lolos Administrasi</span>
+                        @if($isLolosActive)
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                        @endif
+                    </div>
                     <div class="flex items-center justify-between">
                         <span class="text-xl sm:text-2xl font-black text-emerald-600">{{ $stats['lolos'] }}</span>
-                        <span class="p-1.5 bg-emerald-50 text-emerald-600 rounded-lg material-symbols-outlined text-lg">verified</span>
+                        <span class="p-1.5 rounded-lg material-symbols-outlined text-lg transition-transform group-hover:scale-110 {{ $isLolosActive ? 'bg-emerald-600 text-white shadow-xs' : 'bg-emerald-50 text-emerald-600' }}">verified</span>
                     </div>
-                </div>
+                </a>
 
-                <!-- Ditolak / Revisi -->
-                <div class="bg-white p-3.5 sm:p-4 rounded-xl border border-gray-100 shadow-xs space-y-0.5">
-                    <span class="text-rose-500 text-[11px] font-bold block">Ditolak / Perbaikan</span>
+                <!-- Ditolak / Perbaikan -->
+                <a href="{{ route('admin.lomba.index', array_merge($baseQuery, ['status' => 'Ditolak / Perbaikan'])) }}" 
+                   class="p-3.5 sm:p-4 rounded-xl border shadow-xs space-y-0.5 transition-all block group cursor-pointer hover:shadow-md hover:-translate-y-0.5 {{ $isDitolakActive ? 'bg-rose-50/60 border-rose-500 ring-2 ring-rose-500/20' : 'bg-white border-gray-100 hover:border-rose-200' }}"
+                   title="Klik untuk filter: Ditolak / Perbaikan ({{ $stats['ditolak'] + $stats['perlu_perbaikan'] }})">
+                    <div class="flex items-center justify-between">
+                        <span class="text-rose-500 text-[11px] font-bold block">Ditolak / Perbaikan</span>
+                        @if($isDitolakActive)
+                        <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                        @endif
+                    </div>
                     <div class="flex items-center justify-between">
                         <span class="text-xl sm:text-2xl font-black text-rose-600">{{ $stats['ditolak'] + $stats['perlu_perbaikan'] }}</span>
-                        <span class="p-1.5 bg-rose-50 text-rose-500 rounded-lg material-symbols-outlined text-lg">rule</span>
+                        <span class="p-1.5 rounded-lg material-symbols-outlined text-lg transition-transform group-hover:scale-110 {{ $isDitolakActive ? 'bg-rose-500 text-white shadow-xs' : 'bg-rose-50 text-rose-500' }}">rule</span>
                     </div>
-                </div>
+                </a>
             </div>
 
             <!-- STATUS AKSES & JADWAL PENDAFTARAN LOMBA PER KATEGORI -->
@@ -291,12 +327,13 @@
 
                     <!-- Filter Status (Clean Custom Arrow) -->
                     <div class="relative shrink-0">
-                        <select name="status" onchange="this.form.submit()" class="appearance-none w-full md:w-auto min-w-[155px] text-xs bg-slate-50 border border-slate-200 rounded-lg pl-3 pr-8 py-1.5 font-medium text-slate-700 focus:bg-white focus:ring-2 focus:ring-[#00A3E0]/20 focus:border-[#00A3E0] outline-none cursor-pointer transition-all">
-                            <option value="">Semua Status</option>
-                            <option value="Menunggu Verifikasi" {{ request('status') == 'Menunggu Verifikasi' ? 'selected' : '' }}>Menunggu Verifikasi</option>
-                            <option value="Lolos Administrasi" {{ request('status') == 'Lolos Administrasi' ? 'selected' : '' }}>Lolos Administrasi</option>
-                            <option value="Perlu Perbaikan" {{ request('status') == 'Perlu Perbaikan' ? 'selected' : '' }}>Perlu Perbaikan</option>
-                            <option value="Ditolak" {{ request('status') == 'Ditolak' ? 'selected' : '' }}>Ditolak</option>
+                        <select name="status" onchange="this.form.submit()" class="appearance-none w-full md:w-auto min-w-[170px] text-xs bg-slate-50 border border-slate-200 rounded-lg pl-3 pr-8 py-1.5 font-medium text-slate-700 focus:bg-white focus:ring-2 focus:ring-[#00A3E0]/20 focus:border-[#00A3E0] outline-none cursor-pointer transition-all">
+                            <option value="">Semua Status ({{ $stats['total'] }})</option>
+                            <option value="Menunggu Verifikasi" {{ request('status') == 'Menunggu Verifikasi' ? 'selected' : '' }}>Menunggu Verifikasi ({{ $stats['menunggu'] }})</option>
+                            <option value="Lolos Administrasi" {{ request('status') == 'Lolos Administrasi' ? 'selected' : '' }}>Lolos Administrasi ({{ $stats['lolos'] }})</option>
+                            <option value="Ditolak / Perbaikan" {{ in_array(request('status'), ['Ditolak / Perbaikan', 'ditolak_perbaikan']) ? 'selected' : '' }}>Ditolak / Perbaikan ({{ $stats['ditolak'] + $stats['perlu_perbaikan'] }})</option>
+                            <option value="Perlu Perbaikan" {{ request('status') == 'Perlu Perbaikan' ? 'selected' : '' }}>- Perlu Perbaikan ({{ $stats['perlu_perbaikan'] }})</option>
+                            <option value="Ditolak" {{ request('status') == 'Ditolak' ? 'selected' : '' }}>- Ditolak ({{ $stats['ditolak'] }})</option>
                         </select>
                         <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2 text-slate-400">
                             <span class="material-symbols-outlined text-[18px]">expand_more</span>
@@ -317,16 +354,16 @@
             <!-- TABLE DAFTAR PESERTA LOMBA (Ultra Compact, Responsive & Non-Truncated Actions) -->
             <div class="bg-white rounded-xl border border-gray-100 shadow-xs overflow-hidden">
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs border-collapse min-w-[980px]">
+                    <table class="w-full text-left text-xs border-collapse min-w-[895px]">
                         <thead class="bg-slate-50/90 border-b border-slate-200/80 text-slate-500 font-bold uppercase tracking-wider text-[10px]">
                             <tr>
-                                <th class="py-2.5 px-3 whitespace-nowrap w-[115px]">No. Registrasi</th>
-                                <th class="py-2.5 px-3 min-w-[170px] max-w-[240px]">Nama Alat TTG</th>
-                                <th class="py-2.5 px-2 text-center whitespace-nowrap w-[140px]">Kategori</th>
-                                <th class="py-2.5 px-3 min-w-[150px] max-w-[190px]">Inovator & Instansi</th>
-                                <th class="py-2.5 px-3 whitespace-nowrap w-[135px]">Biaya & Harga</th>
-                                <th class="py-2.5 px-3 text-center whitespace-nowrap min-w-[150px]">Status</th>
-                                <th class="py-2.5 px-3 text-center whitespace-nowrap w-[110px]">Aksi</th>
+                                <th class="py-2.5 px-3 whitespace-nowrap w-[110px]">No. Registrasi</th>
+                                <th class="py-2.5 px-3 min-w-[150px] max-w-[210px]">Nama Alat TTG</th>
+                                <th class="py-2.5 px-2 text-center whitespace-nowrap w-[130px]">Kategori</th>
+                                <th class="py-2.5 px-3 min-w-[130px] max-w-[170px]">Inovator & Instansi</th>
+                                <th class="py-2.5 px-3 whitespace-nowrap w-[125px]">Biaya & Harga</th>
+                                <th class="py-2.5 px-3 text-center whitespace-nowrap min-w-[145px] w-[145px]">Status</th>
+                                <th class="py-2.5 px-3 text-center whitespace-nowrap w-[105px] sticky right-0 z-20 bg-slate-50 shadow-[-3px_0_6px_-2px_rgba(0,0,0,0.06)]">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100">
@@ -343,7 +380,7 @@
                                 </td>
 
                                 <!-- Nama Alat -->
-                                <td class="py-2.5 px-3 min-w-[170px] max-w-[240px] align-middle">
+                                <td class="py-2.5 px-3 min-w-[150px] max-w-[210px] align-middle">
                                     <a href="{{ route('admin.lomba.show', $item->id) }}" class="font-bold text-slate-900 hover:text-[#00A3E0] transition-colors truncate block text-xs leading-snug" title="{{ $item->nama_alat }}">
                                         {{ $item->nama_alat }}
                                     </a>
@@ -356,13 +393,13 @@
 
                                 <!-- Kategori (Uniform Width & Symmetrical) -->
                                 <td class="py-2.5 px-2 whitespace-nowrap text-center align-middle">
-                                    <span class="inline-flex items-center justify-center min-w-[130px] py-1 px-2.5 bg-sky-50 text-[#00A3E0] font-bold rounded-lg text-[10px] border border-sky-200/80 shadow-2xs leading-tight tracking-tight text-center whitespace-nowrap">
+                                    <span class="inline-flex items-center justify-center min-w-[125px] py-1 px-2.5 bg-sky-50 text-[#00A3E0] font-bold rounded-lg text-[10px] border border-sky-200/80 shadow-2xs leading-tight tracking-tight text-center whitespace-nowrap">
                                         {{ $item->kategori_peserta }}
                                     </span>
                                 </td>
 
                                 <!-- Inovator & Instansi -->
-                                <td class="py-2.5 px-3 min-w-[150px] max-w-[190px] align-middle">
+                                <td class="py-2.5 px-3 min-w-[130px] max-w-[170px] align-middle">
                                     <strong class="text-slate-800 block font-bold text-xs leading-snug truncate" title="{{ $item->nama_inovator }}">{{ $item->nama_inovator }}</strong>
                                     <span class="text-slate-500 text-[10px] block truncate leading-tight mt-0.5" title="{{ $item->asal_instansi }}">{{ $item->asal_instansi }}</span>
                                     @if($item->nomor_wa)
@@ -377,15 +414,15 @@
                                 </td>
 
                                 <!-- Status Badge (Full Visibility & Never Truncated) -->
-                                <td class="py-2.5 px-3 whitespace-nowrap text-center align-middle">
-                                    <span class="inline-flex items-center justify-center gap-1.5 min-w-[140px] px-3 py-1 rounded-full font-bold text-[10px] border leading-tight {{ $item->status_badge }} shadow-2xs whitespace-nowrap">
+                                <td class="py-2.5 px-3 whitespace-nowrap text-center align-middle min-w-[145px] w-[145px]">
+                                    <span class="inline-flex items-center justify-center gap-1.5 min-w-[135px] px-2.5 py-1 rounded-full font-bold text-[10px] border leading-tight {{ $item->status_badge }} shadow-2xs whitespace-nowrap">
                                         <span class="material-symbols-outlined text-[13px] leading-none shrink-0">{{ $item->status_icon }}</span>
                                         <span class="whitespace-nowrap">{{ $item->status }}</span>
                                     </span>
                                 </td>
 
-                                <!-- Aksi (Normal Flow - No Overlapping) -->
-                                <td class="py-2.5 px-3 whitespace-nowrap text-center align-middle">
+                                <!-- Aksi (Sticky Right - Always Accessible) -->
+                                <td class="py-2.5 px-3 whitespace-nowrap text-center align-middle sticky right-0 z-10 bg-white group-hover:bg-slate-50 transition-colors shadow-[-3px_0_6px_-2px_rgba(0,0,0,0.06)]">
                                     <div class="flex items-center justify-center gap-1">
                                         <a href="{{ route('admin.lomba.show', $item->id) }}" class="p-1.5 bg-sky-50 hover:bg-[#00A3E0] text-[#00A3E0] hover:text-white rounded-lg transition-all shadow-2xs" title="Lihat Detail & Foto Dokumentasi">
                                             <span class="material-symbols-outlined text-[17px]">visibility</span>

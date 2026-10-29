@@ -36,7 +36,11 @@ class AdminLombaController extends Controller
 
         // Filter Status Verifikasi
         if ($request->filled('status')) {
-            $query->where('status', $request->status);
+            if (in_array($request->status, ['Ditolak / Perbaikan', 'ditolak_perbaikan'], true)) {
+                $query->whereIn('status', ['Ditolak', 'Perlu Perbaikan']);
+            } else {
+                $query->where('status', $request->status);
+            }
         }
 
         $perPage = (int) $request->input('per_page', 10);
