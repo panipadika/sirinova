@@ -4,8 +4,11 @@
 
         <div class="space-y-2 max-w-md">
             <a href="/" class="flex items-center gap-2.5">
-                <img src="{{ asset('storage/images/logo_tasik.png') }}" alt="Logo Kota Tasikmalaya"
-                    class="h-7 w-auto object-contain">
+                <picture>
+                    <source srcset="{{ asset('storage/images/logo_tasik.webp') }}" type="image/webp">
+                    <img src="{{ asset('storage/images/logo_tasik.png') }}" alt="Logo Kota Tasikmalaya"
+                        width="28" height="28" loading="lazy" decoding="async" class="h-7 w-auto object-contain">
+                </picture>
                 <span class="text-xl font-black text-[#00A3E0] tracking-tight">
                     SI RINOVA
                 </span>

@@ -19,15 +19,29 @@
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}?v=3">
     <link rel="apple-touch-icon" href="{{ asset('storage/images/favicon_tasik.png') }}?v=3">
 
+    <!-- Preconnect ke Origin Eksternal untuk Mempercepat Download -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
+
+    <!-- Preload Critical LCP Hero Image (WebP 61KB untuk kecepatan tinggi) -->
+    <link rel="preload" as="image" href="{{ asset('images/hero-bg.webp') }}?v=3" type="image/webp" fetchpriority="high">
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Google Fonts & Material Symbols -->
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-        rel="stylesheet">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
-        rel="stylesheet">
+    <!-- Google Fonts & Material Symbols (Non-render blocking dengan font-display: swap) -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap">
+    </noscript>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap">
+    </noscript>
 
     <style>
         html, body {
@@ -50,7 +64,11 @@
         }
 
         .bg-hero {
-            background-image: url("{{ asset('images/hero-bg.jpg') }}?v=2");
+            background-image: url("{{ asset('images/hero-bg.webp') }}?v=3");
+            background-image: image-set(
+                url("{{ asset('images/hero-bg.webp') }}?v=3") type("image/webp"),
+                url("{{ asset('images/hero-bg.jpg') }}?v=3") type("image/jpeg")
+            );
             background-size: cover;
             background-position: center right;
         }
@@ -316,8 +334,11 @@
 
             <!-- Logo & Brand Name -->
             <a href="/" class="flex items-center gap-3 shrink-0 group">
-                <img src="{{ asset('storage/images/logo_tasik.png') }}"
-                     alt="Logo Kota Tasikmalaya" class="h-10 w-auto object-contain group-hover:scale-105 transition-transform">
+                <picture>
+                    <source srcset="{{ asset('storage/images/logo_tasik.webp') }}" type="image/webp">
+                    <img src="{{ asset('storage/images/logo_tasik.png') }}"
+                         alt="Logo Kota Tasikmalaya" width="40" height="40" class="h-10 w-auto object-contain group-hover:scale-105 transition-transform" fetchpriority="high">
+                </picture>
                 <span class="text-xl sm:text-2xl font-black text-[#00A3E0] tracking-tight">
                     SI RINOVA
                 </span>
@@ -570,6 +591,7 @@
                         <div class="relative h-32 sm:h-44 lg:h-56 w-full bg-slate-100 overflow-hidden">
                             @if($item->foto)
                                 <img src="{{ asset('storage/' . $item->foto) }}" alt="{{ $item->nama_alat }}"
+                                    loading="lazy" decoding="async"
                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                     onerror="this.src='https://placehold.co/600x400?text=Katalog+TTG'">
                             @else
@@ -663,6 +685,7 @@
                                     <!-- Real Book Cover Image -->
                                     <img src="{{ Str::startsWith($kajian->cover_image, 'http') ? $kajian->cover_image : (Str::startsWith($kajian->cover_image, 'storage/') ? asset($kajian->cover_image) : asset('storage/' . $kajian->cover_image)) }}" 
                                          alt="{{ $kajian->judul }}" 
+                                         loading="lazy" decoding="async"
                                          class="absolute inset-0 w-full h-full object-cover rounded-r-sm">
                                     <div class="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-slate-950/20 pointer-events-none"></div>
                                 @else
@@ -812,6 +835,7 @@
                             <div class="relative h-56 w-full bg-slate-100 overflow-hidden">
                                 @if(!empty($item->foto))
                                     <img src="{{ asset($item->foto) }}" alt="{{ $item->judul }}"
+                                         loading="lazy" decoding="async"
                                          class="w-full h-full object-cover group-hover/card:scale-105 transition-transform duration-500"
                                          onerror="this.src='https://placehold.co/600x400?text=Galeri+Kegiatan'">
                                 @else
