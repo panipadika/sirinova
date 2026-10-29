@@ -45,5 +45,17 @@ class Handler extends ExceptionHandler
                 ], 405);
             }
         });
+
+        // Tangani jika file / payload yang diunggah melebihi post_max_size server (Error 413)
+        $this->renderable(function (\Illuminate\Http\Exceptions\PostTooLargeException $e, $request) {
+            if ($request->is('api/*') || $request->expectsJson()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Ukuran file atau data yang diunggah terlalu besar melebihi batas server.'
+                ], 413);
+            }
+
+            return back()->withInput()->with('error', 'Ukuran foto/file yang Anda unggah terlalu besar dan melebihi batas upload server. Silakan gunakan foto dengan ukuran lebih kecil (disarankan di bawah 2MB).');
+        });
     }
 }

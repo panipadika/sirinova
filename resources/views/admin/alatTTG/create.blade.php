@@ -186,15 +186,84 @@
 
     <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
     <script>
-        // Fitur Preview Nama Foto
+        // Fitur Preview & Kompresi Foto Otomatis
         function previewFileName(input) {
             const preview = document.getElementById('file-name-preview');
-            if (input.files && input.files[0]) {
-                preview.textContent = "File: " + input.files[0].name;
-                preview.classList.add('text-[#29abe2]', 'font-semibold');
-            } else {
-                preview.textContent = "Maks. 2MB (JPG, PNG)";
+            const file = input.files && input.files[0];
+            if (!file) {
+                preview.textContent = "Maks. 5MB (JPG, PNG, WebP)";
                 preview.classList.remove('text-[#29abe2]', 'font-semibold');
+                return;
+            }
+
+            if (!file.type.startsWith('image/')) {
+                alert('File harus berupa gambar (JPG, PNG, WebP).');
+                input.value = '';
+                preview.textContent = "Maks. 5MB (JPG, PNG, WebP)";
+                preview.classList.remove('text-[#29abe2]', 'font-semibold');
+                return;
+            }
+
+            if (file.size > 25 * 1024 * 1024) {
+                alert('Ukuran file terlalu besar (maksimal 25MB).');
+                input.value = '';
+                preview.textContent = "Maks. 5MB (JPG, PNG, WebP)";
+                preview.classList.remove('text-[#29abe2]', 'font-semibold');
+                return;
+            }
+
+            // Jika ukuran foto lebih dari 1MB, otomatis kompres
+            if (file.size > 1024 * 1024) {
+                preview.textContent = '⏳ Mengompres foto (' + (file.size / 1024 / 1024).toFixed(1) + ' MB)...';
+                preview.classList.add('text-[#29abe2]', 'font-semibold');
+
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const img = new Image();
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+                        const maxDim = 1600;
+
+                        if (width > maxDim || height > maxDim) {
+                            if (width > height) {
+                                height = Math.round((height * maxDim) / width);
+                                width = maxDim;
+                            } else {
+                                width = Math.round((width * maxDim) / height);
+                                height = maxDim;
+                            }
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        canvas.toBlob(function(blob) {
+                            if (blob) {
+                                const compressedFile = new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".webp", {
+                                    type: "image/webp",
+                                    lastModified: Date.now()
+                                });
+
+                                try {
+                                    const dataTransfer = new DataTransfer();
+                                    dataTransfer.items.add(compressedFile);
+                                    input.files = dataTransfer.files;
+                                } catch (err) {}
+
+                                preview.textContent = '✔️ Siap (' + (compressedFile.size / 1024).toFixed(0) + ' KB): ' + compressedFile.name;
+                            }
+                        }, 'image/webp', 0.85);
+                    };
+                    img.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                preview.textContent = "✔️ File: " + file.name + " (" + (file.size / 1024).toFixed(0) + " KB)";
+                preview.classList.add('text-[#29abe2]', 'font-semibold');
             }
         }
 

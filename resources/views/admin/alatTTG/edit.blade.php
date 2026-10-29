@@ -262,8 +262,76 @@
     <script>
         document.getElementById('file-upload').addEventListener('change', function(e) {
             const fileNameDisplay = document.getElementById('file-name');
-            if (e.target.files[0]) {
-                fileNameDisplay.textContent = '✔️ File baru: ' + e.target.files[0].name;
+            const file = e.target.files[0];
+            if (!file) return;
+
+            if (!file.type.startsWith('image/')) {
+                alert('File harus berupa gambar (JPG, PNG, WebP).');
+                this.value = '';
+                fileNameDisplay.classList.add('hidden');
+                return;
+            }
+
+            if (file.size > 25 * 1024 * 1024) {
+                alert('Ukuran file terlalu besar (maksimal 25MB).');
+                this.value = '';
+                fileNameDisplay.classList.add('hidden');
+                return;
+            }
+
+            // Jika ukuran foto lebih dari 1MB, lakukan auto-resize & kompresi client-side
+            if (file.size > 1024 * 1024) {
+                fileNameDisplay.textContent = '⏳ Mengompres foto (' + (file.size / 1024 / 1024).toFixed(1) + ' MB)...';
+                fileNameDisplay.classList.remove('hidden');
+
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const img = new Image();
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+                        const maxDim = 1600;
+
+                        if (width > maxDim || height > maxDim) {
+                            if (width > height) {
+                                height = Math.round((height * maxDim) / width);
+                                width = maxDim;
+                            } else {
+                                width = Math.round((width * maxDim) / height);
+                                height = maxDim;
+                            }
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        canvas.toBlob(function(blob) {
+                            if (blob) {
+                                const compressedFile = new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".webp", {
+                                    type: "image/webp",
+                                    lastModified: Date.now()
+                                });
+
+                                try {
+                                    const dataTransfer = new DataTransfer();
+                                    dataTransfer.items.add(compressedFile);
+                                    document.getElementById('file-upload').files = dataTransfer.files;
+                                } catch (err) {
+                                    // Fallback jika DataTransfer tidak didukung
+                                }
+
+                                fileNameDisplay.textContent = '✔️ Foto terkompresi: ' + compressedFile.name + ' (' + (compressedFile.size / 1024).toFixed(0) + ' KB)';
+                            }
+                        }, 'image/webp', 0.85);
+                    };
+                    img.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                fileNameDisplay.textContent = '✔️ File baru: ' + file.name + ' (' + (file.size / 1024).toFixed(0) + ' KB)';
                 fileNameDisplay.classList.remove('hidden');
             }
         });
