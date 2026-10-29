@@ -25,8 +25,8 @@
     <link rel="preconnect" href="https://cdn.tailwindcss.com">
     <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
 
-    <!-- Preload Critical LCP Hero Image (WebP 61KB untuk kecepatan tinggi) -->
-    <link rel="preload" as="image" href="{{ asset('images/hero-bg.webp') }}?v=3" type="image/webp" fetchpriority="high">
+    <!-- Preload Critical LCP Hero Image (Langsung mengunduh gambar gedung sejak awal) -->
+    <link rel="preload" as="image" href="{{ asset('images/hero-bg.jpg') }}?v=3" fetchpriority="high">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -64,11 +64,7 @@
         }
 
         .bg-hero {
-            background-image: url("{{ asset('images/hero-bg.webp') }}?v=3");
-            background-image: image-set(
-                url("{{ asset('images/hero-bg.webp') }}?v=3") type("image/webp"),
-                url("{{ asset('images/hero-bg.jpg') }}?v=3") type("image/jpeg")
-            );
+            background-image: url("{{ asset('images/hero-bg.jpg') }}?v=3");
             background-size: cover;
             background-position: center right;
         }
@@ -334,11 +330,8 @@
 
             <!-- Logo & Brand Name -->
             <a href="/" class="flex items-center gap-3 shrink-0 group">
-                <picture>
-                    <source srcset="{{ asset('storage/images/logo_tasik.webp') }}" type="image/webp">
-                    <img src="{{ asset('storage/images/logo_tasik.png') }}"
-                         alt="Logo Kota Tasikmalaya" width="40" height="40" class="h-10 w-auto object-contain group-hover:scale-105 transition-transform" fetchpriority="high">
-                </picture>
+                <img src="{{ asset('storage/images/logo_tasik.png') }}"
+                     alt="Logo Kota Tasikmalaya" width="40" height="40" class="h-10 w-auto object-contain group-hover:scale-105 transition-transform" fetchpriority="high">
                 <span class="text-xl sm:text-2xl font-black text-[#00A3E0] tracking-tight">
                     SI RINOVA
                 </span>
