@@ -66,7 +66,7 @@
             <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
                 <div>
                     <h2 class="text-3xl font-bold text-gray-900 tracking-tight">Galeri Kegiatan & Dokumentasi</h2>
-                    <p class="text-sm text-gray-600 mt-1">Kelola dokumentasi pameran, sosialisasi, bimtek, dan kegiatan inovasi Bapperida.</p>
+                    <p class="text-sm text-gray-600 mt-1">Kelola dokumentasi pameran, sosialisasi, bimtek, dan kegiatan inovasi Bappelitbangda.</p>
                 </div>
                 <a href="{{ route('admin.galeri.create') }}"
                     class="bg-[#29abe2] text-white px-5 py-2.5 rounded-md hover:bg-[#1a95c9] transition-colors flex items-center justify-center gap-2 font-medium text-sm shadow-sm">

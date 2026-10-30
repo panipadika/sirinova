@@ -210,7 +210,7 @@
             </h1>
 
             <p class="text-slate-500 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
-                Platform integrasi publikasi riset, inovasi daerah, capaian indikator makro, dan penerapan Teknologi Tepat Guna (TTG) Bapperida Kota Tasikmalaya.
+                Platform integrasi publikasi riset, inovasi daerah, capaian indikator makro, dan penerapan Teknologi Tepat Guna (TTG) Bappelitbangda Kota Tasikmalaya.
             </p>
         </div>
 
@@ -285,11 +285,11 @@
                 </h2>
                 
                 <p class="text-slate-600 text-xs sm:text-sm leading-relaxed text-justify">
-                    <strong class="text-slate-800">SI RINOVA (Sistem Informasi Riset dan Inovasi)</strong> adalah wadah publikasi dan informasi terpadu Bapperida Kota Tasikmalaya yang dirancang untuk memfasilitasi riset ilmiah, dokumen kebijakan, data indikator makro, penerapan inovasi daerah, serta pelaksanaan kompetisi teknologi tepat guna.
+                    <strong class="text-slate-800">SI RINOVA (Sistem Informasi Riset dan Inovasi)</strong> adalah wadah publikasi dan informasi terpadu Bappelitbangda Kota Tasikmalaya yang dirancang untuk memfasilitasi riset ilmiah, dokumen kebijakan, data indikator makro, penerapan inovasi daerah, serta pelaksanaan kompetisi teknologi tepat guna.
                 </p>
 
                 <p class="text-slate-600 text-xs sm:text-sm leading-relaxed text-justify">
-                    Platform ini menyajikan enam menu layanan utama: <span class="text-[#00A3E0] font-semibold">Capaian Indikator Makro</span>, <span class="text-[#00A3E0] font-semibold">Katalog Alat Teknologi Tepat Guna (TTG)</span>, <span class="text-[#00A3E0] font-semibold">Repositori E-Book Kajian</span>, <span class="text-[#00A3E0] font-semibold">Naskah Telaahan Staf</span>, <span class="text-[#00A3E0] font-semibold">Dokumentasi Galeri Kegiatan</span>, serta <span class="text-amber-600 font-semibold">Pendaftaran Lomba Inovasi TTG</span> Bapperida Kota Tasikmalaya.
+                    Platform ini menyajikan enam menu layanan utama: <span class="text-[#00A3E0] font-semibold">Capaian Indikator Makro</span>, <span class="text-[#00A3E0] font-semibold">Katalog Alat Teknologi Tepat Guna (TTG)</span>, <span class="text-[#00A3E0] font-semibold">Repositori E-Book Kajian</span>, <span class="text-[#00A3E0] font-semibold">Naskah Telaahan Staf</span>, <span class="text-[#00A3E0] font-semibold">Dokumentasi Galeri Kegiatan</span>, serta <span class="text-amber-600 font-semibold">Pendaftaran Lomba Inovasi TTG</span> Bappelitbangda Kota Tasikmalaya.
                 </p>
 
                 <!-- Feature Badges -->
@@ -569,7 +569,7 @@
 
                 <div class="space-y-2">
                     <!-- Alamat -->
-                    <a href="https://maps.google.com/?q=BAPPERIDA+KOTA+TASIKMALAYA" target="_blank"
+                    <a href="https://maps.google.com/?q=BAPPELITBANGDA+KOTA+TASIKMALAYA" target="_blank"
                        class="flex items-start gap-3.5 p-2.5 -mx-2 rounded-2xl hover:bg-sky-50/70 border border-transparent hover:border-sky-100 transition-all duration-300 group">
                         <div class="w-9 h-9 bg-sky-50 group-hover:bg-[#00A3E0] rounded-xl flex items-center justify-center text-[#00A3E0] group-hover:text-white shrink-0 transition-colors">
                             <span class="material-symbols-outlined text-lg">location_on</span>
@@ -605,7 +605,7 @@
                     </a>
 
                     <!-- WhatsApp -->
-                    <a href="https://wa.me/6281393515410?text=Halo%20Bapperida%20Kota%20Tasikmalaya," target="_blank"
+                    <a href="https://wa.me/6281393515410?text=Halo%20Bappelitbangda%20Kota%20Tasikmalaya," target="_blank"
                        class="flex items-start gap-3.5 p-2.5 -mx-2 rounded-2xl hover:bg-emerald-50/70 border border-transparent hover:border-emerald-100 transition-all duration-300 group">
                         <div class="w-9 h-9 bg-emerald-50 group-hover:bg-emerald-600 rounded-xl flex items-center justify-center text-emerald-600 group-hover:text-white shrink-0 transition-colors">
                             <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
@@ -637,7 +637,7 @@
             <!-- Right Google Map Panel -->
             <div class="lg:col-span-7 bg-white rounded-3xl border border-slate-100 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.02)] min-h-[360px] relative reveal-right">
                 <iframe
-                    src="https://maps.google.com/maps?q=BAPPERIDA+KOTA+TASIKMALAYA,+Jl.+Ir.+H.+Juanda+No.191,+Bungursari,+Kota+Tasikmalaya&t=&z=16&ie=UTF8&iwloc=&output=embed"
+                    src="https://maps.google.com/maps?q=BAPPELITBANGDA+KOTA+TASIKMALAYA,+Jl.+Ir.+H.+Juanda+No.191,+Bungursari,+Kota+Tasikmalaya&t=&z=16&ie=UTF8&iwloc=&output=embed"
                     class="w-full h-full min-h-[360px] border-0"
                     allowfullscreen=""
                     loading="lazy"

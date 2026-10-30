@@ -86,7 +86,7 @@
 
         <!-- Footer Notice -->
         <div class="relative z-20 text-xs text-cyan-100/70 font-medium">
-            &copy; 2026 Bapperida Kota Tasikmalaya. 
+            &copy; 2026 Bappelitbangda Kota Tasikmalaya. 
         </div>
     </div>
 

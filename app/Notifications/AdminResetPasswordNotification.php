@@ -46,10 +46,10 @@ class AdminResetPasswordNotification extends Notification
         return (new MailMessage)
             ->subject('Permintaan Reset Kata Sandi Administrator - SI RINOVA')
             ->greeting("Halo, {$namaAdmin}")
-            ->line('Kami menerima permintaan untuk mengatur ulang kata sandi akun Administrator Anda pada sistem SI RINOVA Bapperida Kota Tasikmalaya.')
+            ->line('Kami menerima permintaan untuk mengatur ulang kata sandi akun Administrator Anda pada sistem SI RINOVA Bappelitbangda Kota Tasikmalaya.')
             ->action('Atur Ulang Kata Sandi', $this->resetUrl)
             ->line("Tautan pemulihan kata sandi ini bersifat rahasia, hanya dapat digunakan satu kali, dan akan kedaluwarsa dalam waktu {$expireMinutes} menit.")
             ->line('Jika Anda tidak merasa melakukan permintaan ini, abaikan email ini. Kata sandi akun Anda tidak akan berubah.')
-            ->salutation("Salam hormat,\nTim Bapperida Kota Tasikmalaya");
+            ->salutation("Salam hormat,\nTim Bappelitbangda Kota Tasikmalaya");
     }
 }

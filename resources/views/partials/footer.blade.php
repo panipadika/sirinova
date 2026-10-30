@@ -11,7 +11,7 @@
                 </span>
             </a>
             <p class="text-slate-500 leading-relaxed">
-                Bapperida Kota Tasikmalaya. Mendorong inovasi dan penerapan Teknologi Tepat Guna untuk
+                Bappelitbangda Kota Tasikmalaya. Mendorong inovasi dan penerapan Teknologi Tepat Guna untuk
                 kesejahteraan masyarakat.
             </p>
         </div>
@@ -86,7 +86,7 @@
             iconClass: 'bg-emerald-50 text-emerald-600',
             html: `
                 <div class="space-y-3">
-                    <p class="text-slate-600">Bapperida Kota Tasikmalaya berkomitmen penuh melindungi hak privasi setiap pengunjung portal SI RINOVA.</p>
+                    <p class="text-slate-600">Bappelitbangda Kota Tasikmalaya berkomitmen penuh melindungi hak privasi setiap pengunjung portal SI RINOVA.</p>
                     <div class="p-3.5 bg-emerald-50/60 border border-emerald-100 rounded-2xl space-y-1">
                         <strong class="text-emerald-800 block text-xs">1. Pengumpulan Informasi</strong>
                         <p class="text-slate-600 text-[11px] leading-relaxed">Informasi identitas (Nama, Email, Nomor WhatsApp) yang Anda berikan melalui formulir Kirim Pesan semata-mata digunakan untuk keperluan tindak lanjut komunikasi kedinasan dan konsultasi inovasi daerah.</p>
@@ -112,7 +112,7 @@
                     <p class="text-slate-600">Dengan mengakses portal SI RINOVA Kota Tasikmalaya, Anda menyetujui ketentuan pemanfaatan data berikut:</p>
                     <div class="p-3.5 bg-sky-50/60 border border-sky-100 rounded-2xl space-y-1">
                         <strong class="text-sky-900 block text-xs">1. Hak Cipta & Hak Kekayaan Intelektual</strong>
-                        <p class="text-slate-600 text-[11px] leading-relaxed">Inovasi Teknologi Tepat Guna (TTG) yang tercantum merupakan hak milik intelektual inovator bersangkutan yang difasilitasi dan dipublikasikan oleh Bapperida Kota Tasikmalaya.</p>
+                        <p class="text-slate-600 text-[11px] leading-relaxed">Inovasi Teknologi Tepat Guna (TTG) yang tercantum merupakan hak milik intelektual inovator bersangkutan yang difasilitasi dan dipublikasikan oleh Bappelitbangda Kota Tasikmalaya.</p>
                     </div>
                     <div class="p-3.5 bg-slate-50 border border-slate-100 rounded-2xl space-y-1">
                         <strong class="text-slate-800 block text-xs">2. Sitasi & Referensi Publikasi</strong>
@@ -151,7 +151,7 @@
                             <span class="material-symbols-outlined text-sm text-[#00A3E0]">send</span>
                             Ingin konsultasi atau mengajukan inovasi?
                         </strong>
-                        <p class="text-slate-600 text-[11px] leading-relaxed">Silakan kirimkan pesan melalui menu <a href="{{ route('public.tentang') }}#form-pesan" class="text-[#00A3E0] font-bold hover:underline" onclick="closeFooterModal()">Kirim Pesan</a> atau hubungi kontak resmi Bapperida Kota Tasikmalaya.</p>
+                        <p class="text-slate-600 text-[11px] leading-relaxed">Silakan kirimkan pesan melalui menu <a href="{{ route('public.tentang') }}#form-pesan" class="text-[#00A3E0] font-bold hover:underline" onclick="closeFooterModal()">Kirim Pesan</a> atau hubungi kontak resmi Bappelitbangda Kota Tasikmalaya.</p>
                     </div>
                 </div>
             `

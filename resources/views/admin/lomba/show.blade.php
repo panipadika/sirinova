@@ -125,7 +125,7 @@
                                             $cleanPhone = '62' . substr($cleanPhone, 1);
                                         }
                                     @endphp
-                                    <a href="https://wa.me/{{ $cleanPhone }}?text=Halo%20{{ urlencode($item->nama_inovator) }},%20kami%20dari%20Panitia%20Lomba%20TTG%20Bapperida%20Kota%20Tasikmalaya..." target="_blank" 
+                                    <a href="https://wa.me/{{ $cleanPhone }}?text=Halo%20{{ urlencode($item->nama_inovator) }},%20kami%20dari%20Panitia%20Lomba%20TTG%20Bappelitbangda%20Kota%20Tasikmalaya..." target="_blank" 
                                        class="inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white rounded-lg font-bold text-[10px] shadow-2xs transition-all cursor-pointer">
                                         <span class="material-symbols-outlined text-xs">chat</span> Chat WA
                                     </a>

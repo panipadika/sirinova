@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="utf-8">
-    <title>Cetak Rekapitulasi Akun Peserta Lomba TTG - Bapperida Kota Tasikmalaya</title>
+    <title>Cetak Rekapitulasi Akun Peserta Lomba TTG - Bappelitbangda Kota Tasikmalaya</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -126,7 +126,7 @@
         <p>Kota Tasikmalaya, {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}</p>
         <p style="margin-top: -5px;">Panitia Lomba Inovasi TTG,</p>
         <div style="height: 60px;"></div>
-        <p><strong>Bapperida Kota Tasikmalaya</strong></p>
+        <p><strong>Bappelitbangda Kota Tasikmalaya</strong></p>
     </div>
 
 </body>

@@ -57,7 +57,7 @@ class AdminLombaExportAndAjaxTest extends TestCase
             'nama_alat' => 'Alat Test AJAX Delete',
             'kategori_peserta' => 'Umum',
             'nama_inovator' => 'Inovator Test',
-            'asal_instansi' => 'Bapperida Kota Tasikmalaya',
+            'asal_instansi' => 'Bappelitbangda Kota Tasikmalaya',
             'nomor_wa' => '081234567890',
             'email' => 'inovator_test@example.com',
             'fungsi' => 'Fungsi pengujian penghapusan AJAX',

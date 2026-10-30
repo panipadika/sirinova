@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Lomba Teknologi Tepat Guna (TTG) - SI RINOVA Kota Tasikmalaya</title>
-    <meta name="description" content="Informasi dan Pendaftaran Resmi Lomba Inovasi Alat Teknologi Tepat Guna (TTG) Bapperida Kota Tasikmalaya. Kategori Pelajar SMA/SMK, Perguruan Tinggi, dan Umum.">
+    <meta name="description" content="Informasi dan Pendaftaran Resmi Lomba Inovasi Alat Teknologi Tepat Guna (TTG) Bappelitbangda Kota Tasikmalaya. Kategori Pelajar SMA/SMK, Perguruan Tinggi, dan Umum.">
 
     <!-- Favicon Logo Tasikmalaya -->
     <link rel="icon" type="image/png" href="{{ asset('storage/images/favicon_tasik.png') }}?v=3">
@@ -583,7 +583,7 @@
                     <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-600 text-white font-black text-sm">4</span>
                     <h3 class="text-base font-bold text-slate-900">Verifikasi & Penilaian</h3>
                     <p class="text-xs text-slate-600 leading-relaxed">
-                        Pantau status administrasi dan evaluasi dewan juri Bapperida langsung dari dashboard status Anda.
+                        Pantau status administrasi dan evaluasi dewan juri Bappelitbangda langsung dari dashboard status Anda.
                     </p>
                 </div>
             </div>

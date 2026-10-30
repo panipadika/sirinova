@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="utf-8">
-    <title>Rekapitulasi Akun Peserta Lomba TTG - Bapperida Kota Tasikmalaya</title>
+    <title>Rekapitulasi Akun Peserta Lomba TTG - Bappelitbangda Kota Tasikmalaya</title>
     <style>
         @page {
             size: A4 landscape;
@@ -171,7 +171,7 @@
         <tr>
             <td style="border: none; width: 65%;">
                 <div style="font-size: 7.5pt; color: #94a3b8;">
-                    Dokumen ini diunduh secara resmi melalui Panel Admin SI-RINOVA Bapperida Kota Tasikmalaya.
+                    Dokumen ini diunduh secara resmi melalui Panel Admin SI-RINOVA Bappelitbangda Kota Tasikmalaya.
                 </div>
             </td>
             <td style="border: none; width: 35%;">
@@ -179,7 +179,7 @@
                     <p style="margin: 0;">Kota Tasikmalaya, {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}</p>
                     <p style="margin: 4px 0 0 0; font-weight: bold;">Panitia Lomba Inovasi TTG</p>
                     <div style="height: 55px;"></div>
-                    <p style="margin: 0; font-weight: bold; text-decoration: underline;">Bapperida Kota Tasikmalaya</p>
+                    <p style="margin: 0; font-weight: bold; text-decoration: underline;">Bappelitbangda Kota Tasikmalaya</p>
                 </div>
             </td>
         </tr>

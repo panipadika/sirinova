@@ -79,14 +79,14 @@
                     Pemulihan Akun Administrator
                 </h2>
                 <p class="text-sm lg:text-base text-cyan-50 leading-relaxed font-normal opacity-90 pt-1">
-                    Layanan mandiri pemulihan kata sandi akun administrator Bapperida Kota Tasikmalaya dengan verifikasi identitas terdaftar.
+                    Layanan mandiri pemulihan kata sandi akun administrator Bappelitbangda Kota Tasikmalaya dengan verifikasi identitas terdaftar.
                 </p>
             </div>
         </div>
 
         <!-- Footer Notice -->
         <div class="relative z-20 text-xs text-cyan-100/70 font-medium">
-            &copy; 2026 Bapperida Kota Tasikmalaya. 
+            &copy; 2026 Bappelitbangda Kota Tasikmalaya. 
         </div>
     </div>
 

@@ -50,6 +50,6 @@ class PesertaResetPasswordNotification extends Notification
             ->action('Atur Ulang Kata Sandi', $this->resetUrl)
             ->line("Tautan pemulihan kata sandi ini bersifat rahasia, hanya dapat digunakan satu kali, dan akan kedaluwarsa dalam waktu {$expireMinutes} menit.")
             ->line('Jika Anda tidak merasa melakukan permintaan ini, abaikan email ini. Kata sandi akun Anda tidak akan berubah.')
-            ->salutation("Salam hormat,\nTim Panitia Lomba TTG Bapperida Kota Tasikmalaya");
+            ->salutation("Salam hormat,\nTim Panitia Lomba TTG Bappelitbangda Kota Tasikmalaya");
     }
 }
