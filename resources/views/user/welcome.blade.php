@@ -23,7 +23,7 @@
     <link rel="preload" as="image" href="{{ url('/images/hero-bg-bappelitbangda.webp') }}?v=20261030" type="image/webp" fetchpriority="high">
 
     <!-- Compiled High-Performance Tailwind CSS (Local, Gzip ~16KB, Auto-Fallback jika Offline) -->
-    <link rel="stylesheet" href="{{ url('/css/tailwind.min.css') }}?v=2" onerror="this.onerror=null;var s=document.createElement('script');s.src='https://cdn.tailwindcss.com';document.head.appendChild(s);">
+    <link rel="stylesheet" href="{{ url('/css/tailwind.min.css') }}?v=3" onerror="this.onerror=null;var s=document.createElement('script');s.src='https://cdn.tailwindcss.com';document.head.appendChild(s);">
 
     <!-- Preconnect ke Google Fonts & Gstatic untuk Menghilangkan Latensi TLS/DNS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -341,51 +341,51 @@
                          onerror="this.onerror=null;this.src='{{ asset('storage/images/logo_tasik.png') }}';"
                          alt="Logo Kota Tasikmalaya" width="56" height="40" class="h-10 w-14 object-contain group-hover:scale-105 transition-transform" style="aspect-ratio: 160 / 114;" fetchpriority="high">
                 </picture>
-                <span class="text-xl sm:text-2xl font-black text-[#00A3E0] tracking-tight">
+                <span class="text-xl sm:text-2xl font-black text-[#0072a3] tracking-tight">
                     SI RINOVA
                 </span>
             </a>
 
             <!-- Navigation Links (Desktop) -->
             <nav class="hidden md:flex items-center gap-6 xl:gap-8 font-semibold text-sm whitespace-nowrap">
-                <a href="/" class="text-[#00A3E0] border-b-2 border-[#00A3E0] pb-1 transition-colors whitespace-nowrap">Beranda</a>
-                <a href="{{ route('public.indikator-makro') }}" class="text-slate-600 hover:text-[#00A3E0] transition-colors py-1 whitespace-nowrap">Indikator Makro</a>
+                <a href="/" class="text-[#0072a3] border-b-2 border-[#0072a3] pb-1 transition-colors whitespace-nowrap">Beranda</a>
+                <a href="{{ route('public.indikator-makro') }}" class="text-slate-600 hover:text-[#0072a3] transition-colors py-1 whitespace-nowrap">Indikator Makro</a>
                 
                 <!-- Dropdown Katalog -->
                 <div class="relative group py-5">
-                    <button class="flex items-center gap-1 text-slate-600 group-hover:text-[#00A3E0] transition-colors font-semibold text-sm focus:outline-none whitespace-nowrap">
+                    <button class="flex items-center gap-1 text-slate-600 group-hover:text-[#0072a3] transition-colors font-semibold text-sm focus:outline-none whitespace-nowrap" aria-label="Menu Katalog TTG">
                         <span>Katalog TTG</span>
                         <span class="material-symbols-outlined text-base transition-transform group-hover:rotate-180">expand_more</span>
                     </button>
                     <div class="absolute left-0 top-full w-52 bg-white rounded-xl shadow-xl border border-slate-100 py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                        <a href="{{ route('katalog.index') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-semibold text-slate-700 hover:bg-sky-50 hover:text-[#00A3E0] transition-colors">
-                            <span class="material-symbols-outlined text-base text-[#00A3E0]">inventory_2</span>
+                        <a href="{{ route('katalog.index') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-semibold text-slate-700 hover:bg-sky-50 hover:text-[#0072a3] transition-colors">
+                            <span class="material-symbols-outlined text-base text-[#0072a3]">inventory_2</span>
                             <span>Alat TTG</span>
                         </a>
-                        <a href="{{ route('public.kategori') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-semibold text-slate-700 hover:bg-sky-50 hover:text-[#00A3E0] transition-colors">
-                            <span class="material-symbols-outlined text-base text-[#00A3E0]">category</span>
+                        <a href="{{ route('public.kategori') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-semibold text-slate-700 hover:bg-sky-50 hover:text-[#0072a3] transition-colors">
+                            <span class="material-symbols-outlined text-base text-[#0072a3]">category</span>
                             <span>Kategori Sektor</span>
                         </a>
-                        <a href="{{ route('public.wilayah') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-semibold text-slate-700 hover:bg-sky-50 hover:text-[#00A3E0] transition-colors">
-                            <span class="material-symbols-outlined text-base text-[#00A3E0]">map</span>
+                        <a href="{{ route('public.wilayah') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-xs font-semibold text-slate-700 hover:bg-sky-50 hover:text-[#0072a3] transition-colors">
+                            <span class="material-symbols-outlined text-base text-[#0072a3]">map</span>
                             <span>Sebaran Wilayah</span>
                         </a>
                     </div>
                 </div>
 
-                <a href="{{ route('public.ebook') }}" class="text-slate-600 hover:text-[#00A3E0] transition-colors py-1 whitespace-nowrap">E-Book Kajian</a>
-                <a href="{{ route('public.telaahan-staf') }}" class="text-slate-600 hover:text-[#00A3E0] transition-colors py-1 whitespace-nowrap">Telaahan Staf</a>
-                <a href="{{ route('public.galeri') }}" class="text-slate-600 hover:text-[#00A3E0] transition-colors py-1 whitespace-nowrap">Galeri</a>
-                <a href="{{ route('lomba.info') }}" class="text-amber-500 hover:text-amber-600 transition-colors py-1 flex items-center gap-1 font-bold whitespace-nowrap">
+                <a href="{{ route('public.ebook') }}" class="text-slate-600 hover:text-[#0072a3] transition-colors py-1 whitespace-nowrap">E-Book Kajian</a>
+                <a href="{{ route('public.telaahan-staf') }}" class="text-slate-600 hover:text-[#0072a3] transition-colors py-1 whitespace-nowrap">Telaahan Staf</a>
+                <a href="{{ route('public.galeri') }}" class="text-slate-600 hover:text-[#0072a3] transition-colors py-1 whitespace-nowrap">Galeri</a>
+                <a href="{{ route('lomba.info') }}" class="text-amber-700 hover:text-amber-800 transition-colors py-1 flex items-center gap-1 font-bold whitespace-nowrap">
                     <span class="material-symbols-outlined text-base">emoji_events</span>
                     <span>Lomba TTG</span>
                 </a>
-                <a href="{{ route('public.tentang') }}" class="text-slate-600 hover:text-[#00A3E0] transition-colors py-1 whitespace-nowrap">Tentang</a>
+                <a href="{{ route('public.tentang') }}" class="text-slate-600 hover:text-[#0072a3] transition-colors py-1 whitespace-nowrap">Tentang</a>
             </nav>
 
             <!-- Mobile Menu Button -->
             <div class="md:hidden flex items-center">
-                <button id="mobile-menu-btn" class="p-2 rounded-lg text-slate-600 hover:bg-slate-100">
+                <button id="mobile-menu-btn" aria-label="Buka menu navigasi" class="p-2 rounded-lg text-slate-600 hover:bg-slate-100">
                     <span class="material-symbols-outlined text-2xl">menu</span>
                 </button>
             </div>
@@ -393,23 +393,23 @@
 
         <!-- Mobile Nav Menu Dropdown -->
         <div id="mobile-nav" class="hidden md:hidden bg-white border-b border-slate-200 px-6 py-4 space-y-3 font-semibold text-sm">
-            <a href="/" class="block text-[#00A3E0]">Beranda</a>
-            <a href="{{ route('public.indikator-makro') }}" class="block text-slate-600 hover:text-[#00A3E0]">Indikator Makro</a>
+            <a href="/" class="block text-[#0072a3]">Beranda</a>
+            <a href="{{ route('public.indikator-makro') }}" class="block text-slate-600 hover:text-[#0072a3]">Indikator Makro</a>
             <div class="py-0.5">
-                <button id="mobile-katalog-btn" type="button" class="w-full flex items-center justify-between text-xs font-bold text-slate-400 hover:text-[#00A3E0] uppercase tracking-wider focus:outline-none transition-colors py-1">
+                <button id="mobile-katalog-btn" type="button" aria-label="Buka sub-menu katalog" class="w-full flex items-center justify-between text-xs font-bold text-slate-600 hover:text-[#0072a3] uppercase tracking-wider focus:outline-none transition-colors py-1">
                     <span>Katalog TTG</span>
                     <span id="mobile-katalog-icon" class="material-symbols-outlined text-base transition-transform duration-200">expand_more</span>
                 </button>
                 <div id="mobile-katalog-sub" class="hidden space-y-2 pt-1.5 pl-3">
-                    <a href="{{ route('katalog.index') }}" class="block text-slate-600 hover:text-[#00A3E0]">Alat TTG</a>
-                    <a href="{{ route('public.kategori') }}" class="block text-slate-600 hover:text-[#00A3E0]">Kategori Sektor</a>
-                    <a href="{{ route('public.wilayah') }}" class="block text-slate-600 hover:text-[#00A3E0]">Sebaran Wilayah</a>
+                    <a href="{{ route('katalog.index') }}" class="block text-slate-600 hover:text-[#0072a3]">Alat TTG</a>
+                    <a href="{{ route('public.kategori') }}" class="block text-slate-600 hover:text-[#0072a3]">Kategori Sektor</a>
+                    <a href="{{ route('public.wilayah') }}" class="block text-slate-600 hover:text-[#0072a3]">Sebaran Wilayah</a>
                 </div>
             </div>
             <a href="{{ route('public.ebook') }}" class="block text-slate-600">E-Book Kajian</a>
             <a href="{{ route('public.telaahan-staf') }}" class="block text-slate-600">Telaahan Staf</a>
             <a href="{{ route('public.galeri') }}" class="block text-slate-600">Galeri</a>
-            <a href="{{ route('lomba.info') }}" class="flex items-center gap-1.5 text-amber-500 font-bold">
+            <a href="{{ route('lomba.info') }}" class="flex items-center gap-1.5 text-amber-700 font-bold">
                 <span class="material-symbols-outlined text-base">emoji_events</span>
                 <span>Lomba TTG</span>
             </a>
@@ -451,12 +451,12 @@
                     <div class="animate-hero-buttons grid grid-cols-2 gap-2 sm:gap-3 pt-1.5 justify-start w-full max-w-sm sm:max-w-md">
                         <!-- Row 1: Indikator Makro & Katalog TTG (Primary Blue) -->
                         <a href="{{ route('public.indikator-makro') }}"
-                            class="bg-[#00A3E0] hover:bg-[#008bc0] hover:scale-105 active:scale-95 text-white px-2.5 sm:px-5 py-2 sm:py-3 rounded-xl font-bold text-[11px] sm:text-sm transition-all duration-300 shadow-md shadow-cyan-500/20 text-center flex items-center justify-center gap-1.5">
+                            class="bg-[#0072a3] hover:bg-[#005f88] hover:scale-105 active:scale-95 text-white px-2.5 sm:px-5 py-2 sm:py-3 rounded-xl font-bold text-[11px] sm:text-sm transition-all duration-300 shadow-md shadow-cyan-700/25 text-center flex items-center justify-center gap-1.5">
                             <span class="material-symbols-outlined text-base sm:text-lg shrink-0">analytics</span>
                             <span class="truncate">Indikator Makro</span>
                         </a>
                         <a href="{{ route('katalog.index') }}"
-                            class="bg-[#00A3E0] hover:bg-[#008bc0] hover:scale-105 active:scale-95 text-white px-2.5 sm:px-5 py-2 sm:py-3 rounded-xl font-bold text-[11px] sm:text-sm transition-all duration-300 shadow-md shadow-cyan-500/20 text-center flex items-center justify-center gap-1.5">
+                            class="bg-[#0072a3] hover:bg-[#005f88] hover:scale-105 active:scale-95 text-white px-2.5 sm:px-5 py-2 sm:py-3 rounded-xl font-bold text-[11px] sm:text-sm transition-all duration-300 shadow-md shadow-cyan-700/25 text-center flex items-center justify-center gap-1.5">
                             <span class="material-symbols-outlined text-base sm:text-lg shrink-0">inventory_2</span>
                             <span class="truncate">Katalog TTG</span>
                         </a>
@@ -498,65 +498,65 @@
                 <a href="{{ route('public.indikator-makro') }}"
                     class="reveal-up delay-100 bg-white rounded-2xl p-5 sm:p-6 border border-slate-100 shadow-[0_10px_30px_rgba(0,0,0,0.04)] text-center flex flex-col items-center justify-center hover:-translate-y-2 hover:shadow-xl transition-all duration-300 group block">
                     <div
-                        class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-sky-50 text-[#00A3E0] flex items-center justify-center mb-3 group-hover:scale-110 group-hover:bg-[#00A3E0] group-hover:text-white transition-all">
+                        class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-sky-50 text-[#0072a3] flex items-center justify-center mb-3 group-hover:scale-110 group-hover:bg-[#0072a3] group-hover:text-white transition-all">
                         <span class="material-symbols-outlined text-2xl">analytics</span>
                     </div>
-                    <h3 class="text-2xl sm:text-3xl lg:text-4xl font-black text-[#00A3E0] tracking-tight">
+                    <div class="text-2xl sm:text-3xl lg:text-4xl font-black text-[#0072a3] tracking-tight">
                         <span class="stat-number" data-target="{{ $totalIndikator ?? 5 }}">0</span>+
-                    </h3>
-                    <p class="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-widest mt-1.5">INDIKATOR MAKRO</p>
+                    </div>
+                    <p class="text-[10px] sm:text-xs font-bold text-slate-600 uppercase tracking-widest mt-1.5">INDIKATOR MAKRO</p>
                 </a>
 
                 <!-- Stat 2: Total Alat TTG -->
                 <a href="{{ route('katalog.index') }}"
                     class="reveal-up delay-200 bg-white rounded-2xl p-5 sm:p-6 border border-slate-100 shadow-[0_10px_30px_rgba(0,0,0,0.04)] text-center flex flex-col items-center justify-center hover:-translate-y-2 hover:shadow-xl transition-all duration-300 group block">
                     <div
-                        class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-sky-50 text-[#00A3E0] flex items-center justify-center mb-3 group-hover:scale-110 group-hover:bg-[#00A3E0] group-hover:text-white transition-all">
+                        class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-sky-50 text-[#0072a3] flex items-center justify-center mb-3 group-hover:scale-110 group-hover:bg-[#0072a3] group-hover:text-white transition-all">
                         <span class="material-symbols-outlined text-2xl">hardware</span>
                     </div>
-                    <h3 class="text-2xl sm:text-3xl lg:text-4xl font-black text-[#00A3E0] tracking-tight">
+                    <div class="text-2xl sm:text-3xl lg:text-4xl font-black text-[#0072a3] tracking-tight">
                         <span class="stat-number" data-target="{{ $totalAlat }}">0</span>+
-                    </h3>
-                    <p class="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-widest mt-1.5">ALAT TTG</p>
+                    </div>
+                    <p class="text-[10px] sm:text-xs font-bold text-slate-600 uppercase tracking-widest mt-1.5">ALAT TTG</p>
                 </a>
 
                 <!-- Stat 3: Total E-Book Kajian -->
                 <a href="{{ route('public.ebook') }}"
                     class="reveal-up delay-300 bg-white rounded-2xl p-5 sm:p-6 border border-slate-100 shadow-[0_10px_30px_rgba(0,0,0,0.04)] text-center flex flex-col items-center justify-center hover:-translate-y-2 hover:shadow-xl transition-all duration-300 group block">
                     <div
-                        class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-sky-50 text-[#00A3E0] flex items-center justify-center mb-3 group-hover:scale-110 group-hover:bg-[#00A3E0] group-hover:text-white transition-all">
+                        class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-sky-50 text-[#0072a3] flex items-center justify-center mb-3 group-hover:scale-110 group-hover:bg-[#0072a3] group-hover:text-white transition-all">
                         <span class="material-symbols-outlined text-2xl">auto_stories</span>
                     </div>
-                    <h3 class="text-2xl sm:text-3xl lg:text-4xl font-black text-[#00A3E0] tracking-tight">
+                    <div class="text-2xl sm:text-3xl lg:text-4xl font-black text-[#0072a3] tracking-tight">
                         <span class="stat-number" data-target="{{ $totalEbook }}">0</span>+
-                    </h3>
-                    <p class="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-widest mt-1.5">E-BOOK KAJIAN</p>
+                    </div>
+                    <p class="text-[10px] sm:text-xs font-bold text-slate-600 uppercase tracking-widest mt-1.5">E-BOOK KAJIAN</p>
                 </a>
 
                 <!-- Stat 4: Total Telaahan Staf -->
                 <a href="{{ route('public.telaahan-staf') }}"
                     class="reveal-up delay-400 bg-white rounded-2xl p-5 sm:p-6 border border-slate-100 shadow-[0_10px_30px_rgba(0,0,0,0.04)] text-center flex flex-col items-center justify-center hover:-translate-y-2 hover:shadow-xl transition-all duration-300 group block">
                     <div
-                        class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-sky-50 text-[#00A3E0] flex items-center justify-center mb-3 group-hover:scale-110 group-hover:bg-[#00A3E0] group-hover:text-white transition-all">
+                        class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-sky-50 text-[#0072a3] flex items-center justify-center mb-3 group-hover:scale-110 group-hover:bg-[#0072a3] group-hover:text-white transition-all">
                         <span class="material-symbols-outlined text-2xl">description</span>
                     </div>
-                    <h3 class="text-2xl sm:text-3xl lg:text-4xl font-black text-[#00A3E0] tracking-tight">
+                    <div class="text-2xl sm:text-3xl lg:text-4xl font-black text-[#0072a3] tracking-tight">
                         <span class="stat-number" data-target="{{ $totalTelaahanStaf }}">0</span>+
-                    </h3>
-                    <p class="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-widest mt-1.5">TELAAHAN STAF</p>
+                    </div>
+                    <p class="text-[10px] sm:text-xs font-bold text-slate-600 uppercase tracking-widest mt-1.5">TELAAHAN STAF</p>
                 </a>
 
                 <!-- Stat 5: Total Galeri Kegiatan -->
                 <a href="{{ route('public.galeri') }}"
                     class="reveal-up delay-500 bg-white rounded-2xl p-5 sm:p-6 border border-slate-100 shadow-[0_10px_30px_rgba(0,0,0,0.04)] text-center flex flex-col items-center justify-center hover:-translate-y-2 hover:shadow-xl transition-all duration-300 group block col-span-2 sm:col-span-1">
                     <div
-                        class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-sky-50 text-[#00A3E0] flex items-center justify-center mb-3 group-hover:scale-110 group-hover:bg-[#00A3E0] group-hover:text-white transition-all">
+                        class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-sky-50 text-[#0072a3] flex items-center justify-center mb-3 group-hover:scale-110 group-hover:bg-[#0072a3] group-hover:text-white transition-all">
                         <span class="material-symbols-outlined text-2xl">photo_library</span>
                     </div>
-                    <h3 class="text-2xl sm:text-3xl lg:text-4xl font-black text-[#00A3E0] tracking-tight">
+                    <div class="text-2xl sm:text-3xl lg:text-4xl font-black text-[#0072a3] tracking-tight">
                         <span class="stat-number" data-target="{{ $totalGaleri }}">0</span>+
-                    </h3>
-                    <p class="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-widest mt-1.5">GALERI KEGIATAN</p>
+                    </div>
+                    <p class="text-[10px] sm:text-xs font-bold text-slate-600 uppercase tracking-widest mt-1.5">GALERI KEGIATAN</p>
                 </a>
 
             </div>
@@ -572,7 +572,7 @@
                     <p class="text-slate-500 text-xs sm:text-sm mt-1">Temukan berbagai inovasi teknologi tepat guna terbaru dari Kota Tasikmalaya.</p>
                 </div>
                 <a href="{{ route('katalog.index') }}"
-                    class="inline-flex items-center gap-2 px-5 py-2.5 bg-sky-50 hover:bg-[#00A3E0] text-[#00A3E0] hover:text-white rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 shadow-2xs hover:shadow-md shrink-0 self-start sm:self-auto group">
+                    class="inline-flex items-center gap-2 px-5 py-2.5 bg-sky-50 hover:bg-[#0072a3] text-[#0072a3] hover:text-white rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 shadow-2xs hover:shadow-md shrink-0 self-start sm:self-auto group">
                     <span>Lihat Semua Katalog</span>
                     <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
                 </a>
@@ -605,7 +605,7 @@
                             <!-- Category Badge -->
                             <div class="absolute top-2 left-2 sm:top-4 sm:left-4">
                                 <span
-                                    class="px-2 py-0.5 sm:px-3 sm:py-1 bg-white/90 backdrop-blur-md text-[#00A3E0] text-[10px] sm:text-xs font-bold rounded-full shadow-sm">
+                                    class="px-2 py-0.5 sm:px-3 sm:py-1 bg-white/90 backdrop-blur-md text-[#0072a3] text-[10px] sm:text-xs font-bold rounded-full shadow-sm">
                                     {{ $item->kategori->nama_kategori ?? 'Teknologi' }}
                                 </span>
                             </div>
@@ -615,7 +615,7 @@
                         <div class="p-3 sm:p-5 lg:p-6 flex-1 flex flex-col justify-between gap-2 sm:gap-4">
                             <div>
                                 <h3
-                                    class="text-xs sm:text-base lg:text-lg font-bold text-slate-900 group-hover:text-[#00A3E0] transition-colors leading-snug line-clamp-2">
+                                    class="text-xs sm:text-base lg:text-lg font-bold text-slate-900 group-hover:text-[#0072a3] transition-colors leading-snug line-clamp-2">
                                     {{ $item->nama_alat }}
                                 </h3>
 
@@ -633,7 +633,7 @@
 
                             <!-- Detail Link Button -->
                             <a href="{{ route('katalog.show', $item->id) }}"
-                                class="w-full py-1.5 sm:py-2.5 px-2 sm:px-4 border border-[#00A3E0]/40 text-[#00A3E0] hover:bg-[#00A3E0] hover:text-white rounded-lg sm:rounded-xl text-[10px] sm:text-xs font-bold transition-all text-center flex items-center justify-center gap-1">
+                                class="w-full py-1.5 sm:py-2.5 px-2 sm:px-4 border border-[#0072a3]/40 text-[#0072a3] hover:bg-[#0072a3] hover:text-white rounded-lg sm:rounded-xl text-[10px] sm:text-xs font-bold transition-all text-center flex items-center justify-center gap-1">
                                 Lihat Detail
                             </a>
                         </div>
@@ -660,7 +660,7 @@
                     <p class="text-slate-500 text-xs sm:text-sm mt-1">Kumpulan dokumen publikasi dan hasil penelitian riset daerah Kota Tasikmalaya.</p>
                 </div>
                 <a href="{{ route('public.ebook') }}"
-                    class="inline-flex items-center gap-2 px-5 py-2.5 bg-sky-50 hover:bg-[#00A3E0] text-[#00A3E0] hover:text-white rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 shadow-2xs hover:shadow-md shrink-0 self-start sm:self-auto group">
+                    class="inline-flex items-center gap-2 px-5 py-2.5 bg-sky-50 hover:bg-[#0072a3] text-[#0072a3] hover:text-white rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 shadow-2xs hover:shadow-md shrink-0 self-start sm:self-auto group">
                     <span>Lihat Semua E-Book Kajian</span>
                     <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
                 </a>
@@ -721,17 +721,17 @@
                         <!-- Bottom Portion: Card Content & Actions -->
                         <div class="p-3.5 sm:p-4 space-y-3 flex-1 flex flex-col justify-between bg-white">
                             <div>
-                                <h4 class="text-xs sm:text-sm font-extrabold text-slate-900 leading-snug group-hover:text-[#00A3E0] transition-colors line-clamp-2">
+                                <h3 class="text-xs sm:text-sm font-extrabold text-slate-900 leading-snug group-hover:text-[#0072a3] transition-colors line-clamp-2">
                                     {{ $kajian->judul }}
-                                </h4>
-                                <p class="text-[11px] text-slate-400 font-medium mt-1">
+                                </h3>
+                                <p class="text-[11px] text-slate-600 font-medium mt-1">
                                     {{ $kajian->tahun }}
                                 </p>
                             </div>
 
                             <div class="pt-2">
                                 <a href="{{ route('public.ebook.detail', $kajian->id) }}"
-                                   class="w-full flex items-center justify-center py-2.5 px-4 bg-sky-50 hover:bg-[#00A3E0] text-[#00A3E0] hover:text-white rounded-full text-xs sm:text-sm font-bold transition-all duration-200 text-center shadow-2xs hover:shadow-md">
+                                   class="w-full flex items-center justify-center py-2.5 px-4 bg-sky-50 hover:bg-[#0072a3] text-[#0072a3] hover:text-white rounded-full text-xs sm:text-sm font-bold transition-all duration-200 text-center shadow-2xs hover:shadow-md">
                                     <span>Lihat Detail</span>
                                 </a>
                             </div>
@@ -758,7 +758,7 @@
                     <p class="text-slate-500 text-xs sm:text-sm mt-1">Dokumen analisis strategis dan pertimbangan teknis kebijakan inovasi daerah Kota Tasikmalaya.</p>
                 </div>
                 <a href="{{ route('public.telaahan-staf') }}"
-                    class="inline-flex items-center gap-2 px-5 py-2.5 bg-sky-50 hover:bg-[#00A3E0] text-[#00A3E0] hover:text-white rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 shadow-2xs hover:shadow-md shrink-0 self-start sm:self-auto group">
+                    class="inline-flex items-center gap-2 px-5 py-2.5 bg-sky-50 hover:bg-[#0072a3] text-[#0072a3] hover:text-white rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 shadow-2xs hover:shadow-md shrink-0 self-start sm:self-auto group">
                     <span>Lihat Semua Telaahan Staf</span>
                     <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
                 </a>
@@ -777,18 +777,18 @@
                             <div class="space-y-3">
                                 <!-- Top Badges & Date -->
                                 <div class="flex items-center justify-between gap-2">
-                                    <span class="px-2.5 py-1 bg-sky-50 text-[#00A3E0] text-[10px] font-extrabold rounded-md uppercase tracking-wider flex items-center gap-1 max-w-[70%] truncate" title="{{ $item->pembuat_bidang }}">
+                                    <span class="px-2.5 py-1 bg-sky-50 text-[#0072a3] text-[10px] font-extrabold rounded-md uppercase tracking-wider flex items-center gap-1 max-w-[70%] truncate" title="{{ $item->pembuat_bidang }}">
                                         <span class="material-symbols-outlined text-[13px] shrink-0">corporate_fare</span>
                                         <span class="truncate">{{ $item->pembuat_bidang }}</span>
                                     </span>
-                                    <span class="text-xs text-slate-400 font-medium flex items-center gap-1 shrink-0">
+                                    <span class="text-xs text-slate-600 font-medium flex items-center gap-1 shrink-0">
                                         <span class="material-symbols-outlined text-sm">calendar_today</span>
                                         {{ $item->tahun_dokumen ?? '-' }}
                                     </span>
                                 </div>
 
                                 <!-- Document Title -->
-                                <h3 class="text-base font-extrabold text-slate-900 leading-snug group-hover:text-[#00A3E0] transition-colors line-clamp-2">
+                                <h3 class="text-base font-extrabold text-slate-900 leading-snug group-hover:text-[#0072a3] transition-colors line-clamp-2">
                                     <a href="{{ route('public.telaahan-staf.detail', $item->id) }}">
                                         {{ $item->judul }}
                                     </a>
@@ -796,7 +796,7 @@
 
                                 <!-- Summary Snippet -->
                                 @if(!empty($item->ringkasan))
-                                    <p class="text-xs text-slate-500 leading-relaxed line-clamp-3 bg-slate-50/80 p-3 rounded-xl border border-slate-100/80 text-left">
+                                    <p class="text-xs text-slate-600 leading-relaxed line-clamp-3 bg-slate-50/80 p-3 rounded-xl border border-slate-100/80 text-left">
                                         {{ Str::limit($item->ringkasan, 130) }}
                                     </p>
                                 @endif
@@ -805,7 +805,7 @@
                             <!-- Bottom Action Buttons -->
                             <div class="pt-4 border-t border-slate-100">
                                 <a href="{{ route('public.telaahan-staf.detail', $item->id) }}"
-                                   class="w-full py-2.5 px-4 bg-sky-50 hover:bg-[#00A3E0] text-[#00A3E0] hover:text-white rounded-xl text-xs font-bold transition-all duration-200 text-center flex items-center justify-center gap-1.5">
+                                   class="w-full py-2.5 px-4 bg-sky-50 hover:bg-[#0072a3] text-[#0072a3] hover:text-white rounded-xl text-xs font-bold transition-all duration-200 text-center flex items-center justify-center gap-1.5">
                                     <span class="material-symbols-outlined text-base">visibility</span>
                                     <span>Lihat Detail</span>
                                 </a>
@@ -860,7 +860,7 @@
 
                                 <!-- Date Badge (Top Left - Matching Reference Design) -->
                                 <div class="absolute top-3.5 left-3.5 z-10">
-                                    <span class="px-3 py-1 bg-[#00A3E0]/95 backdrop-blur-md text-white text-[11px] font-extrabold rounded-full shadow-md uppercase tracking-wider">
+                                    <span class="px-3 py-1 bg-[#0072a3]/95 backdrop-blur-md text-white text-[11px] font-extrabold rounded-full shadow-md uppercase tracking-wider">
                                         {{ $item->tanggal_kegiatan ? \Carbon\Carbon::parse($item->tanggal_kegiatan)->translatedFormat('d M Y') : 'Terbaru' }}
                                     </span>
                                 </div>
@@ -869,19 +869,19 @@
                             <!-- Card Body Content -->
                             <div class="p-6 flex-1 flex flex-col justify-between space-y-4 bg-white">
                                 <div class="space-y-2">
-                                    <h3 class="text-base sm:text-lg font-extrabold text-slate-900 leading-snug group-hover/card:text-[#00A3E0] transition-colors line-clamp-2">
+                                    <h3 class="text-base sm:text-lg font-extrabold text-slate-900 leading-snug group-hover/card:text-[#0072a3] transition-colors line-clamp-2">
                                         {{ $item->judul }}
                                     </h3>
                                     
                                     @if(!empty($item->lokasi))
-                                        <p class="text-xs text-slate-400 font-medium flex items-center gap-1">
-                                            <span class="material-symbols-outlined text-sm text-[#00A3E0]">location_on</span>
+                                        <p class="text-xs text-slate-600 font-medium flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-sm text-[#0072a3]">location_on</span>
                                             <span>{{ $item->lokasi }}</span>
                                         </p>
                                     @endif
 
                                     @if(!empty($item->deskripsi))
-                                        <p class="text-xs text-slate-500 leading-relaxed line-clamp-2 pt-1 font-normal">
+                                        <p class="text-xs text-slate-600 leading-relaxed line-clamp-2 pt-1 font-normal">
                                             {{ Str::limit($item->deskripsi, 100) }}
                                         </p>
                                     @endif
@@ -890,7 +890,7 @@
                                 <!-- Selengkapnya Pill Button (Matching Reference Image) -->
                                 <div class="pt-2">
                                     <a href="{{ route('public.galeri') }}"
-                                       class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#00A3E0] hover:bg-[#008cc0] text-white rounded-full text-xs font-bold transition-all duration-200 shadow-sm hover:shadow-md group/btn">
+                                       class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#0072a3] hover:bg-[#005f88] text-white rounded-full text-xs font-bold transition-all duration-200 shadow-sm hover:shadow-md group/btn">
                                         <span>SELENGKAPNYA</span>
                                         <span class="material-symbols-outlined text-sm group-hover/btn:translate-x-1 transition-transform">arrow_forward</span>
                                     </a>
@@ -915,7 +915,7 @@
         <!-- 5. CALL TO ACTION BANNER -->
         <section id="tentang" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
             <div
-                class="bg-gradient-to-r from-[#00A3E0] via-[#008bc0] to-[#0284c7] rounded-3xl p-8 sm:p-12 text-center text-white space-y-6 shadow-2xl relative overflow-hidden">
+                class="bg-gradient-to-r from-[#0072a3] via-[#0284c7] to-[#0369a1] rounded-3xl p-8 sm:p-12 text-center text-white space-y-6 shadow-2xl relative overflow-hidden">
                 <!-- Decorative Blur Glows -->
                 <div class="absolute -top-24 -left-24 w-72 h-72 bg-white/10 rounded-full blur-3xl pointer-events-none">
                 </div>
@@ -958,6 +958,7 @@
 
     <!-- DETAIL MODAL -->
     <div id="detail-modal"
+        role="dialog" aria-modal="true" aria-labelledby="modal-title"
         class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300 p-4">
         <div id="detail-modal-content"
             class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto custom-modal-scrollbar transform scale-95 transition-transform duration-300 p-6 sm:p-8 space-y-6">
@@ -965,10 +966,10 @@
             <div class="flex justify-between items-start border-b border-slate-100 pb-4">
                 <div>
                     <span id="modal-kategori"
-                        class="px-3 py-1 bg-sky-50 text-[#00A3E0] font-bold text-xs rounded-full">Kategori</span>
-                    <h3 id="modal-title" class="text-2xl font-bold text-slate-900 mt-2">Nama Alat TTG</h3>
+                        class="px-3 py-1 bg-sky-50 text-[#0072a3] font-bold text-xs rounded-full">Kategori</span>
+                    <h2 id="modal-title" class="text-2xl font-bold text-slate-900 mt-2">Nama Alat TTG</h2>
                 </div>
-                <button onclick="closeDetailModal()" class="text-slate-400 hover:text-slate-700 p-1">
+                <button onclick="closeDetailModal()" class="text-slate-400 hover:text-slate-700 p-1 cursor-pointer" aria-label="Tutup modal detail alat">
                     <span class="material-symbols-outlined text-2xl">close</span>
                 </button>
             </div>
@@ -981,11 +982,11 @@
             <!-- Details List Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
                 <div class="p-3.5 bg-slate-50 rounded-xl space-y-1">
-                    <span class="text-slate-400 font-medium block">Inovator / Pembuat</span>
+                    <span class="text-slate-600 font-medium block">Inovator / Pembuat</span>
                     <span id="modal-inovator" class="font-bold text-slate-800 text-sm">-</span>
                 </div>
                 <div class="p-3.5 bg-slate-50 rounded-xl space-y-1">
-                    <span class="text-slate-400 font-medium block">Lokasi Kecamatan</span>
+                    <span class="text-slate-600 font-medium block">Lokasi Kecamatan</span>
                     <span id="modal-wilayah" class="font-bold text-slate-800 text-sm">-</span>
                 </div>
             </div>
@@ -993,12 +994,12 @@
             <!-- Deskripsi & Spesifikasi -->
             <div class="space-y-4 text-xs text-slate-600 leading-relaxed">
                 <div>
-                    <h4 class="font-bold text-slate-900 text-sm mb-1">Deskripsi & Manfaat</h4>
+                    <h3 class="font-bold text-slate-900 text-sm mb-1">Deskripsi & Manfaat</h3>
                     <p id="modal-deskripsi"
                         class="bg-slate-50 p-4 rounded-xl text-slate-700 font-normal whitespace-pre-line">-</p>
                 </div>
                 <div>
-                    <h4 class="font-bold text-slate-900 text-sm mb-1">Spesifikasi Alat</h4>
+                    <h3 class="font-bold text-slate-900 text-sm mb-1">Spesifikasi Alat</h3>
                     <p id="modal-spesifikasi"
                         class="bg-slate-50 p-4 rounded-xl text-slate-700 font-normal whitespace-pre-line">-</p>
                 </div>
@@ -1006,7 +1007,7 @@
 
             <div class="pt-2 flex justify-end">
                 <button onclick="closeDetailModal()"
-                    class="px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-all">
+                    class="px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-all cursor-pointer">
                     Tutup
                 </button>
             </div>

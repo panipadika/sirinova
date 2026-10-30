@@ -11,27 +11,27 @@
                         alt="Logo Kota Tasikmalaya"
                         width="39" height="28" loading="lazy" decoding="async" class="h-7 w-[39px] object-contain" style="aspect-ratio: 160 / 114;">
                 </picture>
-                <span class="text-xl font-black text-[#00A3E0] tracking-tight">
+                <span class="text-xl font-black text-[#0072a3] tracking-tight">
                     SI RINOVA
                 </span>
             </a>
-            <p class="text-slate-500 leading-relaxed">
+            <p class="text-slate-600 leading-relaxed">
                 Bappelitbangda Kota Tasikmalaya. Mendorong inovasi dan penerapan Teknologi Tepat Guna untuk
                 kesejahteraan masyarakat.
             </p>
         </div>
 
-        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-8 font-semibold text-slate-600">
-            <a href="{{ route('lomba.info') }}" class="hover:text-[#00A3E0] transition-colors cursor-pointer text-xs font-bold text-[#00A3E0]">Lomba TTG</a>
-            <button type="button" onclick="openFooterModal('privasi')" class="hover:text-[#00A3E0] transition-colors cursor-pointer text-xs font-semibold focus:outline-none">Kebijakan Privasi</button>
-            <button type="button" onclick="openFooterModal('syarat')" class="hover:text-[#00A3E0] transition-colors cursor-pointer text-xs font-semibold focus:outline-none">Syarat & Ketentuan</button>
-            <button type="button" onclick="openFooterModal('bantuan')" class="hover:text-[#00A3E0] transition-colors cursor-pointer text-xs font-semibold focus:outline-none">Bantuan</button>
-            <a href="{{ route('public.tentang') }}#form-pesan" class="hover:text-[#00A3E0] transition-colors cursor-pointer">Kontak Kami</a>
+        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-8 font-semibold text-slate-700">
+            <a href="{{ route('lomba.info') }}" class="hover:text-[#0072a3] transition-colors cursor-pointer text-xs font-bold text-[#0072a3]">Lomba TTG</a>
+            <button type="button" onclick="openFooterModal('privasi')" class="hover:text-[#0072a3] transition-colors cursor-pointer text-xs font-semibold focus:outline-none">Kebijakan Privasi</button>
+            <button type="button" onclick="openFooterModal('syarat')" class="hover:text-[#0072a3] transition-colors cursor-pointer text-xs font-semibold focus:outline-none">Syarat & Ketentuan</button>
+            <button type="button" onclick="openFooterModal('bantuan')" class="hover:text-[#0072a3] transition-colors cursor-pointer text-xs font-semibold focus:outline-none">Bantuan</button>
+            <a href="{{ route('public.tentang') }}#form-pesan" class="hover:text-[#0072a3] transition-colors cursor-pointer">Kontak Kami</a>
         </div>
 
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 pt-6 border-t border-sky-100/80 text-center text-slate-400">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 pt-6 border-t border-sky-100/80 text-center text-slate-600 text-xs">
         <p>&copy; 2026 Pemerintah Kota Tasikmalaya.</p>
     </div>
 </footer>
@@ -49,7 +49,7 @@
 </style>
 
 <!-- MODAL FOOTER INFO (Kebijakan Privasi, Syarat & Ketentuan, Bantuan) -->
-<div id="footer-info-modal" class="fixed inset-0 z-[9999] hidden items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 transition-all duration-300">
+<div id="footer-info-modal" role="dialog" aria-modal="true" aria-labelledby="footer-modal-title" class="fixed inset-0 z-[9999] hidden items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 transition-all duration-300">
     <div id="footer-modal-card" class="bg-white rounded-3xl shadow-2xl max-w-xl sm:max-w-2xl w-full max-h-[92vh] flex flex-col overflow-hidden transform scale-95 transition-transform duration-300 border border-slate-100">
         
         <!-- Header Modal -->
@@ -63,7 +63,7 @@
                     <p id="footer-modal-subtitle" class="text-xs text-slate-500 mt-0.5"></p>
                 </div>
             </div>
-            <button type="button" onclick="closeFooterModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center transition-colors cursor-pointer" title="Tutup">
+            <button type="button" onclick="closeFooterModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center transition-colors cursor-pointer" title="Tutup" aria-label="Tutup dialog informasi">
                 <span class="material-symbols-outlined text-lg">close</span>
             </button>
         </div>
@@ -75,7 +75,7 @@
 
         <!-- Footer Modal -->
         <div class="p-4 border-t border-slate-100 bg-slate-50/50 flex items-center justify-end">
-            <button type="button" onclick="closeFooterModal()" class="bg-[#00A3E0] hover:bg-[#0090c7] text-white px-6 py-2 rounded-xl text-xs font-bold shadow-md shadow-[#00A3E0]/20 hover:shadow-[#00A3E0]/40 transition-all cursor-pointer">
+            <button type="button" onclick="closeFooterModal()" class="bg-[#0072a3] hover:bg-[#005f88] text-white px-6 py-2 rounded-xl text-xs font-bold shadow-md shadow-[#0072a3]/20 hover:shadow-[#0072a3]/40 transition-all cursor-pointer">
                 Tutup
             </button>
         </div>
