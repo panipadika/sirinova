@@ -25,17 +25,13 @@
     <!-- Compiled High-Performance Tailwind CSS (Local, Gzip ~16KB, Auto-Fallback jika Offline) -->
     <link rel="stylesheet" href="{{ url('/css/tailwind.min.css') }}?v=2" onerror="this.onerror=null;var s=document.createElement('script');s.src='https://cdn.tailwindcss.com';document.head.appendChild(s);">
 
-    <!-- Google Fonts & Material Symbols (Non-render blocking dengan font-display: swap) -->
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" media="print" onload="this.media='all'">
-    <noscript>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap">
-    </noscript>
+    <!-- Preconnect ke Google Fonts & Gstatic untuk Menghilangkan Latensi TLS/DNS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" media="print" onload="this.media='all'">
-    <noscript>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap">
-    </noscript>
+    <!-- Google Fonts & Material Symbols Single Streamlined Request (display: swap & Font Weights Teroptimal) -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap">
 
     <style>
         html, body {
@@ -43,7 +39,7 @@
             padding: 0 !important;
         }
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: #ffffff;
             color: #1e293b;
         }
@@ -54,7 +50,18 @@
         h4,
         h5,
         h6 {
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        /* Prevent Layout Shift for Material Symbols Ligatures */
+        .material-symbols-outlined {
+            width: 1em;
+            height: 1em;
+            overflow: hidden;
+            display: inline-block;
+            vertical-align: middle;
+            font-size: 24px;
+            line-height: 1;
         }
 
         .bg-hero {
@@ -328,11 +335,11 @@
 
             <!-- Logo & Brand Name (Retina WebP ~5.9KB dengan Fallback Aman) -->
             <a href="/" class="flex items-center gap-3 shrink-0 group">
-                <picture>
-                    <source srcset="{{ url('/images/logo_tasik_sm.webp') }}?v=1" type="image/webp">
-                    <img src="{{ url('/images/logo_tasik_sm.png') }}?v=1"
+                <picture class="inline-block shrink-0" style="width: 56px; height: 40px; aspect-ratio: 160 / 114;">
+                    <source srcset="{{ url('/images/logo_tasik_sm.webp') }}?v=2" type="image/webp">
+                    <img src="{{ url('/images/logo_tasik_sm.png') }}?v=2"
                          onerror="this.onerror=null;this.src='{{ asset('storage/images/logo_tasik.png') }}';"
-                         alt="Logo Kota Tasikmalaya" width="40" height="40" class="h-10 w-auto object-contain group-hover:scale-105 transition-transform" fetchpriority="high">
+                         alt="Logo Kota Tasikmalaya" width="56" height="40" class="h-10 w-14 object-contain group-hover:scale-105 transition-transform" style="aspect-ratio: 160 / 114;" fetchpriority="high">
                 </picture>
                 <span class="text-xl sm:text-2xl font-black text-[#00A3E0] tracking-tight">
                     SI RINOVA
@@ -1370,7 +1377,22 @@
             // Init Carousel
             createGaleriDots();
             updateGaleriSlider();
-            startGaleriAutoSlide();
+
+            // IntersectionObserver: Only auto-slide when carousel is in viewport
+            if ('IntersectionObserver' in window) {
+                const galeriObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            startGaleriAutoSlide();
+                        } else {
+                            stopGaleriAutoSlide();
+                        }
+                    });
+                }, { threshold: 0.1 });
+                galeriObserver.observe(galeriContainer);
+            } else {
+                startGaleriAutoSlide();
+            }
         }
     </script>
 </body>

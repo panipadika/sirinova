@@ -4,12 +4,12 @@
 
         <div class="space-y-2 max-w-md">
             <a href="/" class="flex items-center gap-2.5">
-                <picture>
-                    <source srcset="{{ url('/images/logo_tasik_sm.webp') }}?v=1" type="image/webp">
-                    <img src="{{ url('/images/logo_tasik_sm.png') }}?v=1"
+                <picture class="inline-block shrink-0" style="width: 39px; height: 28px; aspect-ratio: 160 / 114;">
+                    <source srcset="{{ url('/images/logo_tasik_sm.webp') }}?v=2" type="image/webp">
+                    <img src="{{ url('/images/logo_tasik_sm.png') }}?v=2"
                         onerror="this.onerror=null;this.src='{{ asset('storage/images/logo_tasik.png') }}';"
                         alt="Logo Kota Tasikmalaya"
-                        width="28" height="28" loading="lazy" decoding="async" class="h-7 w-auto object-contain">
+                        width="39" height="28" loading="lazy" decoding="async" class="h-7 w-[39px] object-contain" style="aspect-ratio: 160 / 114;">
                 </picture>
                 <span class="text-xl font-black text-[#00A3E0] tracking-tight">
                     SI RINOVA
