@@ -19,12 +19,13 @@
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}?v=3">
     <link rel="apple-touch-icon" href="{{ asset('storage/images/favicon_tasik.png') }}?v=3">
 
-    <!-- Preload Critical LCP Hero Image (WebP Format ~85KB untuk Kecepatan Maksimal di Mobile) -->
-    <link rel="preload" as="image" href="{{ url('/images/hero-bg-bappelitbangda.webp') }}?v=20261030" type="image/webp" fetchpriority="high">
+    <!-- Responsive Preload Critical LCP Hero Image (Mobile: 25.4KB, Desktop: 85KB) -->
+    <link rel="preload" as="image" href="{{ url('/images/hero-bg-bappelitbangda-mobile.webp') }}?v=20261030" type="image/webp" media="(max-width: 767px)" fetchpriority="high">
+    <link rel="preload" as="image" href="{{ url('/images/hero-bg-bappelitbangda.webp') }}?v=20261030" type="image/webp" media="(min-width: 768px)" fetchpriority="high">
 
     <!-- Preload Compiled High-Performance Tailwind CSS (Local, Gzip ~16KB, Auto-Fallback jika Offline) -->
-    <link rel="preload" as="style" href="{{ url('/css/tailwind.min.css') }}?v=4">
-    <link rel="stylesheet" href="{{ url('/css/tailwind.min.css') }}?v=4" onerror="this.onerror=null;var s=document.createElement('script');s.src='https://cdn.tailwindcss.com';document.head.appendChild(s);">
+    <link rel="preload" as="style" href="{{ url('/css/tailwind.min.css') }}?v=5" fetchpriority="high">
+    <link rel="stylesheet" href="{{ url('/css/tailwind.min.css') }}?v=5" onerror="this.onerror=null;var s=document.createElement('script');s.src='https://cdn.tailwindcss.com';document.head.appendChild(s);">
 
     <!-- Preconnect ke Google Fonts & Gstatic untuk Menghilangkan Latensi TLS/DNS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -70,16 +71,13 @@
 
         .bg-hero {
             background-image: url("{{ url('/images/hero-bg-bappelitbangda.webp') }}?v=20261030");
-            background-image: image-set(
-                url("{{ url('/images/hero-bg-bappelitbangda.webp') }}?v=20261030") type("image/webp"),
-                url("{{ url('/images/hero-bg-bappelitbangda.jpg') }}?v=20261030") type("image/jpeg")
-            );
             background-size: cover;
             background-position: center right;
         }
 
         @media (max-width: 767px) {
             .bg-hero {
+                background-image: url("{{ url('/images/hero-bg-bappelitbangda-mobile.webp') }}?v=20261030");
                 background-position: 80% center;
             }
         }
@@ -198,6 +196,17 @@
         .animate-hero-buttons {
             animation: heroPopUp 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.45s forwards;
             opacity: 0;
+        }
+
+        /* Mobile Instant Paint Optimization (Menghilangkan Penundaan LCP 1.5 detik pada Mobile) */
+        @media (max-width: 768px) {
+            .animate-hero-title,
+            .animate-hero-subtitle,
+            .animate-hero-buttons {
+                animation: none !important;
+                opacity: 1 !important;
+                transform: none !important;
+            }
         }
 
         /* Hide scrollbar completely for all browsers */
@@ -341,8 +350,8 @@
             <a href="/" class="flex items-center gap-3 shrink-0 group">
                 <picture class="inline-block shrink-0" style="width: 56px; height: 40px; aspect-ratio: 160 / 114;">
                     <source srcset="{{ url('/images/logo_tasik_sm.webp') }}?v=2" type="image/webp">
-                    <img src="{{ url('/images/logo_tasik_sm.png') }}?v=2"
-                         onerror="this.onerror=null;this.src='{{ asset('storage/images/logo_tasik.png') }}';"
+                    <img src="{{ url('/images/logo_tasik_sm.webp') }}?v=2"
+                         onerror="this.onerror=null;this.src='{{ url('/images/logo_tasik_sm.png') }}';"
                          alt="Logo Kota Tasikmalaya" width="56" height="40" class="h-10 w-14 object-contain group-hover:scale-105 transition-transform" style="aspect-ratio: 160 / 114;" fetchpriority="high" decoding="async">
                 </picture>
                 <span class="text-xl sm:text-2xl font-black text-[#00A3E0] tracking-tight">
@@ -1102,10 +1111,18 @@
             revealElements.forEach(el => revealObserver.observe(el));
         }
 
+        function scheduleScrollReveals() {
+            if ('requestIdleCallback' in window) {
+                requestIdleCallback(() => initScrollReveals(), { timeout: 800 });
+            } else {
+                setTimeout(initScrollReveals, 50);
+            }
+        }
+
         if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initScrollReveals);
+            document.addEventListener('DOMContentLoaded', scheduleScrollReveals);
         } else {
-            initScrollReveals();
+            scheduleScrollReveals();
         }
 
         // Detail Modal Logic
