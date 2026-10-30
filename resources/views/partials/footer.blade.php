@@ -22,7 +22,7 @@
         </div>
 
         <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-8 font-semibold text-slate-700">
-            <a href="{{ route('lomba.info') }}" class="hover:text-[#00A3E0] transition-colors cursor-pointer text-xs font-bold text-[#00A3E0]">Lomba TTG</a>
+            <a href="{{ route('lomba.info') }}" class="hover:text-[#00A3E0] transition-colors cursor-pointer text-xs font-semibold">Lomba TTG</a>
             <button type="button" onclick="openFooterModal('privasi')" class="hover:text-[#00A3E0] transition-colors cursor-pointer text-xs font-semibold focus:outline-none">Kebijakan Privasi</button>
             <button type="button" onclick="openFooterModal('syarat')" class="hover:text-[#00A3E0] transition-colors cursor-pointer text-xs font-semibold focus:outline-none">Syarat & Ketentuan</button>
             <button type="button" onclick="openFooterModal('bantuan')" class="hover:text-[#00A3E0] transition-colors cursor-pointer text-xs font-semibold focus:outline-none">Bantuan</button>

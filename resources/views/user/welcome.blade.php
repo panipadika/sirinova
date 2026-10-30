@@ -23,7 +23,7 @@
     <link rel="preload" as="image" href="{{ url('/images/hero-bg-bappelitbangda.webp') }}?v=20261030" type="image/webp" fetchpriority="high">
 
     <!-- Compiled High-Performance Tailwind CSS (Local, Gzip ~16KB, Auto-Fallback jika Offline) -->
-    <link rel="stylesheet" href="{{ url('/css/tailwind.min.css') }}?v=3" onerror="this.onerror=null;var s=document.createElement('script');s.src='https://cdn.tailwindcss.com';document.head.appendChild(s);">
+    <link rel="stylesheet" href="{{ url('/css/tailwind.min.css') }}?v=4" onerror="this.onerror=null;var s=document.createElement('script');s.src='https://cdn.tailwindcss.com';document.head.appendChild(s);">
 
     <!-- Preconnect ke Google Fonts & Gstatic untuk Menghilangkan Latensi TLS/DNS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -915,33 +915,34 @@
         <!-- 5. CALL TO ACTION BANNER -->
         <section id="tentang" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
             <div
-                class="bg-gradient-to-r from-[#00A3E0] via-[#008bc0] to-[#0284c7] rounded-3xl p-8 sm:p-12 text-center text-white space-y-6 shadow-2xl relative overflow-hidden">
+                class="rounded-3xl p-8 sm:p-12 text-center text-white space-y-6 shadow-2xl relative overflow-hidden border border-[#00A3E0]/30"
+                style="background: linear-gradient(135deg, #072a40 0%, #005a82 50%, #051a29 100%);">
                 <!-- Decorative Blur Glows -->
-                <div class="absolute -top-24 -left-24 w-72 h-72 bg-white/10 rounded-full blur-3xl pointer-events-none">
+                <div class="absolute -top-24 -left-24 w-72 h-72 bg-[#00A3E0]/20 rounded-full blur-3xl pointer-events-none">
                 </div>
                 <div
-                    class="absolute -bottom-24 -right-24 w-72 h-72 bg-yellow-300/15 rounded-full blur-3xl pointer-events-none">
+                    class="absolute -bottom-24 -right-24 w-72 h-72 bg-[#00A3E0]/15 rounded-full blur-3xl pointer-events-none">
                 </div>
 
                 <div class="relative z-10 max-w-2xl mx-auto space-y-4">
                     <span
-                        class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-white/15 backdrop-blur-md rounded-full text-xs font-bold text-yellow-300 border border-white/20">
-                        <span class="material-symbols-outlined text-sm">lightbulb</span>
+                        class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-slate-900/60 backdrop-blur-md rounded-full text-xs font-bold text-yellow-300 border border-yellow-400/30 shadow-sm">
+                        <span class="material-symbols-outlined text-sm text-yellow-300">lightbulb</span>
                         Fasilitasi Inovasi Daerah
                     </span>
 
-                    <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight">
+                    <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight text-white drop-shadow-sm">
                         Punya Inovasi Teknologi Tepat Guna?
                     </h2>
 
-                    <p class="text-sky-100 text-sm sm:text-base font-normal leading-relaxed">
+                    <p class="text-slate-100 text-sm sm:text-base font-normal leading-relaxed max-w-xl mx-auto">
                         Daftarkan karya atau hasil inovasi Anda agar terpublikasi di SI RINOVA Kota Tasikmalaya dan
                         dapat dimanfaatkan oleh masyarakat luas.
                     </p>
 
                     <div class="pt-3 flex justify-center">
                         <a href="{{ route('public.tentang') }}#form-pesan"
-                            class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#fed000] hover:bg-yellow-400 hover:scale-105 active:scale-95 text-slate-900 px-8 py-3.5 rounded-xl font-bold text-sm transition-all duration-300 shadow-lg shadow-yellow-500/20">
+                            class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#fed000] hover:bg-yellow-400 hover:scale-105 active:scale-95 text-slate-900 px-8 py-3.5 rounded-xl font-bold text-sm transition-all duration-300 shadow-lg shadow-yellow-500/25">
                             <span class="material-symbols-outlined text-lg">send</span>
                             <span>Kirim Pesan</span>
                         </a>
