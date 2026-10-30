@@ -26,7 +26,7 @@
     <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
 
     <!-- Preload Critical LCP Hero Image (Gambar Baru Gedung Bappelitbangda) -->
-    <link rel="preload" as="image" href="{{ asset('images/hero-bg-bappelitbangda.jpg') }}?v=1" fetchpriority="high">
+    <link rel="preload" as="image" href="{{ asset('images/hero-bg-bappelitbangda.jpg') }}?v=20261030" fetchpriority="high">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -64,14 +64,14 @@
         }
 
         .bg-hero {
-            background-image: url("{{ asset('images/hero-bg-bappelitbangda.jpg') }}?v=1");
+            background-image: url("{{ asset('images/hero-bg-bappelitbangda.jpg') }}?v=20261030");
             background-size: cover;
             background-position: center right;
         }
 
         @media (max-width: 767px) {
             .bg-hero {
-                background-position: 95% 10%;
+                background-position: 80% center;
             }
         }
 
