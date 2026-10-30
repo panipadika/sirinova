@@ -304,41 +304,44 @@
                             </div>
 
                             <!-- Card Body Info -->
-                            <div class="p-3 sm:p-5 space-y-1.5 sm:space-y-3">
-                                <h3 class="font-extrabold text-slate-900 text-xs sm:text-base leading-snug line-clamp-2 min-h-[2.25rem] sm:min-h-[2.75rem] group-hover:text-[#00A3E0] transition-colors flex items-start">
+                            <div class="p-3 sm:p-5 space-y-1.5 sm:space-y-2.5">
+                                <h3 class="font-extrabold text-slate-900 text-xs sm:text-base leading-snug line-clamp-3 group-hover:text-[#00A3E0] transition-colors">
                                     <a href="{{ route('katalog.show', $item->id) }}">
                                         {{ $item->nama_alat }}
                                     </a>
                                 </h3>
                                 
-                                <p class="hidden sm:block text-slate-500 text-xs leading-relaxed line-clamp-2 sm:min-h-[2.25rem]">
+                                <p class="hidden sm:block text-slate-500 text-xs leading-relaxed line-clamp-2">
                                     {{ Str::limit($item->deskripsi ?? 'Tidak ada deskripsi singkat.', 90, '...') }}
                                 </p>
-
-                                <!-- Metadata info -->
-                                <div class="pt-2 sm:pt-3 space-y-1 sm:space-y-1.5 text-[10px] sm:text-xs text-slate-500 font-medium border-t border-slate-100">
-                                    <p class="flex items-center gap-1 sm:gap-2 truncate">
-                                        <span class="material-symbols-outlined text-sm sm:text-base text-slate-400 shrink-0">person</span>
-                                        <span class="truncate"><span class="hidden sm:inline">Inovator: </span><strong class="text-slate-800 font-semibold">{{ $item->inovator->nama_inovator ?? 'Inovator Mandiri' }}</strong></span>
-                                    </p>
-                                    <p class="flex items-center gap-1 sm:gap-2 truncate">
-                                        <span class="material-symbols-outlined text-sm sm:text-base text-slate-400 shrink-0">location_on</span>
-                                        <span class="truncate">Kec. <strong class="text-slate-800 font-semibold">{{ $item->wilayah->nama_kecamatan ?? 'Tasikmalaya' }}</strong></span>
-                                    </p>
-                                    <p class="flex items-center gap-1 sm:gap-2">
-                                        <span class="material-symbols-outlined text-sm sm:text-base text-slate-400 shrink-0">calendar_today</span>
-                                        <span>Tahun <strong class="text-slate-800 font-semibold">{{ $item->tahun_produksi ?? '-' }}</strong></span>
-                                    </p>
-                                </div>
                             </div>
                         </div>
 
-                        <!-- Card Footer CTA Button -->
-                        <div class="p-3 sm:p-5 pt-0">
-                            <a href="{{ route('katalog.show', $item->id) }}"
-                               class="w-full py-1.5 sm:py-2.5 px-2 sm:px-4 bg-sky-50 hover:bg-[#00A3E0] text-[#00A3E0] hover:text-white rounded-lg sm:rounded-xl text-[10px] sm:text-xs font-bold transition-all text-center flex items-center justify-center gap-1 group-hover:shadow-md">
-                                <span>Lihat Detail</span>
-                            </a>
+                        <!-- Card Footer Info & CTA Button (Pinned Bottom) -->
+                        <div class="mt-auto">
+                            <!-- Metadata info -->
+                            <div class="px-3 sm:px-5 pb-3 sm:pb-3.5 space-y-1 sm:space-y-1.5 text-[10px] sm:text-xs text-slate-500 font-medium border-t border-slate-100 pt-2 sm:pt-3">
+                                <p class="flex items-center gap-1 sm:gap-2 truncate">
+                                    <span class="material-symbols-outlined text-sm sm:text-base text-slate-400 shrink-0">person</span>
+                                    <span class="truncate"><span class="hidden sm:inline">Inovator: </span><strong class="text-slate-800 font-semibold">{{ $item->inovator->nama_inovator ?? 'Inovator Mandiri' }}</strong></span>
+                                </p>
+                                <p class="flex items-center gap-1 sm:gap-2 truncate">
+                                    <span class="material-symbols-outlined text-sm sm:text-base text-slate-400 shrink-0">location_on</span>
+                                    <span class="truncate">Kec. <strong class="text-slate-800 font-semibold">{{ $item->wilayah->nama_kecamatan ?? 'Tasikmalaya' }}</strong></span>
+                                </p>
+                                <p class="flex items-center gap-1 sm:gap-2">
+                                    <span class="material-symbols-outlined text-sm sm:text-base text-slate-400 shrink-0">calendar_today</span>
+                                    <span>Tahun <strong class="text-slate-800 font-semibold">{{ $item->tahun_produksi ?? '-' }}</strong></span>
+                                </p>
+                            </div>
+
+                            <!-- Card Footer CTA Button -->
+                            <div class="p-3 sm:p-5 pt-0">
+                                <a href="{{ route('katalog.show', $item->id) }}"
+                                   class="w-full py-1.5 sm:py-2.5 px-2 sm:px-4 bg-sky-50 hover:bg-[#00A3E0] text-[#00A3E0] hover:text-white rounded-lg sm:rounded-xl text-[10px] sm:text-xs font-bold transition-all text-center flex items-center justify-center gap-1 group-hover:shadow-md">
+                                    <span>Lihat Detail</span>
+                                </a>
+                            </div>
                         </div>
 
                     </div>

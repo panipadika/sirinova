@@ -627,30 +627,34 @@
                         </div>
 
                         <!-- Card Content -->
-                        <div class="p-3 sm:p-5 lg:p-6 flex-1 flex flex-col justify-between gap-2 sm:gap-4">
+                        <div class="p-3 sm:p-5 lg:p-6 flex-1 flex flex-col justify-between">
+                            <!-- Bagian Atas: Judul Alat TTG (Maksimal 3 Baris) -->
                             <div>
                                 <h3
-                                    class="text-xs sm:text-base lg:text-lg font-bold text-slate-900 group-hover:text-[#00A3E0] transition-colors leading-snug line-clamp-2 min-h-[2.25rem] sm:min-h-[2.75rem] lg:min-h-[3.25rem] flex items-start">
+                                    class="text-xs sm:text-base lg:text-lg font-bold text-slate-900 group-hover:text-[#00A3E0] transition-colors leading-snug line-clamp-3">
                                     {{ $item->nama_alat }}
                                 </h3>
+                            </div>
 
-                                <div class="mt-1.5 sm:mt-3 space-y-1 sm:space-y-1.5 text-[10px] sm:text-xs text-slate-500 font-medium">
+                            <!-- Bagian Bawah: Inovator, Lokasi, dan Tombol (Terkunci Rapi Sejajar di Dasar Kartu) -->
+                            <div class="mt-auto pt-3 sm:pt-4 space-y-2.5 sm:space-y-3.5">
+                                <div class="space-y-1 sm:space-y-1.5 text-[10px] sm:text-xs text-slate-500 font-medium">
                                     <p class="flex items-center gap-1 sm:gap-2">
-                                        <span class="material-symbols-outlined text-sm sm:text-base text-slate-400">person</span>
+                                        <span class="material-symbols-outlined text-sm sm:text-base text-slate-400 shrink-0">person</span>
                                         <span class="truncate">{{ $item->inovator->nama_inovator ?? 'Inovator Mandiri' }}</span>
                                     </p>
                                     <p class="flex items-center gap-1 sm:gap-2">
-                                        <span class="material-symbols-outlined text-sm sm:text-base text-slate-400">location_on</span>
+                                        <span class="material-symbols-outlined text-sm sm:text-base text-slate-400 shrink-0">location_on</span>
                                         <span class="truncate">Kec. {{ $item->wilayah->nama_kecamatan ?? 'Tasikmalaya' }}</span>
                                     </p>
                                 </div>
-                            </div>
 
-                            <!-- Detail Link Button -->
-                            <a href="{{ route('katalog.show', $item->id) }}"
-                                class="w-full py-1.5 sm:py-2.5 px-2 sm:px-4 border border-[#00A3E0]/40 text-[#00A3E0] hover:bg-[#00A3E0] hover:text-white rounded-lg sm:rounded-xl text-[10px] sm:text-xs font-bold transition-all text-center flex items-center justify-center gap-1">
-                                Lihat Detail
-                            </a>
+                                <!-- Detail Link Button -->
+                                <a href="{{ route('katalog.show', $item->id) }}"
+                                    class="w-full py-1.5 sm:py-2.5 px-2 sm:px-4 border border-[#00A3E0]/40 text-[#00A3E0] hover:bg-[#00A3E0] hover:text-white rounded-lg sm:rounded-xl text-[10px] sm:text-xs font-bold transition-all text-center flex items-center justify-center gap-1">
+                                    Lihat Detail
+                                </a>
+                            </div>
                         </div>
 
                     </div>
