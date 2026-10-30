@@ -19,17 +19,11 @@
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}?v=3">
     <link rel="apple-touch-icon" href="{{ asset('storage/images/favicon_tasik.png') }}?v=3">
 
-    <!-- Preconnect ke Origin Eksternal untuk Mempercepat Download -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://cdn.tailwindcss.com">
-    <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
+    <!-- Preload Critical LCP Hero Image (WebP Format ~85KB untuk Kecepatan Maksimal di Mobile) -->
+    <link rel="preload" as="image" href="{{ url('/images/hero-bg-bappelitbangda.webp') }}?v=20261030" type="image/webp" fetchpriority="high">
 
-    <!-- Preload Critical LCP Hero Image (Gambar Baru Gedung Bappelitbangda) -->
-    <link rel="preload" as="image" href="{{ asset('images/hero-bg-bappelitbangda.jpg') }}?v=20261030" fetchpriority="high">
-
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Compiled High-Performance Tailwind CSS (Local, Gzip ~16KB, Auto-Fallback jika Offline) -->
+    <link rel="stylesheet" href="{{ url('/css/tailwind.min.css') }}?v=2" onerror="this.onerror=null;var s=document.createElement('script');s.src='https://cdn.tailwindcss.com';document.head.appendChild(s);">
 
     <!-- Google Fonts & Material Symbols (Non-render blocking dengan font-display: swap) -->
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap">
@@ -64,7 +58,11 @@
         }
 
         .bg-hero {
-            background-image: url("{{ asset('images/hero-bg-bappelitbangda.jpg') }}?v=20261030");
+            background-image: url("{{ url('/images/hero-bg-bappelitbangda.webp') }}?v=20261030");
+            background-image: image-set(
+                url("{{ url('/images/hero-bg-bappelitbangda.webp') }}?v=20261030") type("image/webp"),
+                url("{{ url('/images/hero-bg-bappelitbangda.jpg') }}?v=20261030") type("image/jpeg")
+            );
             background-size: cover;
             background-position: center right;
         }
@@ -328,10 +326,14 @@
     <header class="bg-white/95 backdrop-blur-md sticky top-0 z-50 border-b border-slate-100 shadow-sm transition-all m-0" style="top: 0; margin-top: 0;">
         <div class="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
 
-            <!-- Logo & Brand Name -->
+            <!-- Logo & Brand Name (Retina WebP ~5.9KB dengan Fallback Aman) -->
             <a href="/" class="flex items-center gap-3 shrink-0 group">
-                <img src="{{ asset('storage/images/logo_tasik.png') }}"
-                     alt="Logo Kota Tasikmalaya" width="40" height="40" class="h-10 w-auto object-contain group-hover:scale-105 transition-transform" fetchpriority="high">
+                <picture>
+                    <source srcset="{{ url('/images/logo_tasik_sm.webp') }}?v=1" type="image/webp">
+                    <img src="{{ url('/images/logo_tasik_sm.png') }}?v=1"
+                         onerror="this.onerror=null;this.src='{{ asset('storage/images/logo_tasik.png') }}';"
+                         alt="Logo Kota Tasikmalaya" width="40" height="40" class="h-10 w-auto object-contain group-hover:scale-105 transition-transform" fetchpriority="high">
+                </picture>
                 <span class="text-xl sm:text-2xl font-black text-[#00A3E0] tracking-tight">
                     SI RINOVA
                 </span>
@@ -675,11 +677,20 @@
                                 <div class="book-spine-crease"></div>
 
                                 @if(!empty($kajian->cover_image))
-                                    <!-- Real Book Cover Image -->
-                                    <img src="{{ Str::startsWith($kajian->cover_image, 'http') ? $kajian->cover_image : (Str::startsWith($kajian->cover_image, 'storage/') ? asset($kajian->cover_image) : asset('storage/' . $kajian->cover_image)) }}" 
-                                         alt="{{ $kajian->judul }}" 
-                                         loading="lazy" decoding="async"
-                                         class="absolute inset-0 w-full h-full object-cover rounded-r-sm">
+                                    @php
+                                        $coverRaw = $kajian->cover_image;
+                                        $coverUrl = Str::startsWith($coverRaw, 'http') ? $coverRaw : (Str::startsWith($coverRaw, 'storage/') ? asset($coverRaw) : asset('storage/' . $coverRaw));
+                                        $coverWebp = preg_replace('/\.(jpg|jpeg|png)$/i', '.webp', $coverUrl);
+                                    @endphp
+                                    <!-- Real Book Cover Image (WebP Optimized ~15-25KB) -->
+                                    <picture>
+                                        <source srcset="{{ $coverWebp }}" type="image/webp">
+                                        <img src="{{ $coverUrl }}" 
+                                             alt="{{ $kajian->judul }}" 
+                                             width="263" height="367"
+                                             loading="lazy" decoding="async"
+                                             class="absolute inset-0 w-full h-full object-cover rounded-r-sm">
+                                    </picture>
                                     <div class="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-slate-950/20 pointer-events-none"></div>
                                 @else
                                     <!-- Fallback Plain Gradient Cover -->

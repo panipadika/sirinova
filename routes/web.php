@@ -23,24 +23,101 @@ use App\Http\Controllers\AdminLombaController;
 |--------------------------------------------------------------------------
 */
 
-// Route Hero Background Image Baru (Gedung Bappelitbangda + Tugu Asmaul Husna)
-Route::get('/images/hero-bg-bappelitbangda.jpg', function () {
+// Route Compiled High-Performance Tailwind CSS (Local & Gzipped)
+Route::get('/css/tailwind.min.css', function () {
     $candidates = [
-        public_path('images/hero-bg-bappelitbangda.jpg'),
-        base_path('public/images/hero-bg-bappelitbangda.jpg'),
-        base_path('public/images/hero-bg.jpg'),
-        storage_path('app/public/images/hero-bg-bappelitbangda.jpg'),
+        public_path('css/tailwind.min.css'),
+        base_path('public/css/tailwind.min.css'),
     ];
     foreach ($candidates as $file) {
         if (file_exists($file)) {
-            return response()->file($file, [
-                'Content-Type' => 'image/jpeg',
+            return response(file_get_contents($file), 200, [
+                'Content-Type' => 'text/css; charset=UTF-8',
                 'Cache-Control' => 'public, max-age=31536000, immutable',
             ]);
         }
     }
     abort(404);
-})->name('hero.bg');
+})->name('tailwind.css');
+
+// Route Hero Background & Optimized Assets
+Route::get('/images/{filename}', function ($filename) {
+    $allowed = [
+        'hero-bg-bappelitbangda.webp',
+        'hero-bg-bappelitbangda.jpg',
+        'hero-bg.webp',
+        'hero-bg.jpg',
+        'logo_tasik_sm.webp',
+        'logo_tasik_sm.png',
+    ];
+    if (in_array($filename, $allowed)) {
+        $candidates = [
+            public_path('images/' . $filename),
+            base_path('public/images/' . $filename),
+            storage_path('app/public/images/' . $filename),
+        ];
+        foreach ($candidates as $file) {
+            if (file_exists($file)) {
+                $mime = str_ends_with($filename, '.webp') ? 'image/webp' : (str_ends_with($filename, '.png') ? 'image/png' : 'image/jpeg');
+                return response()->file($file, [
+                    'Content-Type' => $mime,
+                    'Cache-Control' => 'public, max-age=31536000, immutable',
+                ]);
+            }
+        }
+    }
+    abort(404);
+})->where('filename', '[a-zA-Z0-9_\-\.]+')->name('static.image');
+
+// Dynamic WebP Generator & Server untuk Cover E-Book (Memangkas ~80% ukuran gambar di Mobile)
+Route::get('/storage/ebooks/covers/{filename}', function ($filename) {
+    if (str_ends_with(strtolower($filename), '.webp')) {
+        $baseName = pathinfo($filename, PATHINFO_FILENAME);
+        $dirs = [
+            base_path('../public_html/storage/ebooks/covers'),
+            storage_path('app/public/ebooks/covers'),
+            public_path('storage/ebooks/covers'),
+        ];
+        foreach ($dirs as $dir) {
+            $webpPath = $dir . '/' . $filename;
+            if (file_exists($webpPath)) {
+                return response()->file($webpPath, [
+                    'Content-Type' => 'image/webp',
+                    'Cache-Control' => 'public, max-age=31536000, immutable',
+                ]);
+            }
+            foreach (['jpg', 'jpeg', 'png'] as $ext) {
+                $orig = $dir . '/' . $baseName . '.' . $ext;
+                if (file_exists($orig)) {
+                    $src = ($ext === 'png') ? @imagecreatefrompng($orig) : @imagecreatefromjpeg($orig);
+                    if ($src) {
+                        $w = imagesx($src);
+                        $h = imagesy($src);
+                        $maxW = 400;
+                        if ($w > $maxW) {
+                            $newW = $maxW;
+                            $newH = (int) round(($h / $w) * $newW);
+                            $dst = imagecreatetruecolor($newW, $newH);
+                            imagecopyresampled($dst, $src, 0, 0, 0, 0, $newW, $newH, $w, $h);
+                            @imagewebp($dst, $webpPath, 80);
+                            unset($dst);
+                        } else {
+                            @imagewebp($src, $webpPath, 80);
+                        }
+                        unset($src);
+                        if (file_exists($webpPath)) {
+                            return response()->file($webpPath, [
+                                'Content-Type' => 'image/webp',
+                                'Cache-Control' => 'public, max-age=31536000, immutable',
+                            ]);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    abort(404);
+});
 
 // Halaman Utama Publik, Katalog, Kategori, Wilayah & Tentang
 Route::get('/', [PublicController::class, 'index'])->name('home');
