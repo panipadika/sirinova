@@ -22,16 +22,20 @@
     <!-- Preload Critical LCP Hero Image (WebP Format ~85KB untuk Kecepatan Maksimal di Mobile) -->
     <link rel="preload" as="image" href="{{ url('/images/hero-bg-bappelitbangda.webp') }}?v=20261030" type="image/webp" fetchpriority="high">
 
-    <!-- Compiled High-Performance Tailwind CSS (Local, Gzip ~16KB, Auto-Fallback jika Offline) -->
+    <!-- Preload Compiled High-Performance Tailwind CSS (Local, Gzip ~16KB, Auto-Fallback jika Offline) -->
+    <link rel="preload" as="style" href="{{ url('/css/tailwind.min.css') }}?v=4">
     <link rel="stylesheet" href="{{ url('/css/tailwind.min.css') }}?v=4" onerror="this.onerror=null;var s=document.createElement('script');s.src='https://cdn.tailwindcss.com';document.head.appendChild(s);">
 
     <!-- Preconnect ke Google Fonts & Gstatic untuk Menghilangkan Latensi TLS/DNS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <!-- Google Fonts & Material Symbols Single Streamlined Request (display: swap & Font Weights Teroptimal) -->
+    <!-- Asynchronous Non-blocking Google Fonts & Material Symbols (Display: swap & Mengeliminasi Render Blocking 750ms) -->
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap">
+    </noscript>
 
     <style>
         html, body {
@@ -339,7 +343,7 @@
                     <source srcset="{{ url('/images/logo_tasik_sm.webp') }}?v=2" type="image/webp">
                     <img src="{{ url('/images/logo_tasik_sm.png') }}?v=2"
                          onerror="this.onerror=null;this.src='{{ asset('storage/images/logo_tasik.png') }}';"
-                         alt="Logo Kota Tasikmalaya" width="56" height="40" class="h-10 w-14 object-contain group-hover:scale-105 transition-transform" style="aspect-ratio: 160 / 114;" fetchpriority="high">
+                         alt="Logo Kota Tasikmalaya" width="56" height="40" class="h-10 w-14 object-contain group-hover:scale-105 transition-transform" style="aspect-ratio: 160 / 114;" fetchpriority="high" decoding="async">
                 </picture>
                 <span class="text-xl sm:text-2xl font-black text-[#00A3E0] tracking-tight">
                     SI RINOVA
@@ -1370,30 +1374,41 @@
             galeriContainer.addEventListener('mouseenter', stopGaleriAutoSlide);
             galeriContainer.addEventListener('mouseleave', startGaleriAutoSlide);
 
-            // Responsive Resize Listener
-            window.addEventListener('resize', () => {
+            let galeriInitialized = false;
+
+            function initGaleri() {
+                if (galeriInitialized) return;
+                galeriInitialized = true;
                 createGaleriDots();
                 updateGaleriSlider();
+            }
+
+            // Responsive Resize Listener
+            window.addEventListener('resize', () => {
+                if (galeriInitialized) {
+                    createGaleriDots();
+                    updateGaleriSlider();
+                }
             });
 
-            // Init Carousel
-            createGaleriDots();
-            updateGaleriSlider();
-
-            // IntersectionObserver: Only auto-slide when carousel is in viewport
+            // Lazy-init Carousel & auto-slide only when near viewport (eliminates forced reflow on page load)
             if ('IntersectionObserver' in window) {
                 const galeriObserver = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
+                            initGaleri();
                             startGaleriAutoSlide();
                         } else {
                             stopGaleriAutoSlide();
                         }
                     });
-                }, { threshold: 0.1 });
+                }, { rootMargin: '200px 0px', threshold: 0.05 });
                 galeriObserver.observe(galeriContainer);
             } else {
-                startGaleriAutoSlide();
+                window.addEventListener('load', () => {
+                    initGaleri();
+                    startGaleriAutoSlide();
+                });
             }
         }
     </script>
