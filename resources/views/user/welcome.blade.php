@@ -19,17 +19,15 @@
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}?v=3">
     <link rel="apple-touch-icon" href="{{ asset('storage/images/favicon_tasik.png') }}?v=3">
 
-    <!-- Preconnect ke Origin Eksternal untuk Mempercepat Download -->
+    <!-- Preconnect ke Origin Eksternal untuk Mempercepat Download Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://cdn.tailwindcss.com">
-    <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
 
     <!-- Preload Critical LCP Hero Image (Langsung mengunduh gambar gedung sejak awal) -->
     <link rel="preload" as="image" href="{{ asset('images/hero-bg.jpg') }}?v=3" fetchpriority="high">
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Compiled Static Tailwind CSS (Gzip-compressed, cached, No JS render blocking) -->
+    <link rel="stylesheet" href="{{ asset('css/tailwind.min.css') }}?v=1">
 
     <!-- Google Fonts & Material Symbols (Non-render blocking dengan font-display: swap) -->
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap">
@@ -1107,9 +1105,10 @@
                     }
 
                     modal.classList.remove('hidden');
-                    void modal.offsetWidth;
-                    modal.classList.remove('opacity-0');
-                    modalContent.classList.remove('scale-95');
+                    requestAnimationFrame(() => {
+                        modal.classList.remove('opacity-0');
+                        modalContent.classList.remove('scale-95');
+                    });
                 })
                 .catch(err => console.error(err));
         }
@@ -1281,13 +1280,14 @@
                 if (galeriCurrentIndex > maxIdx) galeriCurrentIndex = 0;
                 if (galeriCurrentIndex < 0) galeriCurrentIndex = maxIdx;
 
-                const firstCard = galeriCards[0];
-                if (firstCard) {
-                    const cardWidth = firstCard.offsetWidth;
-                    const gap = 24; // 6 * 4px gap
-                    const moveAmount = galeriCurrentIndex * (cardWidth + gap);
-                    galeriSlider.style.transform = `translateX(-${moveAmount}px)`;
+                // Hitung pergeseran murni via CSS calc tanpa query offsetWidth yang memicu forced reflow
+                let stepCalc = '100% + 24px';
+                if (window.innerWidth >= 1024) {
+                    stepCalc = '33.333% + 8px';
+                } else if (window.innerWidth >= 640) {
+                    stepCalc = '50% + 12px';
                 }
+                galeriSlider.style.transform = `translateX(calc(-1 * ${galeriCurrentIndex} * (${stepCalc})))`;
 
                 // Update Dots
                 if (galeriDotsContainer) {
