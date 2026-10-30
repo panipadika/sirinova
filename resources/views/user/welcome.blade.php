@@ -630,7 +630,7 @@
                         <div class="p-3 sm:p-5 lg:p-6 flex-1 flex flex-col justify-between gap-2 sm:gap-4">
                             <div>
                                 <h3
-                                    class="text-xs sm:text-base lg:text-lg font-bold text-slate-900 group-hover:text-[#00A3E0] transition-colors leading-snug line-clamp-2">
+                                    class="text-xs sm:text-base lg:text-lg font-bold text-slate-900 group-hover:text-[#00A3E0] transition-colors leading-snug line-clamp-2 min-h-[2.25rem] sm:min-h-[2.75rem] lg:min-h-[3.25rem] flex items-start">
                                     {{ $item->nama_alat }}
                                 </h3>
 
@@ -930,18 +930,18 @@
         <!-- 5. CALL TO ACTION BANNER -->
         <section id="tentang" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
             <div
-                class="rounded-3xl p-8 sm:p-12 text-center text-white space-y-6 shadow-2xl relative overflow-hidden border border-[#00A3E0]/30"
-                style="background: linear-gradient(135deg, #072a40 0%, #005a82 50%, #051a29 100%);">
+                class="rounded-3xl p-8 sm:p-12 text-center text-white space-y-6 shadow-2xl relative overflow-hidden border border-white/20"
+                style="background: linear-gradient(135deg, #00A3E0 0%, #0093ca 45%, #0277a8 100%);">
                 <!-- Decorative Blur Glows -->
-                <div class="absolute -top-24 -left-24 w-72 h-72 bg-[#00A3E0]/20 rounded-full blur-3xl pointer-events-none">
+                <div class="absolute -top-24 -left-24 w-72 h-72 bg-white/20 rounded-full blur-3xl pointer-events-none">
                 </div>
                 <div
-                    class="absolute -bottom-24 -right-24 w-72 h-72 bg-[#00A3E0]/15 rounded-full blur-3xl pointer-events-none">
+                    class="absolute -bottom-24 -right-24 w-72 h-72 bg-sky-200/25 rounded-full blur-3xl pointer-events-none">
                 </div>
 
                 <div class="relative z-10 max-w-2xl mx-auto space-y-4">
                     <span
-                        class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-slate-900/60 backdrop-blur-md rounded-full text-xs font-bold text-yellow-300 border border-yellow-400/30 shadow-sm">
+                        class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-sky-950/30 backdrop-blur-md rounded-full text-xs font-bold text-yellow-300 border border-yellow-300/40 shadow-sm">
                         <span class="material-symbols-outlined text-sm text-yellow-300">lightbulb</span>
                         Fasilitasi Inovasi Daerah
                     </span>
@@ -950,14 +950,14 @@
                         Punya Inovasi Teknologi Tepat Guna?
                     </h2>
 
-                    <p class="text-slate-100 text-sm sm:text-base font-normal leading-relaxed max-w-xl mx-auto">
+                    <p class="text-sky-50 text-sm sm:text-base font-normal leading-relaxed max-w-xl mx-auto">
                         Daftarkan karya atau hasil inovasi Anda agar terpublikasi di SI RINOVA Kota Tasikmalaya dan
                         dapat dimanfaatkan oleh masyarakat luas.
                     </p>
 
                     <div class="pt-3 flex justify-center">
                         <a href="{{ route('public.tentang') }}#form-pesan"
-                            class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#fed000] hover:bg-yellow-400 hover:scale-105 active:scale-95 text-slate-900 px-8 py-3.5 rounded-xl font-bold text-sm transition-all duration-300 shadow-lg shadow-yellow-500/25">
+                            class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#fed000] hover:bg-yellow-400 hover:scale-105 active:scale-95 text-slate-900 px-8 py-3.5 rounded-xl font-bold text-sm transition-all duration-300 shadow-lg shadow-sky-900/20">
                             <span class="material-symbols-outlined text-lg">send</span>
                             <span>Kirim Pesan</span>
                         </a>

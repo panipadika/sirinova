@@ -305,13 +305,13 @@
 
                             <!-- Card Body Info -->
                             <div class="p-3 sm:p-5 space-y-1.5 sm:space-y-3">
-                                <h3 class="font-extrabold text-slate-900 text-xs sm:text-base leading-snug line-clamp-2 group-hover:text-[#00A3E0] transition-colors">
+                                <h3 class="font-extrabold text-slate-900 text-xs sm:text-base leading-snug line-clamp-2 min-h-[2.25rem] sm:min-h-[2.75rem] group-hover:text-[#00A3E0] transition-colors flex items-start">
                                     <a href="{{ route('katalog.show', $item->id) }}">
                                         {{ $item->nama_alat }}
                                     </a>
                                 </h3>
                                 
-                                <p class="hidden sm:block text-slate-500 text-xs leading-relaxed line-clamp-2">
+                                <p class="hidden sm:block text-slate-500 text-xs leading-relaxed line-clamp-2 sm:min-h-[2.25rem]">
                                     {{ Str::limit($item->deskripsi ?? 'Tidak ada deskripsi singkat.', 90, '...') }}
                                 </p>
 
