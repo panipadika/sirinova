@@ -596,12 +596,12 @@
                         <h3 class="text-xl sm:text-2xl font-black text-white">Kelengkapan Isian Formulir Lomba</h3>
                         <p class="text-xs text-cyan-100/90">Unduh format proposal resmi dan pelajari seluruh pedoman ketentuan lomba.</p>
                     </div>
-                    <div class="flex flex-wrap items-center gap-3 shrink-0">
+                    <div class="flex flex-col items-stretch gap-2.5 shrink-0 w-full sm:w-auto">
                         <!-- Tombol Link Google Drive: Template Proposal & Ketentuan Syarat -->
                         <a href="{{ $linkTemplateProposal ?? \App\Models\PengaturanLomba::getTemplateUrl() }}" 
                            target="_blank" 
                            rel="noopener noreferrer" 
-                           class="inline-flex items-center gap-2.5 px-5 py-3 bg-white text-[#00A3E0] hover:bg-cyan-50 font-black text-xs rounded-xl shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98]">
+                           class="w-full inline-flex items-center justify-center gap-2.5 px-5 py-3 bg-white text-[#00A3E0] hover:bg-cyan-50 font-black text-xs rounded-xl shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98] text-center">
                             <svg class="w-4 h-4 shrink-0" viewBox="0 0 87.3 78" xmlns="http://www.w3.org/2000/svg">
                                 <path d="m6.6 66.85 3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3l13.75-23.8h-27.5c0 1.55.4 3.1 1.2 4.5z" fill="#0066da"/>
                                 <path d="m43.65 25-13.75-23.8c-1.35.8-2.5 1.9-3.3 3.3l-25.4 44c-.8 1.4-1.2 2.95-1.2 4.5h27.5z" fill="#00ac47"/>
@@ -614,8 +614,8 @@
                             <span class="material-symbols-outlined text-sm">open_in_new</span>
                         </a>
 
-                        <!-- Tombol Buka Formulir Pendaftaran -->
-                        <a href="{{ route('lomba.daftar') }}" class="inline-flex items-center gap-2 px-5 py-3 bg-[#00A3E0] hover:bg-[#008cc0] text-white font-bold text-xs rounded-xl shadow-md transition-all hover:scale-[1.02] active:scale-[0.98]">
+                        <!-- Tombol Buka Formulir Pendaftaran (Samakan Panjangnya) -->
+                        <a href="{{ route('lomba.daftar') }}" class="w-full inline-flex items-center justify-center gap-2 px-5 py-3 bg-[#00A3E0] hover:bg-[#008cc0] text-white font-bold text-xs rounded-xl shadow-md transition-all hover:scale-[1.02] active:scale-[0.98] text-center">
                             <span class="material-symbols-outlined text-base">edit_document</span>
                             <span>Buka Formulir Pendaftaran</span>
                         </a>

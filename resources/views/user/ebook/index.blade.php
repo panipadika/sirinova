@@ -44,6 +44,28 @@
             height: 0;
         }
 
+        /* Custom sleek horizontal scrollbar for filter pills */
+        .custom-filter-scrollbar {
+            scrollbar-width: thin;
+            scrollbar-color: #00A3E0 #f1f5f9;
+        }
+        .custom-filter-scrollbar::-webkit-scrollbar {
+            height: 5px;
+            display: block !important;
+        }
+        .custom-filter-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 9999px;
+            margin: 0 4px;
+        }
+        .custom-filter-scrollbar::-webkit-scrollbar-thumb {
+            background: #00A3E0;
+            border-radius: 9999px;
+        }
+        .custom-filter-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #008cc0;
+        }
+
         /* Book Card Hover Effect */
         .book-card {
             transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -250,8 +272,8 @@
             </form>
 
             <div class="border-t border-slate-100 pt-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
-                <!-- Left: Kategori Pills (Horizontally scrollable on mobile) -->
-                <div class="flex items-center gap-1.5 overflow-x-auto p-1.5 w-full sm:w-auto flex-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+                <!-- Left: Kategori Pills (Horizontally scrollable with sleek indicator) -->
+                <div class="flex items-center gap-1.5 overflow-x-auto p-1.5 pb-2.5 w-full sm:w-auto flex-1 custom-filter-scrollbar">
                     @foreach($kategoriFilter as $kat)
                         <a href="{{ route('public.ebook', ['kategori' => $kat, 'tahun' => $selectedTahun, 'search' => $search]) }}"
                            class="px-3.5 py-1.5 rounded-xl text-xs font-semibold shrink-0 transition-all duration-200

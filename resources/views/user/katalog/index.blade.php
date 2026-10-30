@@ -52,6 +52,28 @@
             overflow: hidden !important;
         }
 
+        /* Custom sleek horizontal scrollbar for filter pills */
+        .custom-filter-scrollbar {
+            scrollbar-width: thin;
+            scrollbar-color: #00A3E0 #f1f5f9;
+        }
+        .custom-filter-scrollbar::-webkit-scrollbar {
+            height: 5px;
+            display: block !important;
+        }
+        .custom-filter-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 9999px;
+            margin: 0 4px;
+        }
+        .custom-filter-scrollbar::-webkit-scrollbar-thumb {
+            background: #00A3E0;
+            border-radius: 9999px;
+        }
+        .custom-filter-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #008cc0;
+        }
+
         /* ========================================================
            SCROLL REVEAL ANIMATIONS
            ======================================================== */
@@ -252,8 +274,8 @@
 
                 </div>
 
-                <!-- BOTTOM ROW: CATEGORY FILTER PILLS CHIPS -->
-                <div class="flex items-center gap-1.5 sm:gap-2 overflow-x-auto p-1.5 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+                <!-- BOTTOM ROW: CATEGORY FILTER PILLS CHIPS (HORIZONTAL SCROLL WITH SLEEK INDICATOR) -->
+                <div class="flex items-center gap-1.5 sm:gap-2 overflow-x-auto p-1.5 pb-2.5 custom-filter-scrollbar">
                     <input type="hidden" name="kategori" id="katalog-kategori-input" value="{{ request('kategori', 'semua') }}">
 
                     <button type="button" onclick="setKatalogKategori('semua')"
