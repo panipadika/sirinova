@@ -19,15 +19,17 @@
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}?v=3">
     <link rel="apple-touch-icon" href="{{ asset('storage/images/favicon_tasik.png') }}?v=3">
 
-    <!-- Preconnect ke Origin Eksternal untuk Mempercepat Download Fonts -->
+    <!-- Preconnect ke Origin Eksternal untuk Mempercepat Download -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
 
     <!-- Preload Critical LCP Hero Image (Langsung mengunduh gambar gedung sejak awal) -->
     <link rel="preload" as="image" href="{{ asset('images/hero-bg.jpg') }}?v=3" fetchpriority="high">
 
-    <!-- Compiled Static Tailwind CSS (Gzip-compressed, cached, No JS render blocking) -->
-    <link rel="stylesheet" href="{{ asset('css/tailwind.min.css') }}?v=1">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Google Fonts & Material Symbols (Non-render blocking dengan font-display: swap) -->
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap">
