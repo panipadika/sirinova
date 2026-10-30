@@ -19,9 +19,8 @@
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}?v=3">
     <link rel="apple-touch-icon" href="{{ asset('storage/images/favicon_tasik.png') }}?v=3">
 
-    <!-- Responsive Preload Critical LCP Hero Image (Mobile: 25.4KB, Desktop: 85KB) -->
-    <link rel="preload" as="image" href="{{ url('/images/hero-bg-bappelitbangda-mobile.webp') }}?v=20261030" type="image/webp" media="(max-width: 767px)" fetchpriority="high">
-    <link rel="preload" as="image" href="{{ url('/images/hero-bg-bappelitbangda.webp') }}?v=20261030" type="image/webp" media="(min-width: 768px)" fetchpriority="high">
+    <!-- Preload Critical LCP Hero Image (WebP ~85KB, High-Priority Fast LCP) -->
+    <link rel="preload" as="image" href="{{ asset('images/hero-bg-bappelitbangda.webp') }}?v=20261030" type="image/webp" fetchpriority="high">
 
     <!-- Preload Compiled High-Performance Tailwind CSS (Local, Gzip ~16KB, Auto-Fallback jika Offline) -->
     <link rel="preload" as="style" href="{{ url('/css/tailwind.min.css') }}?v=5" fetchpriority="high">
@@ -70,14 +69,17 @@
         }
 
         .bg-hero {
-            background-image: url("{{ url('/images/hero-bg-bappelitbangda.webp') }}?v=20261030");
+            background-image: url("{{ asset('images/hero-bg-bappelitbangda.webp') }}?v=20261030");
+            background-image: image-set(
+                url("{{ asset('images/hero-bg-bappelitbangda.webp') }}?v=20261030") type("image/webp"),
+                url("{{ asset('images/hero-bg-bappelitbangda.jpg') }}?v=20261030") type("image/jpeg")
+            );
             background-size: cover;
             background-position: center right;
         }
 
         @media (max-width: 767px) {
             .bg-hero {
-                background-image: url("{{ url('/images/hero-bg-bappelitbangda-mobile.webp') }}?v=20261030");
                 background-position: 80% center;
             }
         }
