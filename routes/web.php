@@ -23,6 +23,25 @@ use App\Http\Controllers\AdminLombaController;
 |--------------------------------------------------------------------------
 */
 
+// Route Hero Background Image Baru (Gedung Bappelitbangda + Tugu Asmaul Husna)
+Route::get('/images/hero-bg-bappelitbangda.jpg', function () {
+    $candidates = [
+        public_path('images/hero-bg-bappelitbangda.jpg'),
+        base_path('public/images/hero-bg-bappelitbangda.jpg'),
+        base_path('public/images/hero-bg.jpg'),
+        storage_path('app/public/images/hero-bg-bappelitbangda.jpg'),
+    ];
+    foreach ($candidates as $file) {
+        if (file_exists($file)) {
+            return response()->file($file, [
+                'Content-Type' => 'image/jpeg',
+                'Cache-Control' => 'public, max-age=31536000, immutable',
+            ]);
+        }
+    }
+    abort(404);
+})->name('hero.bg');
+
 // Halaman Utama Publik, Katalog, Kategori, Wilayah & Tentang
 Route::get('/', [PublicController::class, 'index'])->name('home');
 Route::get('/katalog', [PublicController::class, 'katalog'])->name('katalog.index');
