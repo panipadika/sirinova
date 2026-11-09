@@ -167,7 +167,7 @@ class IndikatorMakroController extends Controller
     public function storeBatch(Request $request)
     {
         $request->validate([
-            'indikator_id' => 'required|exists:indikator_makros,id',
+            'indikator_id' => 'required|exists:indikator_makro,id',
             'tahun' => 'required|integer|min:2000|max:2100',
             'nilai' => 'required|array',
             'nilai.*' => 'nullable|numeric',
