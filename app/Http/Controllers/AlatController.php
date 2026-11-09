@@ -291,12 +291,20 @@ class AlatController extends Controller
     // 2. Export ke PDF
     public function exportPdf()
     {
-        $alatTtg = AlatTtg::with(['inovator', 'kategori', 'wilayah'])->get();
+        try {
+            $alatTtg = AlatTtg::with(['inovator', 'kategori', 'wilayah'])->get();
 
-        // Load view print tapi ubah menjadi format PDF
-        $pdf = Pdf::loadView('admin.alatTTG.print', compact('alatTtg'))->setPaper('a4', 'landscape');
+            // Load view print tapi ubah menjadi format PDF
+            $pdf = Pdf::loadView('admin.alatTTG.print', compact('alatTtg'))->setPaper('a4', 'landscape');
 
-        return $pdf->download('Laporan-Data-Alat-TTG.pdf');
+            return $pdf->download('Laporan-Data-Alat-TTG-' . date('Ymd-His') . '.pdf');
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Gagal export PDF Alat TTG: ' . $e->getMessage(), [
+                'exception' => $e,
+            ]);
+
+            return redirect()->back()->with('error', 'Gagal mengekspor PDF: Terjadi kesalahan saat memproses dokumen.');
+        }
     }
 
     // 3. Export ke Excel

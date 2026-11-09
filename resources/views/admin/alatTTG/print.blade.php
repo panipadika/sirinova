@@ -8,8 +8,8 @@
     <style>
 
         @page {
-            size: A4 portrait; /* Mengatur ukuran kertas otomatis */
-             /* Menghilangkan margin bawaan browser */
+            size: A4 landscape;
+            margin: 15mm 10mm 15mm 10mm;
         }
         /* Menggunakan font dasar agar kompatibel dengan DomPDF */
         body {
@@ -107,13 +107,25 @@
 <body>
 
     <div class="header">
-<!-- Logo Kota Tasikmalaya (Menggunakan metode Base64 khusus untuk DomPDF) -->
+<!-- Logo Kota Tasikmalaya (Menggunakan Base64 aman dengan multi-path fallback) -->
 @php
-    $imagePath = public_path('storage/images/logo_tasik.png');
-    $imageData = base64_encode(file_get_contents($imagePath));
-    $src = 'data:image/png;base64,' . $imageData;
+    $logoCandidates = [
+        public_path('images/logo_tasik_sm.png'),
+        public_path('images/logo_tasik.png'),
+        public_path('storage/images/logo_tasik.png'),
+        storage_path('app/public/images/logo_tasik.png'),
+    ];
+    $src = null;
+    foreach ($logoCandidates as $candidatePath) {
+        if (!empty($candidatePath) && file_exists($candidatePath) && is_readable($candidatePath)) {
+            $src = 'data:image/png;base64,' . base64_encode(file_get_contents($candidatePath));
+            break;
+        }
+    }
 @endphp
+@if($src)
 <img src="{{ $src }}" alt="Logo Kota Tasikmalaya" class="logo">
+@endif
 
         <h1>Laporan Data Alat Teknologi Tepat Guna (TTG)</h1>
         <p><strong>Pemerintah Kota Tasikmalaya</strong></p>
